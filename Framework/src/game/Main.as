@@ -45,6 +45,7 @@ package game
 			Common.language = LanguageManager.getInstance();
 			
 			loadConfigXml();
+			
 		}
 		
 		
