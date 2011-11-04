@@ -19,7 +19,7 @@ package reign.components
 			super();
 			editable = true;
 			
-			//默认的屏蔽字符
+			//默认屏蔽的字符
 			this.restrict = "^<|>";
 		}
 		
