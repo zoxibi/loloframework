@@ -297,14 +297,22 @@ package reign.components
 			_width = value;
 			updateContainerController();
 		}
-		override public function get width():Number { return _width; }
+		/**
+		 * 获取设置的宽度
+		 */
+		public function get setWidth():Number { return _width; }
+		
 		
 		override public function set height(value:Number):void
 		{
 			_height = value;
 			updateContainerController();
 		}
-		override public function get height():Number { return _height; }
+		
+		/**
+		 * 获取设置的高度
+		 */
+		public function get setHeight():Number { return _height; }
 		//
 	}
 }

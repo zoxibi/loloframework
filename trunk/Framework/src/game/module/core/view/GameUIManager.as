@@ -1,9 +1,11 @@
 package game.module.core.view
 {
+	import flash.display.DisplayObject;
 	import flash.utils.getDefinitionByName;
 	
 	import game.common.GameConstants;
 	import game.common.ModuleName;
+	import game.module.chat.view.IChat;
 	import game.module.testScene.view.ITestScene;
 	import game.ui.LoadBar;
 	
@@ -23,6 +25,10 @@ package game.module.core.view
 		
 		/**测试场景*/
 		private var _testScene:ITestScene;
+		
+		
+		/**聊天模块*/
+		private var _chat:IChat;
 		
 		
 		/**
@@ -73,14 +79,12 @@ package game.module.core.view
 				info = Common.config.getResConfig("testSceneModule");
 				Common.loader.add(Common.language.getLanguage("020203"), info.url, Constants.RES_TYPE_CLA, info.version);
 				
-				
 				info = Common.config.getResConfig("chatConfig");
 				Common.loader.add(Common.language.getLanguage("020301"), info.url, Constants.RES_TYPE_XML, info.version);
 				info = Common.config.getResConfig("chatView");
 				Common.loader.add(Common.language.getLanguage("020302"), info.url, Constants.RES_TYPE_CLA, info.version);
 				info = Common.config.getResConfig("chatModule");
 				Common.loader.add(Common.language.getLanguage("020303"), info.url, Constants.RES_TYPE_CLA, info.version);
-				
 				
 				Common.loader.load(loadTestSceneComplete);
 			}
@@ -95,8 +99,12 @@ package game.module.core.view
 			{
 				_testScene = getDefinitionByName(ModuleName.SCENE_TEST).instance;
 				_testScene.sceneID = GameConstants.SCENE_ID_TEST;
+				
+				_chat = getDefinitionByName(ModuleName.MODULE_CHAT).instance;
 			}
+			
 			switchScene(_testScene);
+			addChildToLayer(_chat as DisplayObject, Constants.LAYER_NAME_UI);
 		}
 		//
 	}

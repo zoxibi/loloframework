@@ -24,6 +24,7 @@ package reign.utils
 	import reign.components.NumberText;
 	import reign.components.Page;
 	import reign.components.RadioButton;
+	import reign.components.RichText;
 	import reign.components.ScrollBar;
 	import reign.components.ToolTip;
 	import reign.core.Container;
@@ -76,6 +77,11 @@ package reign.utils
 					//显示文本
 					case "label":
 						if(obj == null) obj = new Label();
+						break;
+					
+					//富显示文本
+					case "richText":
+						if(obj == null) obj = new RichText();
 						break;
 					
 					//输入文本

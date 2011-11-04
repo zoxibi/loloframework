@@ -37,6 +37,7 @@
   </applications>
   <modules>
     <module application="src/game/module/core/view/Game.as" destPath="game/module/testScene/view/TestScene.swf" optimize="true" sourcePath="src/game/module/testScene/view/TestScene.as"/>
+    <module application="src/game/module/core/view/Game.as" destPath="game/module/chat/view/Chat.swf" optimize="true" sourcePath="src/game/module/chat/view/Chat.as"/>
   </modules>
   <buildCSSFiles/>
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
