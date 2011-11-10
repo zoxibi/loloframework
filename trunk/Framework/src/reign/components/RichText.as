@@ -11,6 +11,7 @@ package reign.components
 	import flashx.textLayout.elements.ParagraphElement;
 	import flashx.textLayout.elements.SpanElement;
 	import flashx.textLayout.elements.TextFlow;
+	import flashx.textLayout.events.CompositionCompleteEvent;
 	import flashx.textLayout.events.FlowElementMouseEvent;
 	import flashx.textLayout.formats.TextDecoration;
 	
@@ -38,8 +39,6 @@ package reign.components
 		protected var _underline:Boolean = false;
 		/**行与行之间的垂直距离*/
 		protected var _leading:* = "150%";
-		/**描边滤镜颜色*/
-		protected var _stroke:String = "none";
 		
 		/**文本流*/
 		private var _textFlow:TextFlow;
@@ -56,7 +55,8 @@ package reign.components
 		private var _maxParagraphCount:uint = 60;
 		/**是否可选*/
 		private var _selectable:Boolean;
-		
+		/**是否自动设置高度*/
+		private var _autoHeight:Boolean = true;
 		
 		
 		
@@ -67,7 +67,8 @@ package reign.components
 			_containerController = new ContainerController(this, _width, _height);
 			_textFlow.flowComposer.addController(_containerController);
 			
-			_textFlow.addEventListener(FlowElementMouseEvent.CLICK, textFlowElement_clickHandler);
+			_textFlow.addEventListener(FlowElementMouseEvent.CLICK, clickHandler);
+			_textFlow.addEventListener(CompositionCompleteEvent.COMPOSITION_COMPLETE, compositionCompleteHandler);
 			
 			this.style = Common.style.getStyle("richText");
 		}
@@ -77,7 +78,7 @@ package reign.components
 		 * 点击内容元素
 		 * @param event
 		 */
-		private function textFlowElement_clickHandler(event:FlowElementMouseEvent):void
+		private function clickHandler(event:FlowElementMouseEvent):void
 		{
 			//是链接文本
 			if(event.flowElement is LinkElement)
@@ -85,6 +86,17 @@ package reign.components
 				this.dispatchEvent(new RichTextEvent(RichTextEvent.CLICK_LINK, (event.flowElement as LinkElement).target));
 			}
 		}
+		
+		
+		/**
+		 * 重新合成后
+		 * @param event
+		 */
+		private function compositionCompleteHandler(event:CompositionCompleteEvent):void
+		{
+			updateHeight();
+		}
+		
 		
 		
 		/**
@@ -100,13 +112,11 @@ package reign.components
 			if(value.underline != null) this.underline = value.underline;
 			if(value.leading != null) this.leading = value.leading;
 			
-			if(value.stroke != null) this.stroke = value.stroke;
-			
 			if(value.linkNormalFormat != null) _textFlow.linkNormalFormat = value.linkNormalFormat;
 			if(value.linkHoverFormat != null) _textFlow.linkHoverFormat = value.linkHoverFormat;
 			if(value.linkActiveFormat != null) _textFlow.linkActiveFormat = value.linkActiveFormat;
 			
-			updateContainerController();
+			update();
 		}
 		
 		
@@ -117,7 +127,7 @@ package reign.components
 		{
 			_align = value;
 			_textFlow.setStyle("textAlign", _align);
-			_textFlow.flowComposer.updateAllControllers();
+			update();
 		}
 		public function get align():String { return _align; }
 		
@@ -126,7 +136,7 @@ package reign.components
 		{
 			_bold = value;
 			_textFlow.setStyle("fontWeight", _bold ? FontWeight.BOLD : FontWeight.NORMAL);
-			_textFlow.flowComposer.updateAllControllers();
+			update();
 		}
 		public function get bold():Boolean { return _bold; }
 		
@@ -135,7 +145,7 @@ package reign.components
 		{
 			_color = value;
 			_textFlow.setStyle("color", _color);
-			_textFlow.flowComposer.updateAllControllers();
+			update();
 		}
 		public function get color():uint { return _color; }
 		
@@ -144,7 +154,7 @@ package reign.components
 		{
 			_fontFamily = value;
 			_textFlow.setStyle("fontFamily", _fontFamily);
-			_textFlow.flowComposer.updateAllControllers();
+			update();
 		}
 		public function get fontFamily():String { return _fontFamily; }
 		
@@ -153,7 +163,7 @@ package reign.components
 		{
 			_size = value;
 			_textFlow.setStyle("fontSize", _size);
-			_textFlow.flowComposer.updateAllControllers();
+			update();
 		}
 		public function get size():uint { return _size; }
 		
@@ -162,7 +172,7 @@ package reign.components
 		{
 			_underline = value;
 			_textFlow.setStyle("textDecoration", _underline ? TextDecoration.UNDERLINE : TextDecoration.NONE);
-			_textFlow.flowComposer.updateAllControllers();
+			update();
 		}
 		public function get underline():Boolean { return _underline; }
 		
@@ -172,11 +182,6 @@ package reign.components
 			_leading = value;
 		}
 		public function get leading():* { return _leading; }
-		
-		
-		/**描边滤镜颜色*/
-		public function set stroke(value:String):void { _stroke = value; }
-		public function get stroke():String { return _stroke; }
 		
 		
 		
@@ -198,12 +203,17 @@ package reign.components
 			_textFlow.addChild(_paragraph);
 			_paragraph = null;
 			
-			//超出最大段落数时，从前面移除段落
-			while(_textFlow.numChildren > _maxParagraphCount) {
-				_textFlow.removeChildAt(0);
-			}
+			//第一次添加内容，重设selectable
+			if(_textFlow.numChildren == 1) selectable = _selectable;
 			
-			_textFlow.flowComposer.updateAllControllers();
+			//超出最大段落数时，从前面移除段落
+			while(_textFlow.numChildren > _maxParagraphCount) _textFlow.removeChildAt(0);
+			
+			//显示内容
+			update();
+			
+			//更新高度
+			updateHeight();
 		}
 		
 		
@@ -264,13 +274,34 @@ package reign.components
 		
 		
 		/**
-		 * 更新容器控制器
+		 * 更新容器控制器，显示内容
 		 */
-		public function updateContainerController():void
+		public function update():void
 		{
-			_containerController.setCompositionSize(_width, _height);
-			_textFlow.flowComposer.updateAllControllers();
+			//宽高有改变
+			if(_containerController.compositionWidth != _width || _containerController.compositionHeight != _height)
+				_containerController.setCompositionSize(_width, _height);
+			
+			//有内容
+			if(_textFlow.numChildren > 0) _textFlow.flowComposer.updateAllControllers();
 		}
+		
+		
+		/**
+		 * 更新高度
+		 */
+		public function updateHeight():void
+		{
+			//允许自动设置高度
+			if(autoHeight)
+			{
+				//高度需要多加3像素，才能显示完整
+				_height = _containerController.getContentBounds().height + 3;
+				//重新显示内容
+				update();
+			}
+		}
+		
 		
 		
 		/**
@@ -279,6 +310,7 @@ package reign.components
 		public function set selectable(value:Boolean):void
 		{
 			_selectable = value;
+			if(_textFlow.numChildren == 0) return;//没内容时，不设置，否则将会出现第一行为空行
 			_textFlow.interactionManager = value ? new SelectionManager() : null;
 		}
 		public function get selectable():Boolean { return _selectable; }
@@ -290,23 +322,31 @@ package reign.components
 		public function set maxParagraphCount(value:uint):void { _maxParagraphCount = value; }
 		public function get maxParagraphCount():uint { return _maxParagraphCount; }
 		
+		/**
+		 * 是否自动设置高度
+		 */
+		public function set autoHeight(value:Boolean):void { _autoHeight = value; }
+		public function get autoHeight():Boolean { return _autoHeight; }
+		
 		
 		
 		override public function set width(value:Number):void
 		{
 			_width = value;
-			updateContainerController();
+			update();
 		}
+		
 		/**
 		 * 获取设置的宽度
 		 */
 		public function get setWidth():Number { return _width; }
 		
 		
+		
 		override public function set height(value:Number):void
 		{
 			_height = value;
-			updateContainerController();
+			update();
 		}
 		
 		/**

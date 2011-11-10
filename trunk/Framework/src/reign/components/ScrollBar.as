@@ -431,7 +431,7 @@ package reign.components
 		/**
 		 * 初始化
 		 */
-		private function init():void
+		public function init():void
 		{
 			if(_disArea != null && _content != null)
 			{

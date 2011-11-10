@@ -105,7 +105,7 @@ package reign.components
 							execTest = false;
 						}
 						
-						//回退检测的次数大于了替代文本的长度（文本宽高不够）
+						//回退检测的次数大于了替代文本的长度（文本宽高不够），跳出循环
 						if(backIndex >= _moreText.length) break;
 					}
 					
