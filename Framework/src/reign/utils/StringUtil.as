@@ -45,6 +45,32 @@ package reign.utils
 			while(str.length < length) str = "0" + str;
 			return str;
 		}
+		
+		
+		
+		/**
+		 * 将目标字符串组合成html文本标签包含的字符串
+		 * @param str 要组合的字符串
+		 * @param color 颜色
+		 * @param size 文本尺寸
+		 * @return 
+		 */		
+		public static function toHtmlFont(str:String, color:String="", size:uint=0):String
+		{
+			var s:String = "<font";
+			
+			if(color != "") {
+				if(color.charAt() != "#") color = "#" + color;
+				s += " color='" + color + "'";
+			}
+			
+			if(size != 0) {
+				s += " size='" + size + "'";
+			}
+			
+			s += ">" + str + "</font>";
+			return s;
+		}
 		//
 	}
 }

@@ -7,6 +7,15 @@ package reign.utils
 	 */
 	public class UbbUtil
 	{
+		/**标签 - 普通字符串*/
+		public static const LABEL_STRING:String = "str";
+		/**标签 - 颜色*/
+		public static const LABEL_COLOR:String = "color";
+		/**标签 - 链接*/
+		public static const LABEL_LINK:String = "link";
+		/**标签 - 图像*/
+		public static const LABEL_IMG:String = "img";
+		
 		/**用于找出color包含的文字*/
 		private static const RE_COLOR:RegExp = /\<(color)=(.*?)>(.*?)\<\/(color)\>/ig;
 		/**用于找出link包含的文字*/
@@ -73,7 +82,7 @@ package reign.utils
 						list.push(imgs.shift());
 						break;
 					default:
-						if(str != "") list.push({ type:"str", content:str });
+						if(str != "") list.push({ type:LABEL_STRING, content:str });
 				}
 			}
 			

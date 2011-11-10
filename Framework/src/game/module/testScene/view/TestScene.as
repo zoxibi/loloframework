@@ -1,6 +1,11 @@
 package game.module.testScene.view
 {
+	import flash.display.Shape;
+	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	
+	import game.module.testScene.controls.TestSceneController;
+	import game.module.testScene.model.TestSceneData;
 	
 	import reign.common.Common;
 	import reign.components.List;
@@ -9,7 +14,6 @@ package game.module.testScene.view
 	import reign.components.ScrollBar;
 	import reign.core.Scene;
 	import reign.data.HashMap;
-	import reign.utils.StringUtil;
 	import reign.utils.UbbUtil;
 
 	/**
@@ -29,10 +33,16 @@ package game.module.testScene.view
 		public var richText:RichText;
 		
 		
+		private var _data:TestSceneData;
+		private var _controller:TestSceneController;
+		
+		
 		public function TestScene()
 		{
 			super();
 			instance = this;
+			_data = TestSceneData.getInstance();
+			_controller = new TestSceneController();
 			initUI(Common.loader.getXML(Common.language.getLanguage("020201")));
 			
 //			Common.stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
@@ -45,16 +55,56 @@ package game.module.testScene.view
 			richText = new RichText();
 			richText.width = 200;
 			richText.color = 0xFFFFFF;
-			richText.height = 999;
+//			richText.height = 9999;
 			this.addChild(richText);
 			
+			richText.x = richText.y = 100;
 			
-			var str:String = "asdasd<color=0xFF0000>内容</color>ccc<color=0x00FF00>ddd</color>eee" +
+			var str:String = "开始asdasd<color=0xFF0000>内容</color>ccc<color=0x00FF00>ddd</color>eee" +
 				"<link=testLink>链接内容</link>fff<img=图标标识></img>";
+//			var str:String = "开始";
 			
-			richText.beginParagraph();
+			
+			var s:Sprite = new Sprite();
+			s.graphics.beginFill(0xFF0000);
+			s.graphics.drawRect(100, 100, 5, 5);
+			s.graphics.endFill();
+			this.addChild(s);
+			
+			var s2:Sprite = new Sprite();
+			s2.graphics.beginFill(0xFF0000);
+			s2.graphics.drawRect(0, 0, 30, 30);
+			s2.graphics.endFill();
+			
+			richText.selectable = true;
+			
 			richText.appendText(str);
 			richText.endParagraph();
+			trace(richText.height);
+			
+			richText.appendText(str);
+			richText.endParagraph();
+			trace(richText.height);
+			
+			richText.appendGraphic(s2);
+			richText.appendText(str);
+			richText.endParagraph();
+			trace(richText.height);
+			
+			richText.appendText(str);
+			richText.endParagraph();
+			trace(richText.height);
+			
+			var mask:Shape = new Shape();
+			this.addChild(mask);
+			mask.x = mask.y = 100;
+			mask.graphics.beginFill(0);
+			mask.graphics.drawRect(0, 0, 100, 100);
+			mask.graphics.endFill();
+			
+			richText.mask = mask;
+			
+			trace(this.height);
 			
 			var content:Array = UbbUtil.stringToList(str);
 			content = content.concat();
