@@ -8,6 +8,8 @@ package reign.core
 	{
 		/**场景ID*/
 		protected var _sceneID:int;
+		/**场景视图的ID*/
+		protected var _viewID:int;
 		
 		
 		
@@ -22,6 +24,21 @@ package reign.core
 		public function get sceneID():int
 		{
 			return _sceneID;
+		}
+		
+		
+		
+		/**
+		 * 场景视图的ID
+		 */
+		public function set viewID(value:int):void
+		{
+			_viewID = value;
+		}
+		
+		public function get viewID():int
+		{
+			return _viewID;
 		}
 		//
 	}
