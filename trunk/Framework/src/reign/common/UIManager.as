@@ -295,6 +295,17 @@ package reign.common
 		}
 		
 		/**
+		 * 获取当前场景视图的ID，没有进入场景或者场景没有设置过视图ID时，值为0（默认）
+		 * @return 
+		 */
+		public function get nowSceneViewID():int
+		{
+			if(_nowScene == null) return 0;
+			return _nowScene.viewID;
+		}
+		
+		
+		/**
 		 * 切换到指定场景
 		 * @param scene 要切换至的场景
 		 */

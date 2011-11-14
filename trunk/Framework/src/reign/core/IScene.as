@@ -11,5 +11,12 @@ package reign.core
 		 */
 		function set sceneID(value:int):void;
 		function get sceneID():int;
+		
+		/**
+		 * 场景视图的ID
+		 */
+		function set viewID(value:int):void;
+		function get viewID():int;
+		//
 	}
 }

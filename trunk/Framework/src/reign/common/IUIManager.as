@@ -86,6 +86,12 @@ package reign.common
 		 */
 		function get nowSceneID():int;
 		
+		/**
+		 * 获取当前场景视图的ID，没有进入场景或者场景没有设置过视图ID时，值为0（默认）
+		 * @return 
+		 */
+		function get nowSceneViewID():int;
+		
 		
 		
 		/**
