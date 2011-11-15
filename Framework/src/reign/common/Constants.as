@@ -35,6 +35,8 @@ package reign.common
 		public static const LAYER_NAME_UI:String = "ui";
 		/**窗口层的名称*/
 		public static const LAYER_NAME_WINDOW:String = "window";
+		/**顶级UI层*/
+		public static const LAYER_NAME_UI_TOP:String = "uiTop";
 		/**游戏指导层的名称*/
 		public static const LAYER_NAME_GUIDE:String = "guide";
 		/**提示层的名称*/

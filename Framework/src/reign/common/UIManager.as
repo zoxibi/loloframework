@@ -25,6 +25,8 @@ package reign.common
 		protected var _uiLayer:Sprite;
 		/**窗口层*/
 		protected var _windowLayer:Sprite;
+		/**顶级UI层*/
+		protected var _uiTopLayer:Sprite;
 		/**游戏指导层*/
 		protected var _guideLayer:Sprite;
 		/**提示消息层*/
@@ -73,6 +75,11 @@ package reign.common
 			_windowLayer.mouseEnabled = false;
 			_windowLayer.name = Constants.LAYER_NAME_WINDOW;
 			this.addChild(_windowLayer);
+			
+			_uiTopLayer = new Sprite();
+			_uiTopLayer.mouseEnabled = false;
+			_uiTopLayer.name = Constants.LAYER_NAME_UI_TOP;
+			this.addChild(_uiTopLayer);
 			
 			_guideLayer = new Sprite();
 			_guideLayer.mouseEnabled = false;
