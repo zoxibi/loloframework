@@ -226,6 +226,7 @@ package reign.components
 		 */
 		public function appendText(text:String, prop:Object=null):void
 		{
+			if(text == null) return;
 			if(_paragraph == null) beginParagraph();
 			
 			var span:SpanElement = AutoUtil.init(new SpanElement(), null, prop);
@@ -243,6 +244,7 @@ package reign.components
 		 */
 		public function appendLinkText(text:String, data:String=null, spanProp:Object=null, linkProp:Object=null):void
 		{
+			if(text == null) return;
 			if(_paragraph == null) beginParagraph();
 			
 			var span:SpanElement = AutoUtil.init(new SpanElement(), null, spanProp);
@@ -262,6 +264,7 @@ package reign.components
 		 */
 		public function appendGraphic(source:DisplayObject, prop:Object=null):void
 		{
+			if(source == null) return;
 			if(_paragraph == null) beginParagraph();
 			
 			var graphic:InlineGraphicElement = AutoUtil.init(new InlineGraphicElement(), null, prop);
