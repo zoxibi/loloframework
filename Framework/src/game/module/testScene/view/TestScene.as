@@ -8,12 +8,14 @@ package game.module.testScene.view
 	import game.module.testScene.model.TestSceneData;
 	
 	import reign.common.Common;
+	import reign.components.Alert;
 	import reign.components.List;
 	import reign.components.Page;
 	import reign.components.RichText;
 	import reign.components.ScrollBar;
 	import reign.core.Scene;
 	import reign.data.HashMap;
+	import reign.events.components.CloseEvent;
 	import reign.utils.UbbUtil;
 
 	/**
@@ -32,6 +34,7 @@ package game.module.testScene.view
 		
 		public var richText:RichText;
 		
+		private var _alert:Alert;
 		
 		private var _data:TestSceneData;
 		private var _controller:TestSceneController;
@@ -45,7 +48,7 @@ package game.module.testScene.view
 			_controller = new TestSceneController();
 			initUI(Common.loader.getXML(Common.language.getLanguage("020201")));
 			
-//			Common.stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+			Common.stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			
 			list.itemRendererClass = TestItem;
 			list.selectMode = List.SELECT_MODE_KEY;
@@ -55,14 +58,12 @@ package game.module.testScene.view
 			richText = new RichText();
 			richText.width = 200;
 			richText.color = 0xFFFFFF;
-//			richText.height = 9999;
 			this.addChild(richText);
 			
 			richText.x = richText.y = 100;
 			
 			var str:String = "开始asdasd<color=0xFF0000>内容</color>ccc<color=0x00FF00>ddd</color>eee" +
 				"<link=testLink>链接内容</link>fff<img=图标标识></img>";
-//			var str:String = "开始";
 			
 			
 			var s:Sprite = new Sprite();
@@ -80,20 +81,16 @@ package game.module.testScene.view
 			
 			richText.appendText(str);
 			richText.endParagraph();
-			trace(richText.height);
 			
 			richText.appendText(str);
 			richText.endParagraph();
-			trace(richText.height);
 			
 			richText.appendGraphic(s2);
 			richText.appendText(str);
 			richText.endParagraph();
-			trace(richText.height);
 			
 			richText.appendText(str);
 			richText.endParagraph();
-			trace(richText.height);
 			
 			var mask:Shape = new Shape();
 			this.addChild(mask);
@@ -104,11 +101,19 @@ package game.module.testScene.view
 			
 			richText.mask = mask;
 			
-			trace(this.height);
-			
 			var content:Array = UbbUtil.stringToList(str);
 			content = content.concat();
+			
+			
+			_alert = Alert.show("阿萨德", [Alert.OK, Alert.CANCEL]);
+			_alert.addEventListener(CloseEvent.CLOSE, test);
 		}
+		
+		private function test(event:CloseEvent):void
+		{
+			trace(event.detail);
+		}
+		
 		
 		
 		private function timerHandler():void
@@ -134,7 +139,19 @@ package game.module.testScene.view
 		
 		private function mouseDownHandler(event:MouseEvent):void
 		{
-			
+//			_alert.text = "START!"
+//				+ Math.random().toString()
+//				+ Math.random().toString()
+//				+ Math.random().toString()
+//				+ Math.random().toString()
+//				+ Math.random().toString()
+//				+ Math.random().toString()
+//				+ Math.random().toString()
+//				+ Math.random().toString()
+//				+ Math.random().toString()
+//				+ Math.random().toString()
+//				+ "END!";
+//			_alert.show();
 		}
 		//
 	}
