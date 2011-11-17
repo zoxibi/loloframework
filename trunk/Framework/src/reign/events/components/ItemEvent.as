@@ -10,13 +10,13 @@ package reign.events.components
 	 */
 	public class ItemEvent extends Event
 	{
-		/**鼠标按下子项事件*/
+		/**鼠标按下子项*/
 		public static const ITEM_MOUSE_DOWN:String = "itemMouseDown";
 		
-		/**鼠标点击子项事件*/
+		/**鼠标点击子项*/
 		public static const ITEM_CLICK:String = "itemClick";
 		
-		/**选中子项事件*/
+		/**选中子项*/
 		public static const ITEM_SELECTED:String = "itemSelected";
 		
 		

@@ -8,11 +8,11 @@ package game.module.core.view
 	
 	import reign.common.Common;
 	import reign.common.ConfigManager;
-	import reign.common.Constants;
 	import reign.common.LanguageManager;
 	import reign.common.MouseManager;
 	import reign.common.ResLoader;
 	import reign.common.SoundManager;
+	import reign.components.Alert;
 	import reign.core.Scene;
 	import reign.core.Window;
 	import reign.data.HashMap;
@@ -59,6 +59,13 @@ package game.module.core.view
 			TimeUtil.hFormat = Common.language.getLanguage("030202");
 			TimeUtil.mFormat = Common.language.getLanguage("030203");
 			TimeUtil.sFormat = Common.language.getLanguage("030204");
+			
+			Alert.OK	= Common.language.getLanguage("030301");
+			Alert.CANCEL= Common.language.getLanguage("030302");
+			Alert.YES	= Common.language.getLanguage("030303");
+			Alert.NO	= Common.language.getLanguage("030304");
+			Alert.CLOSE	= Common.language.getLanguage("030305");
+			Alert.BACK	= Common.language.getLanguage("030306");
 			
 			Console.getInstance().container = Common.stage;
 			

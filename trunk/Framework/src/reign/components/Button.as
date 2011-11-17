@@ -45,6 +45,9 @@ package reign.components
 		/**是否在文本有省略时，自动显示toolTip*/
 		protected var _autoToolTip:Boolean = true;
 		
+		/**标签文本的内容*/
+		private var _label:String;
+		
 		
 		
 		public function Button()
@@ -237,14 +240,14 @@ package reign.components
 		
 		
 		/**
-		 * 文本的内容
+		 * 标签文本的内容
 		 */
 		public function set label(value:String):void
 		{
-			_labelText.text = value;
+			_labelText.text = _label = value;
 			update();
 		}
-		public function get label():String { return _labelText.text; }
+		public function get label():String { return _label; }
 		
 		
 		/**
