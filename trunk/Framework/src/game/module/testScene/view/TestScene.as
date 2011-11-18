@@ -16,6 +16,7 @@ package game.module.testScene.view
 	import reign.core.Scene;
 	import reign.data.HashMap;
 	import reign.events.components.CloseEvent;
+	import reign.utils.RandomUtil;
 	import reign.utils.UbbUtil;
 
 	/**
@@ -139,6 +140,7 @@ package game.module.testScene.view
 		
 		private function mouseDownHandler(event:MouseEvent):void
 		{
+			trace(RandomUtil.getNotRepeat());
 //			_alert.text = "START!"
 //				+ Math.random().toString()
 //				+ Math.random().toString()

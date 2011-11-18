@@ -121,7 +121,8 @@ package reign.data
 		{
 			_values.splice(index, 1);
 			
-			for(var key:* in _keys)
+			var keys:Dictionary = ObjectUtil.baseClone(_keys);
+			for(var key:* in keys)
 			{
 				//移除相关的key
 				if(_keys[key] == index) {
