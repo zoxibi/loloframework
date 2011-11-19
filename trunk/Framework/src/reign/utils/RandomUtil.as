@@ -18,14 +18,15 @@ package reign.utils
 		
 		
 		/**
-		 * 获取介于min与max之间的随机数
+		 * 获取介于min与max之间的随机数，返回值大于min，小于max
 		 * @param min 最小值
 		 * @param max 最大值
 		 * @return 
 		 */
 		public static function getBetween(min:Number, max:Number):Number
 		{
-			return 0;
+			var gap:Number = max - min;
+			return Math.random() * gap + min;
 		}
 		//
 	}
