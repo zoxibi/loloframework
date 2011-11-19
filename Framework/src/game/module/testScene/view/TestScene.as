@@ -140,7 +140,7 @@ package game.module.testScene.view
 		
 		private function mouseDownHandler(event:MouseEvent):void
 		{
-			trace(RandomUtil.getNotRepeat());
+			trace(RandomUtil.getBetween(5, 6));
 //			_alert.text = "START!"
 //				+ Math.random().toString()
 //				+ Math.random().toString()
