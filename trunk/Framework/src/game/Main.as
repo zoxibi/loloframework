@@ -15,7 +15,7 @@ package game
 	import reign.events.LoadResourceEvent;
 	
 	
-	[SWF(width="1000", height="600", backgroundColor="#000000", frameRate="25")]
+	[SWF(width="1000", height="600", backgroundColor="#666666", frameRate="25")]
 	/**
 	 * 测试框架
 	 * @author LOLO

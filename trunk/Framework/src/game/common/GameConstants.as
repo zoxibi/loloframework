@@ -16,6 +16,10 @@ package game.common
 		public static const MOUSE_STYLE_ATTACK:String = "attack";
 		/**鼠标样式 - 交谈*/
 		public static const MOUSE_STYLE_TALK:String = "talk";
+		
+		
+		/**计时器间隔，1秒*/
+		public static const INTERVAL_1000MS:uint = 1000;
 		//
 	}
 }

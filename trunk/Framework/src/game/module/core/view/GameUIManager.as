@@ -8,6 +8,7 @@ package game.module.core.view
 	import game.module.chat.view.IChat;
 	import game.module.testScene.view.ITestScene;
 	import game.ui.LoadBar;
+	import game.ui.RequestModal;
 	
 	import reign.common.Common;
 	import reign.common.Constants;
@@ -56,6 +57,8 @@ package game.module.core.view
 			super.init();
 			
 			_loadBar = new LoadBar();
+			_requestModal = new RequestModal();
+			
 			showTestScene([]);
 		}
 		

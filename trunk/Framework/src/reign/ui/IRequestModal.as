@@ -1,5 +1,7 @@
 package reign.ui
 {
+	import reign.data.RequestModel;
+
 	/**
 	 * 将与服务端通信的请求进行模态的界面
 	 * @author LOLO
@@ -8,15 +10,15 @@ package reign.ui
 	{
 		/**
 		 * 对指定的命令，开始进行通信模态
-		 * @param command 请求的命令
+		 * @param rm 通信接口模型
 		 */
-		function startModal(command:String):void;
+		function startModal(rm:RequestModel):void;
 		
 		/**
 		 * 对指定的命令，结束通信模态
-		 * @param command 请求的命令
+		 * @param rm 通信接口模型
 		 */
-		function endModal(command:String):void;
+		function endModal(rm:RequestModel):void;
 		
 		
 		/**

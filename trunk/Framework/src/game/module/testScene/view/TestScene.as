@@ -15,8 +15,7 @@ package game.module.testScene.view
 	import reign.components.ScrollBar;
 	import reign.core.Scene;
 	import reign.data.HashMap;
-	import reign.events.components.CloseEvent;
-	import reign.utils.RandomUtil;
+	import reign.data.RequestModel;
 	import reign.utils.UbbUtil;
 
 	/**
@@ -104,17 +103,7 @@ package game.module.testScene.view
 			
 			var content:Array = UbbUtil.stringToList(str);
 			content = content.concat();
-			
-			
-			_alert = Alert.show("阿萨德", [Alert.OK, Alert.CANCEL]);
-			_alert.addEventListener(CloseEvent.CLOSE, test);
 		}
-		
-		private function test(event:CloseEvent):void
-		{
-			trace(event.detail);
-		}
-		
 		
 		
 		private function timerHandler():void
@@ -138,22 +127,20 @@ package game.module.testScene.view
 			hsb.update();
 		}
 		
+		private var _a:RequestModel = new RequestModel("a");
+		private var _b:RequestModel = new RequestModel("b");
+		private var n:int = 0;
+		
 		private function mouseDownHandler(event:MouseEvent):void
 		{
-			trace(RandomUtil.getBetween(5, 6));
-//			_alert.text = "START!"
-//				+ Math.random().toString()
-//				+ Math.random().toString()
-//				+ Math.random().toString()
-//				+ Math.random().toString()
-//				+ Math.random().toString()
-//				+ Math.random().toString()
-//				+ Math.random().toString()
-//				+ Math.random().toString()
-//				+ Math.random().toString()
-//				+ Math.random().toString()
-//				+ "END!";
-//			_alert.show();
+			n++;
+			if(n % 2 == 0) {
+				Common.ui.requesModal.startModal(_a);
+//				Common.ui.requesModal.startModal(_b);
+			}
+			else {
+				Common.ui.requesModal.endModal(_a);
+			}
 		}
 		//
 	}
