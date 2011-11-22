@@ -2,6 +2,8 @@ package reign.common
 {
 	import flash.display.Stage;
 	import flash.net.LocalConnection;
+	
+	import reign.net.IService;
 
 	/**
 	 * 公用接口、方法、引用集合
@@ -12,6 +14,8 @@ package reign.common
 		/**舞台*/
 		public static var stage:Stage;
 		
+		/**后台通信服务*/
+		public static var service:IService;
 		
 		/**用户界面管理*/
 		public static var ui:IUIManager;
