@@ -11,6 +11,7 @@ package reign.utils
 	import reign.components.BaseButton;
 	import reign.components.Button;
 	import reign.components.CheckBox;
+	import reign.components.ComboBox;
 	import reign.components.DragArea;
 	import reign.components.IItemRenderer;
 	import reign.components.ImageLoader;
@@ -148,6 +149,12 @@ package reign.utils
 					//图像加载器
 					case "imageLoader":
 						if(obj == null) obj = new ImageLoader();
+						break;
+					
+					//组合框
+					case "comboBox":
+						if(obj == null) obj = new ComboBox();
+						(obj as ComboBox).initUI(item);
 						break;
 					
 					//模态背景

@@ -9,6 +9,7 @@ package game.module.testScene.view
 	
 	import reign.common.Common;
 	import reign.components.Alert;
+	import reign.components.ComboBox;
 	import reign.components.List;
 	import reign.components.Page;
 	import reign.components.RichText;
@@ -31,6 +32,7 @@ package game.module.testScene.view
 		public var page:Page;
 		public var vsb:ScrollBar;
 		public var hsb:ScrollBar;
+		public var cb:ComboBox;
 		
 		public var richText:RichText;
 		
@@ -103,6 +105,17 @@ package game.module.testScene.view
 			
 			var content:Array = UbbUtil.stringToList(str);
 			content = content.concat();
+			
+			
+			var hp:HashMap = new HashMap();
+			hp.add({label:"AaAa"}, "AAAA", "aaaa");
+			hp.add({label:"美国啊美国啊美国"}, "美国", "USA");
+			hp.add({label:"BbBb"}, "BBBB", "bbbb");
+			hp.add({label:"cCcC"}, "CCCC", "cccc");
+			hp.add({label:"中国china"}, "中国", "china");
+			cb.editable = false;
+			cb.list.itemRendererClass = ComboBoxItemRenderer;
+			cb.listData = hp;
 		}
 		
 		
@@ -125,6 +138,8 @@ package game.module.testScene.view
 			
 			vsb.update();
 			hsb.update();
+			
+			
 		}
 		
 		private var _a:RequestModel = new RequestModel("a");
@@ -133,14 +148,14 @@ package game.module.testScene.view
 		
 		private function mouseDownHandler(event:MouseEvent):void
 		{
-			n++;
-			if(n % 2 == 0) {
-				Common.ui.requesModal.startModal(_a);
+//			n++;
+//			if(n % 2 == 0) {
+//				Common.ui.requesModal.startModal(_a);
 //				Common.ui.requesModal.startModal(_b);
-			}
-			else {
-				Common.ui.requesModal.endModal(_a);
-			}
+//			}
+//			else {
+//				Common.ui.requesModal.endModal(_a);
+//			}
 		}
 		//
 	}
