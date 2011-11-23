@@ -3,40 +3,37 @@ package reign.components
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.events.FocusEvent;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	
 	import reign.common.Common;
 	import reign.data.IHashMap;
 	import reign.events.components.ItemEvent;
+	import reign.events.components.ToolTipEvent;
 	import reign.utils.AutoUtil;
 	
 	/**
 	 * ComboBox组件，包含如下元素
+	 * 	-下拉按钮
 	 * 	-输入文本（可编辑状态下显示）
 	 * 	-显示文本（不可编辑状态下显示）
-	 * 	-下拉按钮
-	 * 	-输入文本、显示文本与下拉按钮的背景（9切片，可伸缩）
-	 * 	-下拉列表（单列）
 	 * 	-下拉列表的背景（9切片，可伸缩）
+	 * 	-下拉列表（单列）
 	 * 	-下拉列表组件对应的垂直滚动条（会自动调整尺寸）
 	 * @author LOLO
 	 */
 	public class ComboBox extends Sprite
 	{
+		/**下拉按钮*/
+		public var arrowBtn:BaseButton;
 		/**输入文本（可编辑状态下显示）*/
 		public var inputText:InputText;
 		/**显示文本（不可编辑状态下显示）*/
 		public var labelText:Label;
-		/**下拉按钮*/
-		public var arrowBtn:BaseButton;
-		/**输入文本、显示文本与下拉按钮的背景（9切片，可伸缩）*/
-		public var textAndBtnBG:DisplayObject;
-		/**下拉列表（单列）*/
-		public var list:List;
 		/**下拉列表的背景（9切片，可伸缩）*/
 		public var listBG:DisplayObject;
+		/**下拉列表（单列）*/
+		public var list:List;
 		/**下拉列表组件对应的垂直滚动条（会自动调整尺寸）*/
 		public var listVSB:ScrollBar;
 		
@@ -49,8 +46,6 @@ package reign.components
 		
 		/**是否可以编辑*/
 		private var _editable:Boolean;
-		/**列表中可见行数的最大值。如果超出该值，将会自动显示滚动条。默认值：0，表示无限长*/
-		private var _rowCount:int = 0;
 		/**上次选中item的key*/
 		private var _lastKey:String;
 		/**在点击下拉按钮时，是否需要打开下拉列表*/
@@ -71,43 +66,46 @@ package reign.components
 			list.isDefaultSelect = false;//默认不选
 			close();//默认关闭下拉列表
 			
-			inputText.addEventListener(FocusEvent.FOCUS_IN, inputText_focusHandler);
-			inputText.addEventListener(FocusEvent.FOCUS_OUT, inputText_focusHandler);
 			inputText.addEventListener(Event.CHANGE, inputText_changeHandler);
+			inputText.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			list.addEventListener(ItemEvent.ITEM_MOUSE_DOWN, list_itemMouseDownHandler);
-			if(arrowBtn != null) arrowBtn.addEventListener(MouseEvent.CLICK, arrowBtn_clickHandler);
+			arrowBtn.addEventListener(MouseEvent.CLICK, arrowBtn_clickHandler);
+			labelText.addEventListener(ToolTipEvent.SHOW, labelText_showToolTipHandler);
 		}
 		
 		
 		/**
-		 * 输入文本获得，失去焦点时
+		 * 文本的tooltip有改变时
 		 * @param event
 		 */
-		private function inputText_focusHandler(event:FocusEvent):void
+		private function labelText_showToolTipHandler(event:ToolTipEvent):void
 		{
-			event.type == FocusEvent.FOCUS_IN
-				? Common.stage.addEventListener(KeyboardEvent.KEY_DOWN, stage_keyDownHandler)
-				: Common.stage.removeEventListener(KeyboardEvent.KEY_DOWN, stage_keyDownHandler);
+			ToolTip.register(arrowBtn, event.toolTip);
 		}
 		
+		
 		/**
-		 * 在舞台上按键
+		 * 用户有按键
 		 * @param event
 		 */
-		private function stage_keyDownHandler(event:KeyboardEvent):void
+		private function keyDownHandler(event:KeyboardEvent):void
 		{
+			var index:int;
 			switch(event.keyCode)
 			{
-				case 12://回车
+				case 13://回车
 					close();
 					break;
 				
 				case 38://上箭头
-					selectItemByIndex(list.selectedItem ? list.selectedItem.index - 1 : 0);
+					index = list.selectedItem ? list.selectedItem.index - 1 : 0;
+					selectItemByIndex(index);
 					break;
 				
-				case 38://上箭头
-					selectItemByIndex(list.selectedItem ? list.selectedItem.index + 1 : 0);
+				case 40://下箭头
+					index = list.selectedItem ? list.selectedItem.index + 1 : 0;
+					if(index == list.numItems) index = 0;
+					selectItemByIndex(index);
 					break;
 			}
 		}
@@ -129,6 +127,7 @@ package reign.components
 		private function inputText_changeHandler(event:Event):void
 		{
 			label = inputText.text;
+			selectItemByKey(inputText.text);
 			open();
 		}
 		
@@ -172,7 +171,7 @@ package reign.components
 		public function open():void
 		{
 			Common.stage.addEventListener(MouseEvent.MOUSE_DOWN, stage_mouseDownHandler);
-			Common.stage.addEventListener(KeyboardEvent.KEY_DOWN, stage_keyDownHandler);
+			Common.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			listVSB.addEventListener(MouseEvent.MOUSE_DOWN, listVSB_mouseDownHandler);
 			openOrCloseList(true);
 		}
@@ -183,9 +182,11 @@ package reign.components
 		public function close():void
 		{
 			Common.stage.removeEventListener(MouseEvent.MOUSE_DOWN, stage_mouseDownHandler);
-			Common.stage.removeEventListener(KeyboardEvent.KEY_DOWN, stage_keyDownHandler);
+			Common.stage.removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			listVSB.removeEventListener(MouseEvent.MOUSE_DOWN, listVSB_mouseDownHandler);
 			openOrCloseList(false);
+			
+			inputText.setSelection(inputText.text.length, inputText.text.length);
 		}
 		
 		
@@ -256,6 +257,31 @@ package reign.components
 		
 		
 		
+		/**
+		 * 设置下拉列表的数据
+		 * 并根据列表设置背景高度，滚动条可见度
+		 * @param value
+		 */
+		public function set listData(value:IHashMap):void
+		{
+			list.data = value;
+			listVSB.update();
+			
+			var height:int = list.height;
+			if(listVSB != null)
+			{
+				if(listVSB.isShow) height = listVSB.disArea.height;
+				listVSB.size = height;
+				listVSB.update();
+				
+				if(!list.visible) listVSB.visible = false;
+			}
+			
+			if(listBG != null) listBG.height = height + listBGPaddingHeight;
+		}
+		
+		
+		
 		
 		/**
 		 * 设置当前文本的内容
@@ -263,7 +289,6 @@ package reign.components
 		public function set label(value:String):void
 		{
 			inputText.text = labelText.text = value;
-			selectItemByKey(inputText.text);
 		}
 		public function get label():String { return inputText.text; }
 		
