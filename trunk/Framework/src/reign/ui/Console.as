@@ -3,6 +3,8 @@ package reign.ui
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.DataEvent;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
@@ -100,6 +102,7 @@ package reign.ui
 			closeBtn.graphics.lineTo(8, 0);
 			closeBtn.x = 485;
 			closeBtn.y = 9;
+			closeBtn.buttonMode = true;
 			this.addChild(closeBtn);
 			
 			titleText = new TextField();
@@ -109,7 +112,7 @@ package reign.ui
 			titleText.x = 10;
 			titleText.y = 5;
 			titleText.defaultTextFormat = new TextFormat("宋体", 12, 0x666666, true);
-			titleText.text = "调试输出控制台";
+			titleText.text = "调试控制台";
 			this.addChild(titleText);
 			
 			contentText = new TextField();
@@ -129,15 +132,17 @@ package reign.ui
 			inputIT.type = "input";
 			inputIT.defaultTextFormat = new TextFormat("宋体", 12, 0x333333);
 			inputIT.width = 480;
-			inputIT.height = 17;
+			inputIT.height = 18;
 			inputIT.x = 10;
 			inputIT.y = 305;
 			inputIT.border = true;
 			inputIT.borderColor = 0xCCCCCC;
 			this.addChild(inputIT);
 			
+			
 			head.addEventListener(MouseEvent.MOUSE_DOWN, head_mouseDownHandler);
 			closeBtn.addEventListener(MouseEvent.CLICK, closeBtn_clickHandler);
+			inputIT.addEventListener(KeyboardEvent.KEY_DOWN, inputIT_keyDownHandler);
 		}
 		
 		
@@ -169,6 +174,20 @@ package reign.ui
 		{
 			hide();
 		}
+		
+		
+		/**
+		 * 在输入框按键
+		 * @param event
+		 */
+		private function inputIT_keyDownHandler(event:KeyboardEvent):void
+		{
+			//按下回车
+			if(event.keyCode == 13) {
+				this.dispatchEvent(new DataEvent(DataEvent.DATA, false, false, inputIT.text));
+			}
+		}
+		
 		
 		
 		

@@ -1,6 +1,7 @@
 package game.module.core.controls
 {
 	import game.common.ModuleName;
+	import game.module.core.events.ConsoleEvent;
 	
 	import reign.mvc.control.FrontController;
 	import reign.mvc.control.MvcEventDispatcher;
@@ -15,6 +16,9 @@ package game.module.core.controls
 		{
 			super();
 			_eventDispatcher = MvcEventDispatcher.getInstance(ModuleName.CORE);
+			
+			
+			addCommand(ConsoleEvent.EVENT_ID, ConsoleCommand);
 		}
 		//
 	}
