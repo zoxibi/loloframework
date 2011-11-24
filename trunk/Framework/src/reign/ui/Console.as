@@ -191,6 +191,14 @@ package reign.ui
 		
 		
 		
+		/**
+		 * 清空输入框
+		 */
+		public function clearInputText():void
+		{
+			inputIT.text = "";
+		}
+		
 		
 		/**
 		 * 显示
