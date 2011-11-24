@@ -25,7 +25,9 @@ package game.module.core.view
 	import reign.mvc.control.MvcEventDispatcher;
 	import reign.ui.Console;
 	import reign.utils.AutoUtil;
+	import reign.utils.RandomUtil;
 	import reign.utils.TimeUtil;
+	import reign.utils.Validator;
 	import reign.utils.bind.BindUtil;
 
 	/**
@@ -134,6 +136,8 @@ package game.module.core.view
 			
 			BindUtil;
 			TimeUtil;
+			RandomUtil;
+			Validator;
 		}
 		//
 	}
