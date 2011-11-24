@@ -18,6 +18,7 @@ package reign.common
 	import flash.utils.getTimer;
 	
 	import reign.events.LoadResourceEvent;
+	import reign.utils.RTimer;
 	import reign.utils.zip.ZipReader;
 
 	/**
@@ -63,6 +64,16 @@ package reign.common
 		
 		/**已经加载完成的资源列表*/
 		private var _resList:Dictionary;
+		
+		/**上次的加载队列*/
+		private var _lastLoadList:Array;
+		/**上次的加载队列*/
+		private var _lastKey:String;
+		/**上次加载是否为后台加载*/
+		private var _lastIsBackground:Boolean;
+		/**用于重新加载*/
+		private var _reloadTimer:RTimer;
+		
 		
 		
 		/**
@@ -126,6 +137,8 @@ package reign.common
 			_xmlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, errorHandler);
 			_xmlLoader.addEventListener(ProgressEvent.PROGRESS, progressHandler);
 			_xmlLoader.addEventListener(Event.COMPLETE, xmlCompleteHandler);
+			
+			_reloadTimer = RTimer.getInstance(5000, reload);
 		}
 		
 		
@@ -135,6 +148,9 @@ package reign.common
 		 */
 		private function progressHandler(event:ProgressEvent):void
 		{
+			_reloadTimer.reset();
+			_reloadTimer.start();
+			
 			var time:int = getTimer();
 			var s:Number = (time - _nowTime) / 1000;//与上次测速的间隔时间
 			
@@ -162,10 +178,12 @@ package reign.common
 		 */
 		private function errorHandler(event:Event):void
 		{
+			_reloadTimer.reset();
+			
 			trace("加载{ name:" + _nowLoadInfo.name + ", url:" + Common.getResUrl(_nowLoadInfo.url) + " }出错！", event.type);
 			this.dispatchEvent(new LoadResourceEvent(LoadResourceEvent.ERROR, _nowLoadInfo.name));
 			
-			loadNext();
+			if(_lastIsBackground) loadNext();
 		}
 		
 		/**
@@ -173,6 +191,8 @@ package reign.common
 		 */
 		private function loadAllComplete():void
 		{
+			_reloadTimer.reset();
+			
 			_isRun = false;
 			var key:String = _nowLoadInfo.key;
 			_nowLoadInfo = {};
@@ -279,6 +299,9 @@ package reign.common
 		 */
 		private function loadNext():void
 		{
+			_reloadTimer.reset();
+			_reloadTimer.start();
+			
 			//加载队列中还有未加载的资源
 			if(_loadList.length > 0)
 			{
@@ -328,6 +351,7 @@ package reign.common
 						_xmlLoader.load(new URLRequest(resUrl));
 						break;
 					default:
+						_reloadTimer.reset();
 						trace("资源类型\"" + _nowLoadInfo.type + "\"无法识别");
 				}
 			}
@@ -386,6 +410,8 @@ package reign.common
 			//使用默认key
 			if(key == null) key = _key.toString();
 			
+			_lastKey = key;
+			_lastIsBackground = isBackground;
 			_callbackList[key] = callback;
 			_key++;
 			
@@ -409,11 +435,35 @@ package reign.common
 			}
 			
 			if(!_isRun) {
+				_lastLoadList = _loadList.concat();
+				
 				_isRun = true;
 				_numTotal = _loadList.length;//记录需要加载的资源总数
 				loadNext();
 			}
 		}
+		
+		
+		/**
+		 * 重新加载
+		 */
+		private function reload():void
+		{
+			_reloadTimer.reset();
+			
+			_isRun = false;
+			_loadList = _lastLoadList.concat();
+			for(var i:int = 0; i < _loadList.length; i++)
+			{
+				if(hasResByName(_loadList[i].name)) {
+					_loadList.splice(i, 1);
+					i--;
+				}
+			}
+			
+			load(_callbackList[_lastKey], _lastKey, _lastIsBackground);
+		}
+		
 		
 		
 		
@@ -443,6 +493,18 @@ package reign.common
 		{
 			delete _resList[name];
 		}
+		
+		/**
+		 * 检测指定名称的资源是否已经加载完成
+		 * @param name 资源名称
+		 */
+		public function hasResByName(name:String):Boolean
+		{
+			return _resList[name] != null;
+		}
+		
+		
+		
 		
 		/**
 		 * 获取图片资源
