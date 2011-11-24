@@ -52,6 +52,14 @@ package reign.common
 		 */
 		function clearByName(name:String):void;
 		
+		
+		/**
+		 * 检测指定名称的资源是否已经加载完成
+		 * @param name 资源名称
+		 */
+		function hasResByName(name:String):Boolean;
+		
+		
 		/**
 		 * 获取图片资源
 		 * @param name 资源名称
