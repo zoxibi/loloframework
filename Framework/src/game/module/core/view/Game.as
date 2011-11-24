@@ -1,10 +1,14 @@
 package game.module.core.view
 {
 	import flash.display.Sprite;
+	import flash.events.DataEvent;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	
 	import game.common.GameConstants;
+	import game.common.ModuleName;
 	import game.module.core.controls.CoreController;
+	import game.module.core.events.ConsoleEvent;
 	import game.net.HttpService;
 	
 	import reign.common.Common;
@@ -18,6 +22,7 @@ package game.module.core.view
 	import reign.core.Window;
 	import reign.data.HashMap;
 	import reign.data.LastTime;
+	import reign.mvc.control.MvcEventDispatcher;
 	import reign.ui.Console;
 	import reign.utils.AutoUtil;
 	import reign.utils.TimeUtil;
@@ -81,6 +86,33 @@ package game.module.core.view
 			this.parent.addChild(GameUIManager.getInstance());
 			this.parent.removeChild(this);
 			Common.ui.init();
+			
+			
+			Common.stage.addEventListener(KeyboardEvent.KEY_DOWN, stage_keyDownHandler);
+			Console.getInstance().addEventListener(DataEvent.DATA, console_dataHandler);
+		}
+		
+		
+		/**
+		 * 舞台上有按键
+		 * @param event
+		 */
+		private function stage_keyDownHandler(event:KeyboardEvent):void
+		{
+			//按下键盘Ctrl+Alt+Shift+A时，如果控制台还未显示，立即显示控制台
+			if(event.ctrlKey && event.altKey && event.shiftKey && (event.keyCode == 65) && (Console.getInstance().parent == null))
+			{
+				Console.getInstance().show();
+			}
+		}
+		
+		/**
+		 * 控制台有数据推送过来
+		 * @param event
+		 */
+		private function console_dataHandler(event:DataEvent):void
+		{
+			MvcEventDispatcher.dispatch(ModuleName.CORE, new ConsoleEvent(event.data));
 		}
 		
 		

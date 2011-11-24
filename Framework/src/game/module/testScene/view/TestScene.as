@@ -4,7 +4,6 @@ package game.module.testScene.view
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	
-	import game.module.testScene.controls.TestSceneController;
 	import game.module.testScene.model.TestSceneData;
 	
 	import reign.common.Common;
@@ -39,7 +38,6 @@ package game.module.testScene.view
 		private var _alert:Alert;
 		
 		private var _data:TestSceneData;
-		private var _controller:TestSceneController;
 		
 		
 		public function TestScene()
@@ -47,7 +45,6 @@ package game.module.testScene.view
 			super();
 			instance = this;
 			_data = TestSceneData.getInstance();
-			_controller = new TestSceneController();
 			initUI(Common.loader.getXML(Common.language.getLanguage("020201")));
 			
 			Common.stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
