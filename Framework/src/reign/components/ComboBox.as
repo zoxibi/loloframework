@@ -284,7 +284,7 @@ package reign.components
 		
 		
 		/**
-		 * 设置当前文本的内容
+		 * 当前文本的内容
 		 */
 		public function set label(value:String):void
 		{
