@@ -1,11 +1,10 @@
 package game.module.core.view
 {
-	import flash.display.DisplayObject;
 	import flash.utils.getDefinitionByName;
 	
 	import game.common.GameConstants;
 	import game.common.ModuleName;
-	import game.module.chat.view.IChat;
+	import game.module.loginScene.view.ILoginScene;
 	import game.module.testScene.view.ITestScene;
 	import game.ui.LoadBar;
 	import game.ui.RequestModal;
@@ -26,10 +25,9 @@ package game.module.core.view
 		
 		/**测试场景*/
 		private var _testScene:ITestScene;
+		/**登录场景*/
+		private var _loginScene:ILoginScene;
 		
-		
-		/**聊天模块*/
-		private var _chat:IChat;
 		
 		
 		/**
@@ -59,8 +57,48 @@ package game.module.core.view
 			_loadBar = new LoadBar();
 			_requestModal = new RequestModal();
 			
-			showTestScene([]);
+			showLoginScene([]);
 		}
+		
+		
+		
+		
+		/**
+		 * 显示【登录场景】
+		 * @param args
+		 */
+		private function showLoginScene(args:Array):void
+		{
+			if(_loginScene == null)
+			{
+				showLoadBar();
+				var info:Object;
+				info = Common.config.getResConfig("loginSceneConfig");
+				Common.loader.add(Common.language.getLanguage("020204"), info.url, Constants.RES_TYPE_XML, info.version);
+				info = Common.config.getResConfig("loginSceneView");
+				Common.loader.add(Common.language.getLanguage("020205"), info.url, Constants.RES_TYPE_CLA, info.version);
+				info = Common.config.getResConfig("loginSceneModule");
+				Common.loader.add(Common.language.getLanguage("020206"), info.url, Constants.RES_TYPE_CLA, info.version);
+				
+				Common.loader.load(loadLoginSceneComplete);
+			}
+			else {
+				loadLoginSceneComplete();
+			}
+		}
+		private function loadLoginSceneComplete():void
+		{
+			hideLoadBar();
+			if(_loginScene == null)
+			{
+				_loginScene = getDefinitionByName(ModuleName.SCENE_LOGIN).instance;
+				_loginScene.sceneID = GameConstants.SCENE_ID_LOGIN;
+			}
+			
+			switchScene(_loginScene);
+		}
+		
+		
 		
 		
 		
@@ -82,13 +120,6 @@ package game.module.core.view
 				info = Common.config.getResConfig("testSceneModule");
 				Common.loader.add(Common.language.getLanguage("020203"), info.url, Constants.RES_TYPE_CLA, info.version);
 				
-				info = Common.config.getResConfig("chatConfig");
-				Common.loader.add(Common.language.getLanguage("020301"), info.url, Constants.RES_TYPE_XML, info.version);
-				info = Common.config.getResConfig("chatView");
-				Common.loader.add(Common.language.getLanguage("020302"), info.url, Constants.RES_TYPE_CLA, info.version);
-				info = Common.config.getResConfig("chatModule");
-				Common.loader.add(Common.language.getLanguage("020303"), info.url, Constants.RES_TYPE_CLA, info.version);
-				
 				Common.loader.load(loadTestSceneComplete);
 			}
 			else {
@@ -102,12 +133,9 @@ package game.module.core.view
 			{
 				_testScene = getDefinitionByName(ModuleName.SCENE_TEST).instance;
 				_testScene.sceneID = GameConstants.SCENE_ID_TEST;
-				
-				_chat = getDefinitionByName(ModuleName.MODULE_CHAT).instance;
 			}
 			
 			switchScene(_testScene);
-			addChildToLayer(_chat as DisplayObject, Constants.LAYER_NAME_UI);
 		}
 		//
 	}
