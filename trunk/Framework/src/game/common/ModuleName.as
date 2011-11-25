@@ -12,10 +12,10 @@ package game.common
 		
 		/**测试场景*/
 		public static const SCENE_TEST:String = "game.module.testScene.view.TestScene";
+		/**登录场景*/
+		public static const SCENE_LOGIN:String = "game.module.loginScene.view.LoginScene";
 		
 		
-		/**聊天模块*/
-		public static const MODULE_CHAT:String = "game.module.chat.view.Chat";
 		//
 	}
 }

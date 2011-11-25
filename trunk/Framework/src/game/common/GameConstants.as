@@ -8,6 +8,8 @@ package game.common
 	{
 		/**测试场景ID*/
 		public static const SCENE_ID_TEST:uint = 0;
+		/**测试场景ID*/
+		public static const SCENE_ID_LOGIN:uint = 1;
 		
 		
 		/**鼠标样式 - 正常*/

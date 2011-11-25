@@ -1,6 +1,7 @@
 package game.ui
 {
 	import flash.display.Sprite;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.utils.getTimer;
 	
@@ -94,6 +95,7 @@ package game.ui
 			_timer.reset();
 			_list = [];
 			Common.ui.removeChildToLayer(this, Constants.LAYER_NAME_TOP);
+			Common.stage.removeEventListener(KeyboardEvent.KEY_DOWN, stage_keyDownHandler);
 		}
 		
 		
@@ -119,7 +121,20 @@ package game.ui
 				//将正在通信的请求，全部设置为超时
 				for each(var item:Object in _list) Common.service.timeout(item.rm);
 				_list = [];
+				
+				Common.stage.addEventListener(KeyboardEvent.KEY_DOWN, stage_keyDownHandler);
 			}
+		}
+		
+		
+		/**
+		 * 舞台上有按键
+		 * @param event
+		 */
+		private function stage_keyDownHandler(event:KeyboardEvent):void
+		{
+			//按下回车或空格
+			if(event.keyCode == 13 || event.keyCode == 32) reset();
 		}
 		
 		
