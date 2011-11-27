@@ -6,9 +6,9 @@ package game.common
 	 */
 	public class GameConstants
 	{
-		/**测试场景ID*/
+		/**场景ID - 测试*/
 		public static const SCENE_ID_TEST:uint = 0;
-		/**测试场景ID*/
+		/**场景ID - 登录*/
 		public static const SCENE_ID_LOGIN:uint = 1;
 		
 		
