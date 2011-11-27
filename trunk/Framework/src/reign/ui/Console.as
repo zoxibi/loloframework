@@ -8,7 +8,7 @@ package reign.ui
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
-
+	
 	/**
 	 * 调试输出控制台
 	 * @author LOLO
