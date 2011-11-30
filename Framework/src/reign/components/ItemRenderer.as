@@ -149,6 +149,7 @@ package reign.components
 		public function dispose():void
 		{
 			_group = null;
+			ToolTip.unregister(this);
 		}
 		//
 	}
