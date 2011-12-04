@@ -1,6 +1,6 @@
 package reign.common
 {
-	import com.adobe.serialization.json.JSON;
+	import com.adobe.serialization.json.AdobeJSON;
 	
 	import flash.utils.Dictionary;
 	
@@ -50,7 +50,7 @@ package reign.common
 			
 			for(var i:int = 0; i < list.style.length(); i++)
 			{
-				_styleList[String(list.style[i].@name)] = JSON.decode(list.style[i].@style);
+				_styleList[String(list.style[i].@name)] = AdobeJSON.decode(list.style[i].@style);
 			}
 		}
 		
