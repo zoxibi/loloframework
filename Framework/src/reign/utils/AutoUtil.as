@@ -1,6 +1,6 @@
 package reign.utils
 {
-	import com.adobe.serialization.json.JSON;
+	import com.adobe.serialization.json.AdobeJSON;
 	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -217,7 +217,7 @@ package reign.utils
 		{
 			if(jsonStr != "")
 			{
-				var prop:Object = JSON.decode(jsonStr);
+				var prop:Object = AdobeJSON.decode(jsonStr);
 				if(prop.styleName != null) ToolTip.registerStyle(target, prop.styleName);
 				
 				ToolTip.register(target, prop.text, prop.toolTipID);
@@ -305,7 +305,7 @@ package reign.utils
 		 */
 		public static function initJsonString(target:Object, jsonStr:String):void
 		{
-			if(jsonStr.length > 0) initObject(target, JSON.decode(jsonStr));
+			if(jsonStr.length > 0) initObject(target, AdobeJSON.decode(jsonStr));
 		}
 		
 		

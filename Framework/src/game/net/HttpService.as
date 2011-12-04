@@ -1,6 +1,6 @@
 package game.net
 {
-	import com.adobe.serialization.json.JSON;
+	import com.adobe.serialization.json.AdobeJSON;
 	
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -115,7 +115,7 @@ package game.net
 			//转换数据
 			var data:Object;
 			try {
-				data = JSON.decode(bytes.toString());
+				data = AdobeJSON.decode(bytes.toString());
 			}
 			catch(error:Error) {
 				msg = Common.language.getLanguage("010302");
