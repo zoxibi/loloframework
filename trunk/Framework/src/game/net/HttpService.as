@@ -80,7 +80,7 @@ package game.net
 		}
 		
 		
-		public function timeout(rm:RequestModel):void
+		public function setTimeout(rm:RequestModel):void
 		{
 			getLoader(rm).close();
 			var msg:String = Common.language.getLanguage("010303");

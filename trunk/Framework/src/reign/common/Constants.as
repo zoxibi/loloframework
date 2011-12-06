@@ -6,8 +6,10 @@ package reign.common
 	 */
 	public class Constants
 	{
-		/**程序核心的名称*/
-		public static const APP_CORE_NAME:String = "appCoreName";
+		/**后台服务类型 - tcp socket*/
+		public static const SERVICE_TYPE_SOCKET:String = "socket";
+		/**后台服务类型 - http*/
+		public static const SERVICE_TYPE_HTTP:String = "http";
 		
 		/**class类型的资源*/
 		public static const RES_TYPE_CLA:String = "class";

@@ -21,6 +21,6 @@ package reign.net
 		 * 将指定的一条通信设置为超时（模态的请求才会被设置为超时）
 		 * @param rm
 		 */
-		function timeout(rm:RequestModel):void;
+		function setTimeout(rm:RequestModel):void;
 	}
 }
