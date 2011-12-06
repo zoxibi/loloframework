@@ -119,7 +119,7 @@ package game.ui
 				view.getChildByName("fail").visible = true;
 				
 				//将正在通信的请求，全部设置为超时
-				for each(var item:Object in _list) Common.service.timeout(item.rm);
+				for each(var item:Object in _list) Common.service.setTimeout(item.rm);
 				_list = [];
 				
 				Common.stage.addEventListener(KeyboardEvent.KEY_DOWN, stage_keyDownHandler);
