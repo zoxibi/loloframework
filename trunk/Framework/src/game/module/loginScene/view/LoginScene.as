@@ -1,4 +1,4 @@
-package game.module.loginScene.view
+﻿package game.module.loginScene.view
 {
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
@@ -82,8 +82,6 @@ package game.module.loginScene.view
 			
 			registerBtn.addEventListener(MouseEvent.CLICK, registerBtn_clickHandler);
 			loginBtn.addEventListener(MouseEvent.CLICK, loginBtn_clickHandler);
-			usernameIT.addEventListener(KeyboardEvent.KEY_DOWN, inputText_keyDownHandler);
-			passwordIT.addEventListener(KeyboardEvent.KEY_DOWN, inputText_keyDownHandler);
 		}
 		
 		
@@ -148,9 +146,19 @@ package game.module.loginScene.view
 		}
 		
 		
+		
 		override protected function startup():void
 		{
 			stage.focus = usernameIT;
+			usernameIT.addEventListener(KeyboardEvent.KEY_DOWN, inputText_keyDownHandler);
+			passwordIT.addEventListener(KeyboardEvent.KEY_DOWN, inputText_keyDownHandler);
+		}
+		
+		
+		override protected function reset():void
+		{
+			usernameIT.removeEventListener(KeyboardEvent.KEY_DOWN, inputText_keyDownHandler);
+			passwordIT.removeEventListener(KeyboardEvent.KEY_DOWN, inputText_keyDownHandler);
 		}
 		//
 	}
