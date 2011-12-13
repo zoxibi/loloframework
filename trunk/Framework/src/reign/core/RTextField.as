@@ -207,6 +207,18 @@ package reign.core
 			resetSize();
 		}
 		
+		
+		/**
+		 * 设置文本显示内容在语言包中的ID，将会通过ID自动到语言包中拿取对应的内容
+		 * @param value
+		 */
+		public function set textID(value:String):void
+		{
+			text = Common.language.getLanguage(value);
+		}
+		
+		
+		
 		/**
 		 * 设置文本显示html内容
 		 * @param value
