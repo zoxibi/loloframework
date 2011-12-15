@@ -77,7 +77,7 @@ package reign.components
 		 * 数据
 		 */
 		public function set data(value:*):void { _data = value; }
-		public function get data():* { return null; }
+		public function get data():* { return _data; }
 		
 		/**
 		 * 在组中的索引
