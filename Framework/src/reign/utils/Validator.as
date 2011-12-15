@@ -25,7 +25,11 @@ package reign.utils
 		 */
 		public static function notExactlySpace(str:String):Boolean
 		{
-			return str.length >= str.split(" ").length + str.split("　").length;
+			for(var i:int = 0; i < str.length; i++)
+			{
+				if(str.charAt(i) != " " && str.charAt(i) != "　") return true;
+			}
+			return false;
 		}
 		//
 	}
