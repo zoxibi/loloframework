@@ -21,7 +21,7 @@ package reign.utils.bind
 		 * 改变值，并进行验证，是否抛出数据值改变事件
 		 * @param valueName 值的名称
 		 * @param oldValueName 原值的名称
-		 * @param newValue 新值的名称
+		 * @param newValue 新值
 		 */		
 		protected function changeValue(valueName:String, oldValueName:String, newValue:*):void
 		{
