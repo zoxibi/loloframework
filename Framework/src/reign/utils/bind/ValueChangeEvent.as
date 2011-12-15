@@ -27,7 +27,7 @@ package reign.utils.bind
 		 * @param oldValue 原值
 		 * @param newValue 新值
 		 */		
-		public function ValueChangeEvent(type:String, valueName:String="", oldValue:String=null, newValue:String=null)
+		public function ValueChangeEvent(type:String, valueName:String="", oldValue:*=null, newValue:*=null)
 		{
 			super(type);
 			
