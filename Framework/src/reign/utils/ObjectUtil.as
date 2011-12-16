@@ -13,6 +13,7 @@ package reign.utils
 	{
 		/**
 		 * 深度克隆一个对象
+		 * 注：无法对有过delete操作的flash.utils.Dictionary对象进行克隆
 		 * @param source 要克隆的对象
 		 * @return 
 		 */
