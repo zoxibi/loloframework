@@ -1,8 +1,6 @@
 package reign.data
 {
 	import flash.utils.Dictionary;
-	
-	import reign.utils.ObjectUtil;
 
 	/**
 	 * 哈希表数据
@@ -33,6 +31,7 @@ package reign.data
 		/**通过键获取值*/
 		public function getValueByKey(key:*):*
 		{
+			if(_keys[key] == undefined) return null;
 			return getValueByIndex(_keys[key]);
 		}
 		
@@ -121,12 +120,17 @@ package reign.data
 		{
 			_values.splice(index, 1);
 			
-			var keys:Dictionary = ObjectUtil.baseClone(_keys);
-			for(var key:* in keys)
+			//克隆一份_keys进行for...in操作，直接对_keys进行操作将会导致for..in无序
+			var key:*;
+			var keys:Dictionary = new Dictionary();
+			for(key in _keys) keys[key] = _keys[key];
+			
+			//检查key
+			for(key in keys)
 			{
 				//移除相关的key
 				if(_keys[key] == index) {
-					_keys[key] = undefined;
+					delete _keys[key];
 				}
 				//后面的索引递减一次
 				else if(_keys[key] > index) {
@@ -156,7 +160,9 @@ package reign.data
 		/**克隆*/
 		public function clone():IHashMap
 		{
-			return new HashMap(_values.concat(), ObjectUtil.baseClone(_keys));
+			var keys:Dictionary = new Dictionary();
+			for(var key:* in _keys) keys[key] = _keys[key];
+			return new HashMap(_values.concat(), keys);
 		}
 		
 		/**值的数量*/

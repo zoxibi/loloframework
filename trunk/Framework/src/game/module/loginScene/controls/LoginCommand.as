@@ -1,4 +1,4 @@
-package game.module.loginScene.controls
+﻿package game.module.loginScene.controls
 {
 	import flash.net.SharedObject;
 	
@@ -39,6 +39,7 @@ package game.module.loginScene.controls
 				var so:SharedObject = SharedObject.getLocal("LOLO_Framework");
 				so.data.username = _e.username;
 				so.data.password = _e.password;
+				so.flush();
 			}
 		}
 		//
