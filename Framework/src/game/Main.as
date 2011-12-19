@@ -5,6 +5,7 @@ package game
 	import flash.display.Sprite;
 	import flash.events.Event;
 	
+	import game.net.SocketService;
 	import game.ui.Loading;
 	
 	import reign.common.Common;
@@ -45,6 +46,8 @@ package game
 			Common.language = LanguageManager.getInstance();
 			
 			loadConfigXml();
+			
+			SocketService;
 		}
 		
 		

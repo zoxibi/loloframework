@@ -4,16 +4,21 @@ package game.net
 	
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
+	import flash.events.ProgressEvent;
 	import flash.events.SecurityErrorEvent;
+	import flash.geom.Point;
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
+	import flash.net.URLStream;
 	import flash.net.URLVariables;
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	
 	import reign.common.Common;
+	import reign.components.AlertText;
 	import reign.data.RequestModel;
 	import reign.net.IService;
+	import reign.ui.Console;
 	
 	/**
 	 * 与后台通信的HTTP服务
@@ -28,6 +33,10 @@ package game.net
 		
 		/**通信实例列表（RequestModel为key）*/
 		private var _loaderList:Dictionary;
+		/**用于长连接*/
+		private var _longConnect:URLStream;
+		/**长连接当前要读取的数据长度*/
+		private var _lcDataLength:int = 0;
 		
 		
 		
@@ -52,6 +61,12 @@ package game.net
 			}
 			
 			_loaderList = new Dictionary();
+			
+			_longConnect = new URLStream();
+			_longConnect.addEventListener(ProgressEvent.PROGRESS, longConnect_progressHandler);
+			_longConnect.addEventListener(Event.COMPLETE, longConnectReconnect);
+			_longConnect.addEventListener(IOErrorEvent.IO_ERROR, longConnectReconnect);
+			_longConnect.addEventListener(SecurityErrorEvent.SECURITY_ERROR, longConnectReconnect);
 		}
 		
 		
@@ -64,6 +79,7 @@ package game.net
 			loader.close();
 			loader.callback = callback;
 			loader.alertError = alertError;
+			if(alertError) loader.mousePoint = new Point(Common.stage.mouseX, Common.stage.mouseY);
 			
 			var url:String = Common.serviceUrl + rm.command + "&t=" + rm.token;
 			var request:URLRequest = new URLRequest(url);
@@ -84,7 +100,7 @@ package game.net
 		{
 			getLoader(rm).close();
 			var msg:String = Common.language.getLanguage("010303");
-			callback(rm, false, {message:msg}, true);
+			callback(rm, false, {msg:msg}, true);
 		}
 		
 		
@@ -107,7 +123,7 @@ package game.net
 				}
 				catch(error:Error) {
 					msg = Common.language.getLanguage("010301");
-					callback(rm, false, {message:msg});
+					callback(rm, false, {msg:msg});
 					return;
 				}
 			}
@@ -119,12 +135,11 @@ package game.net
 			}
 			catch(error:Error) {
 				msg = Common.language.getLanguage("010302");
-				callback(rm, false, {message:msg});
+				callback(rm, false, {msg:msg});
 				return;
 			}
 			
 			var state:int = data.state;
-			
 			//操作成功
 			if(state == 1)
 			{
@@ -135,7 +150,7 @@ package game.net
 			else if(state == 2)
 			{
 				msg = Common.language.getLanguage("010304", data.errorCode);
-				callback(rm, false, {message:msg});
+				callback(rm, false, {msg:msg});
 			}
 			
 			//操作失败
@@ -151,7 +166,7 @@ package game.net
 		private function errorHandler(event:Event):void
 		{
 			var msg:String = Common.language.getLanguage("010305");
-			callback(event.target.requestModel, false, {message:msg});
+			callback(event.target.requestModel, false, {msg:msg});
 		}
 		
 		
@@ -165,7 +180,65 @@ package game.net
 		 */
 		private function callback(rm:RequestModel, success:Boolean, data:Object, timeout:Boolean=false):void
 		{
+			var loader:HttpLoader = getLoader(rm);
+			data.timeout = timeout;
 			
+			if(rm.modal) Common.ui.requesModal.endModal(rm);
+			if(timeout) loader.close();
+			
+			if(!success && loader.alertError)
+			{
+				var alertText:AlertText = AlertText.getInstance("serviceError");
+				alertText.x = loader.mousePoint.x;
+				alertText.y = loader.mousePoint.y;
+				alertText.show(data.msg);
+			}
+			
+			if(loader.callback != null) loader.callback(success, data);
+		}
+		
+		
+		
+		
+		/**
+		 * 长连接收到数据
+		 * @param event
+		 */
+		private function longConnect_progressHandler(event:ProgressEvent=null):void
+		{
+			//目前还没有读到数据长度
+			if(_lcDataLength == 0) {
+				if(_longConnect.bytesAvailable >= 4) {
+					_lcDataLength = _longConnect.readInt();
+				}
+				else {
+					return;
+				}
+			}
+			
+			//缓冲区的数据长度不够
+			if(_longConnect.bytesAvailable < _lcDataLength) return;
+			
+			
+			//读取数据
+			var str:String = _longConnect.readUTFBytes(_lcDataLength);
+			Console.trace("HTTP长连接收到数据：", str);
+			
+			
+			//缓冲区还有数据，继续读
+			_lcDataLength = 0;
+			if(_longConnect.bytesAvailable > 0) longConnect_progressHandler();
+		}
+		
+		
+		/**
+		 * 长连接重连
+		 * @param event
+		 */
+		public function longConnectReconnect(event:Event=null):void
+		{
+			var str:String = (event != null) ? (event.type + "  之前剩余数据长度：" + _longConnect.bytesAvailable) : "";
+			Console.trace("HTTP长连接重连", str);
 		}
 		
 		

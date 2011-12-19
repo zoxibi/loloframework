@@ -41,6 +41,8 @@ package reign.common
 		public static var resVersion:String;
 		/**后台服务器的网络地址*/
 		public static var serviceUrl:String = "";
+		/**当前后台服务类型*/
+		public static var serviceType:String = "";
 		/**资源服务器的网络地址*/
 		public static var resServerUrl:String = "";
 		/**初始数据，由FlashVars传人*/

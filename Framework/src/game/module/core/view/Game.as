@@ -9,7 +9,6 @@ package game.module.core.view
 	import game.common.ModuleName;
 	import game.module.core.controls.CoreController;
 	import game.module.core.events.ConsoleEvent;
-	import game.net.HttpService;
 	
 	import reign.common.Common;
 	import reign.common.ConfigManager;
@@ -77,7 +76,6 @@ package game.module.core.view
 			
 			Console.getInstance().container = Common.stage;
 			
-			Common.service = HttpService.getInstance();
 			Common.sound = SoundManager.getInstance();
 			
 			Common.mouse = MouseManager.getInstance();
