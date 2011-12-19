@@ -182,11 +182,24 @@ package reign.ui
 		 */
 		private function inputIT_keyDownHandler(event:KeyboardEvent):void
 		{
-			//按下回车
+			//按下 Enter 键
 			if(event.keyCode == 13) {
 				this.dispatchEvent(new DataEvent(DataEvent.DATA, false, false, inputIT.text));
 			}
 		}
+		
+		
+		
+		/**
+		 * 在舞台按键
+		 * @param event
+		 */
+		private function stage_keyDownHandler(event:KeyboardEvent):void
+		{
+			//按下 Esc 键
+			if(event.keyCode == 27) hide();
+		}
+		
 		
 		
 		/**
@@ -194,7 +207,10 @@ package reign.ui
 		 */
 		public function show():void
 		{
-			if(container != null) container.addChild(this);
+			if(container != null) {
+				container.addChild(this);
+				stage.addEventListener(KeyboardEvent.KEY_DOWN, stage_keyDownHandler);
+			}
 		}
 		
 		/**
@@ -202,6 +218,7 @@ package reign.ui
 		 */
 		public function hide():void
 		{
+			if(stage != null) stage.removeEventListener(KeyboardEvent.KEY_DOWN, stage_keyDownHandler);
 			if(this.parent != null) this.parent.removeChild(this);
 		}
 		//

@@ -1,6 +1,7 @@
 package game.module.core.controls
 {
 	import game.common.ModuleName;
+	import game.module.core.events.ChangeServiceTypeEvent;
 	import game.module.core.events.ConsoleEvent;
 	
 	import reign.mvc.control.FrontController;
@@ -19,6 +20,7 @@ package game.module.core.controls
 			
 			
 			addCommand(ConsoleEvent.EVENT_ID, ConsoleCommand);
+			addCommand(ChangeServiceTypeEvent.EVENT_ID, ChangeServiceTypeCommand);
 		}
 		//
 	}

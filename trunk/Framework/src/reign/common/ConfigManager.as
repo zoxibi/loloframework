@@ -47,7 +47,7 @@ package reign.common
 			_config = Common.loader.getXML("config", true);
 			
 			Common.resVersion = getConfig("resVersion");
-			Common.serviceUrl = getConfig("serviceUrl");
+			Common.serviceUrl = getConfig("socketServiceUrl");
 		}
 		
 		/**
