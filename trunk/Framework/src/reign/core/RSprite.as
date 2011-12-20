@@ -40,7 +40,7 @@ package reign.core
 		private var _showEffectDuration:Number = 0.3;
 		/**隐藏动画的持续时间(单位:秒)*/
 		private var _hideEffectDuration:Number = 0.2;
-		/**隐藏动画的延迟时间(单位:秒)*/
+		/**显示动画的延迟时间(单位:秒)*/
 		private var _showEffectDelay:Number = 0;
 		/**隐藏动画的延迟时间(单位:秒)*/
 		private var _hideEffectDelay:Number = 0;
