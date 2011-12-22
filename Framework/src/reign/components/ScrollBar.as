@@ -1,6 +1,5 @@
 package reign.components
 {
-	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
@@ -31,7 +30,7 @@ package reign.components
 		private var _downArrow:BaseButton;
 		
 		/**滚动的内容*/
-		private var _content:DisplayObject;
+		private var _content:Sprite;
 		/**内容的显示区域（滚动区域）*/
 		private var _disArea:Rectangle;
 		
@@ -162,6 +161,7 @@ package reign.components
 		 */
 		public function update():void
 		{
+			_content.graphics.clear();//清除用于填充空白区域的绘制内容
 			_isShow = _content[_wh] > _disArea[_wh];
 			
 			if(autoDisplay) this.visible = _isShow;
@@ -183,6 +183,11 @@ package reign.components
 				_thumb.addEventListener(MouseEvent.MOUSE_DOWN, thumb_mouseDownHandler);
 				if(_upArrow != null) _upArrow.addEventListener(MouseEvent.MOUSE_DOWN, arrowMouseDownHandler);
 				if(_downArrow != null) _downArrow.addEventListener(MouseEvent.MOUSE_DOWN, arrowMouseDownHandler);
+				
+				//绘制内容的空白区域
+				_content.graphics.beginFill(0x0, 0.001);
+				_content.graphics.drawRect(0, 0, _content.width, _content.height);
+				_content.graphics.endFill();
 			}
 			else {
 				_thumb[_xy] = _track[_xy];
@@ -460,12 +465,12 @@ package reign.components
 		/**
 		 * 滚动的内容
 		 */
-		public function set content(value:DisplayObject):void
+		public function set content(value:Sprite):void
 		{
 			_content = value;
 			init();
 		}
-		public function get content():DisplayObject { return _content; }
+		public function get content():Sprite { return _content; }
 		
 		
 		
