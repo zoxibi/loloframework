@@ -113,6 +113,8 @@ package game.module.testScene.view
 			cb.editable = false;
 			cb.list.itemRendererClass = ComboBoxItemRenderer;
 			cb.listData = hp;
+			
+			timerHandler();
 		}
 		
 		
