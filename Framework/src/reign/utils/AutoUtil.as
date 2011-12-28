@@ -126,7 +126,7 @@ package reign.utils
 						break;
 					
 					//Item集合
-					case "group":
+					case "itemGroup":
 						if(obj == null) obj = new ItemGroup();
 						break;
 					
