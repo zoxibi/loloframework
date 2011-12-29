@@ -214,6 +214,8 @@ package reign.components
 		 */
 		public function clear():void
 		{
+			Common.ui.removeChildToLayer(this, Constants.LAYER_NAME_ALERT);
+			
 			if(this.numChildren == 0) return;
 			
 			this.removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
@@ -221,6 +223,7 @@ package reign.components
 			for(var i:int = 0; i < _btnC.numChildren; i++) _btnC.getChildAt(i).removeEventListener(MouseEvent.CLICK, btn_clickHandler);
 			
 			while(this.numChildren > 0) this.removeChildAt(0);
+			
 		}
 		
 		
