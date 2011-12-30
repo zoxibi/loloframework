@@ -48,7 +48,6 @@ package game
 		}
 		
 		
-		
 		/**
 		 * 加载网页目录下的Config.xml文件
 		 */
