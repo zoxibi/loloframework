@@ -108,7 +108,7 @@ package reign.utils
 			}
 			
 			//该delay，已经没有计时器在运行了
-			if(!running) timer.reset();
+			if(!running) item.timer.reset();
 		}
 		
 		
@@ -177,6 +177,14 @@ package reign.utils
 		public function stop():void
 		{
 			running = false;
+			
+			var item:Object = _list[delay];
+			for(var key:* in item.list)
+			{
+				var rTimer:RTimer = item.list[key];
+				if(rTimer.running) return;
+			}
+			item.timer.reset();
 		}
 		
 		/**
