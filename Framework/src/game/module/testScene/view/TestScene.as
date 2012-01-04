@@ -16,6 +16,7 @@ package game.module.testScene.view
 	import reign.core.Scene;
 	import reign.data.HashMap;
 	import reign.data.RequestModel;
+	import reign.utils.RTimer;
 	import reign.utils.UbbUtil;
 
 	/**
@@ -114,7 +115,9 @@ package game.module.testScene.view
 			cb.list.itemRendererClass = ComboBoxItemRenderer;
 			cb.listData = hp;
 			
-			timerHandler();
+			
+			var t:RTimer = RTimer.getInstance(2000, timerHandler);
+			t.start()
 		}
 		
 		
@@ -137,8 +140,6 @@ package game.module.testScene.view
 			
 			vsb.update();
 			hsb.update();
-			
-			
 		}
 		
 		private var _a:RequestModel = new RequestModel("a");
@@ -155,6 +156,15 @@ package game.module.testScene.view
 //			else {
 //				Common.ui.requesModal.endModal(_a);
 //			}
+			
+			
+		}
+		
+		
+		
+		override protected function startup():void
+		{
+			
 		}
 		//
 	}

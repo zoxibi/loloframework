@@ -57,7 +57,8 @@ package game.module.core.view
 			_loadBar = new LoadBar();
 			_requestModal = new RequestModal();
 			
-			showLoginScene([]);
+//			showLoginScene([]);
+			showTestScene([]);
 		}
 		
 		
