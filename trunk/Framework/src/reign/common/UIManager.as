@@ -250,7 +250,7 @@ package reign.common
 		 * @param panelName 窗口模块中，面板的名称
 		 * @param closeOther 是否关闭其他已打开的窗口
 		 */
-		protected function openOrCloseWindow(window:IWindow, panelName:String, closeOther:Boolean=true):void
+		public function openOrCloseWindow(window:IWindow, panelName:String, closeOther:Boolean=true):void
 		{
 			//不是当前已打开的窗口模块
 			if(window != _nowWindow) {
