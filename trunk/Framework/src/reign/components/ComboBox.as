@@ -1,4 +1,4 @@
-package reign.components
+﻿package reign.components
 {
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
@@ -200,8 +200,7 @@ package reign.components
 			list.visible = isOpen;
 			if(listBG != null) listBG.visible = isOpen;
 			if(listVSB != null) {
-				listVSB.visible = isOpen;
-				if(isOpen && listVSB.autoDisplay) list.visible = listVSB.isShow;
+				listVSB.visible = isOpen && listVSB.isShow;
 			}
 		}
 		
