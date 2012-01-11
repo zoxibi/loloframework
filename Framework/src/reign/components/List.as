@@ -124,6 +124,7 @@ package reign.components
 			for(i = 0; i < length; i++)
 			{
 				item = (_itemPool.length > 0) ? _itemPool.shift() : new _itemRendererClass();
+				item.index = i;
 				item.data = _data.getValueByIndex(i + pageIndex);
 				addItem(item);
 				addChild(item as DisplayObject);
