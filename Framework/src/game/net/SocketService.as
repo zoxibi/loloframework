@@ -163,11 +163,6 @@ package game.net
 			}
 			
 			
-			//缓冲区还有数据，继续读
-			_dataLength = 0;
-			if(bytesAvailable > 0) socketDataHandler();
-			
-			
 			var msg:String;
 			var data:Object;
 			//转换数据
@@ -204,6 +199,11 @@ package game.net
 			else {
 				callback(false, data, command, token);
 			}
+			
+			
+			//缓冲区还有数据，继续读
+			_dataLength = 0;
+			if(bytesAvailable > 0) socketDataHandler();
 		}
 		
 		
