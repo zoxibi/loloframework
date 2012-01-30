@@ -109,7 +109,7 @@ package reign.components
 			//加载失败
 			else
 			{
-				trace("DisplayObjectLoader 加载", _url, "失败！");
+				trace("ImageLoader 加载", _url, "失败！");
 			}
 			
 			this.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadHandler);

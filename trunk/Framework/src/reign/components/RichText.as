@@ -356,6 +356,16 @@ package reign.components
 		 * 获取设置的高度
 		 */
 		public function get setHeight():Number { return _height; }
+		
+		
+		
+		/**
+		 * 清除所有内容
+		 */
+		public function clear():void
+		{
+			while(_textFlow.numChildren > 0) _textFlow.removeChildAt(0);
+		}
 		//
 	}
 }

@@ -37,7 +37,7 @@ package reign.common
 		private var _claLoader:Loader;
 		/**用于加载image资源*/
 		private var _imgLoader:Loader;
-		/**用于加载wsf资源*/
+		/**用于加载swf资源*/
 		private var _swfLoader:Loader;
 		/**用于加载zip资源*/
 		private var _zipLoader:URLLoader;

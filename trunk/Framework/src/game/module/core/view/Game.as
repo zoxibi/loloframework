@@ -23,6 +23,7 @@ package game.module.core.view
 	import reign.data.LastTime;
 	import reign.mvc.control.MvcEventDispatcher;
 	import reign.ui.Console;
+	import reign.ui.Stats;
 	import reign.utils.AutoUtil;
 	import reign.utils.RandomUtil;
 	import reign.utils.TimeUtil;
@@ -75,6 +76,7 @@ package game.module.core.view
 			Alert.BACK	= Common.language.getLanguage("030306");
 			
 			Console.getInstance().container = Common.stage;
+			Stats.getInstance().container = Common.stage;
 			
 			Common.sound = SoundManager.getInstance();
 			

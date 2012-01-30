@@ -230,6 +230,7 @@ package reign.components
 		}
 		
 		
+		
 		/**
 		 * 按钮的链接文本
 		 */
@@ -331,6 +332,19 @@ package reign.components
 			update();
 		}
 		public function get labelVerticalAlign():String { return _labelVerticalAlign; }
+		
+		
+		
+		/**
+		 * 用于清理引用，释放内存
+		 * 在丢弃该组件时，需要主动调用该方法
+		 */
+		override public function dispose():void
+		{
+			_labelText.dispose();
+			
+			super.dispose();
+		}
 		//
 	}
 }

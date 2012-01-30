@@ -12,7 +12,8 @@ package reign.components
 	public class NumberText extends Label
 	{
 		/**文本原来的颜色*/
-		public var originalColor:uint;
+		private var _originalColor:uint;
+		
 		/**值增加时，切换的颜色*/
 		public var upColor:uint;
 		/**值减少时，切换的颜色*/
@@ -39,10 +40,7 @@ package reign.components
 		{
 			super.style = value;
 			
-			if(value.originalColor != null) {
-				originalColor = value.originalColor;
-				this.color = originalColor;
-			}
+			if(value.originalColor != null) originalColor = value.originalColor;
 			if(value.upColor != null) upColor = value.upColor;
 			if(value.downColor != null) downColor = value.downColor;
 			if(value.delay != null) delay = value.delay;
@@ -86,7 +84,7 @@ package reign.components
 		{
 			count++;
 			
-			this.color = (count % 2) == 1 ? color : originalColor;
+			super.color = (count % 2) == 1 ? color : _originalColor;
 			
 			if(count >= 10)
 			{
@@ -95,6 +93,24 @@ package reign.components
 			}
 			
 			TweenMax.delayedCall(delay, changeColor, [count, color]);
+		}
+		
+		
+		
+		/**
+		 * 文本原来的颜色
+		 */
+		public function set originalColor(value:uint):void
+		{
+			_originalColor = value;
+			super.color = value;
+		}
+		public function get originalColor():uint { return _originalColor; }
+		
+		
+		override public function set color(value:uint):void
+		{
+			originalColor = value;
 		}
 		//
 	}

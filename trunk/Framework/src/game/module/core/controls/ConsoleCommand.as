@@ -5,6 +5,7 @@ package game.module.core.controls
 	import reign.mvc.command.ICommand;
 	import reign.mvc.control.MvcEvent;
 	import reign.ui.Console;
+	import reign.ui.Stats;
 	
 	/**
 	 * 处理控制台推送过来的数据
@@ -36,6 +37,10 @@ package game.module.core.controls
 			
 			switch(args[0])
 			{
+				case "统计":
+					Stats.getInstance().isShow ? Stats.getInstance().hide() : Stats.getInstance().show();
+					break;
+				
 				case "战报":
 					break;
 			}

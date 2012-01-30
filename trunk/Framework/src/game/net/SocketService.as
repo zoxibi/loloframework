@@ -162,6 +162,8 @@ package game.net
 				content = readUTFBytes(_dataLength - 4 - 32);
 			}
 			
+			//置空当前要读取的数据长度
+			_dataLength = 0;
 			
 			var msg:String;
 			var data:Object;
@@ -202,7 +204,6 @@ package game.net
 			
 			
 			//缓冲区还有数据，继续读
-			_dataLength = 0;
 			if(bytesAvailable > 0) socketDataHandler();
 		}
 		

@@ -9,6 +9,9 @@ package reign.components
 	 */
 	public class Mask extends Shape
 	{
+		/**遮罩的目标*/
+		private var _target:DisplayObject;
+		
 		
 		public function Mask()
 		{
@@ -62,9 +65,26 @@ package reign.components
 		 */
 		public function set target(value:DisplayObject):void
 		{
-			if(value.mask != null) value.mask.parent.removeChild(value.mask);
-			value.parent.addChild(this);
-			value.mask = this;
+			_target = value;
+			
+			if(_target.mask != null) _target.mask.parent.removeChild(_target.mask);
+			_target.parent.addChild(this);
+			_target.mask = this;
+		}
+		
+		
+		/**
+		 * 用于清理引用，释放内存
+		 * 在丢弃该组件时，需要主动调用该方法
+		 */
+		public function dispose():void
+		{
+			if(_target != null) {
+				_target.mask = null;
+				_target = null;
+			}
+			
+			if(parent != null) parent.removeChild(this);
 		}
 		//
 	}

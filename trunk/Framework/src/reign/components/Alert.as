@@ -181,7 +181,10 @@ package reign.components
 			clear();
 			var btn:Button = event.currentTarget as Button;
 			var e:CloseEvent = new CloseEvent(CloseEvent.CLOSE, btn.label);
-			if(callback != null) callback(e);
+			if(callback != null) {
+				callback(e);
+				callback = null;
+			}
 			this.dispatchEvent(e);
 		}
 		
@@ -218,12 +221,13 @@ package reign.components
 			
 			if(this.numChildren == 0) return;
 			
+			if(_modalBG != null) _modalBG.dispose();
+			
 			this.removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
 			for(var i:int = 0; i < _btnC.numChildren; i++) _btnC.getChildAt(i).removeEventListener(MouseEvent.CLICK, btn_clickHandler);
 			
 			while(this.numChildren > 0) this.removeChildAt(0);
-			
 		}
 		
 		
