@@ -2,10 +2,9 @@ package reign.common
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.events.TimerEvent;
 	import flash.utils.Dictionary;
-	import flash.utils.Timer;
 	
+	import reign.utils.RTimer;
 	import reign.utils.StringUtil;
 	import reign.utils.zip.ZipReader;
 
@@ -25,7 +24,7 @@ package reign.common
 		/**目前已提取的数量*/
 		private var _extractNum:int = 0;
 		/**用于提取语言包*/
-		private var _extractTimer:Timer;
+		private var _extractTimer:RTimer;
 		
 		
 		
@@ -50,8 +49,7 @@ package reign.common
 			
 			_language = new Dictionary();
 			
-			_extractTimer = new Timer(80);
-			_extractTimer.addEventListener(TimerEvent.TIMER, extractTimerHandler);
+			_extractTimer = RTimer.getInstance(80, extractTimerHandler);
 		}
 		
 		
@@ -94,7 +92,7 @@ package reign.common
 		 * 定时解析语言包
 		 * @param event
 		 */
-		private function extractTimerHandler(event:TimerEvent = null):void
+		private function extractTimerHandler():void
 		{
 			_extractTimer.reset();
 			
@@ -115,6 +113,9 @@ package reign.common
 			//提取完毕
 			else {
 				_languageXML = null;
+				_extractTimer.clear();
+				_extractTimer = null;
+				
 				this.dispatchEvent(new Event("initLanguageComplete"));
 			}
 		}

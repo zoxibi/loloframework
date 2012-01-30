@@ -186,7 +186,7 @@ package reign.components
 				this.removeEventListener(MouseEvent.ROLL_OVER, rollOverHandler);
 				this.removeEventListener(MouseEvent.ROLL_OUT, rollOutHandler);
 				this.removeEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
-				if(stage != null) stage.removeEventListener(MouseEvent.MOUSE_UP, stageMouseUpHandler);
+				Common.stage.removeEventListener(MouseEvent.MOUSE_UP, stageMouseUpHandler);
 				switchState(_selected ? STATE_SELECTED_DISABLED : STATE_DISABLED);
 			}
 		}
@@ -227,7 +227,7 @@ package reign.components
 		private function mouseDownHandler(event:MouseEvent):void
 		{
 			if(_enabled) {
-				stage.addEventListener(MouseEvent.MOUSE_UP, stageMouseUpHandler);
+				Common.stage.addEventListener(MouseEvent.MOUSE_UP, stageMouseUpHandler);
 				mouseDown();
 			}
 		}
@@ -243,7 +243,7 @@ package reign.components
 		 */
 		private function stageMouseUpHandler(event:MouseEvent):void
 		{
-			if(stage != null) stage.removeEventListener(MouseEvent.MOUSE_UP, stageMouseUpHandler);
+			Common.stage.removeEventListener(MouseEvent.MOUSE_UP, stageMouseUpHandler);
 			
 			if(event.target == this) {
 				rollOverHandler(event);

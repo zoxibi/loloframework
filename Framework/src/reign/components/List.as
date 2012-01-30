@@ -181,7 +181,7 @@ package reign.components
 		 * 强制刷新显示
 		 * @param isSelect 是否需要选中子项
 		 */
-		private function refresh(isSelect:Boolean=true):void
+		public function refresh(isSelect:Boolean=true):void
 		{
 			_isSelectItem = isSelect;
 			_lastShowState = {};
@@ -241,6 +241,26 @@ package reign.components
 		public function selectItemByDataKeys(keys:Array):void
 		{
 			selectItemByDataIndex(_data.getIndexByKeys(keys));
+		}
+		
+		
+		/**
+		 * 通过在数据中的键来设置子项的数据
+		 * @param key
+		 * @param data
+		 */
+		public function setItemDataByKey(key:*, data:*):void
+		{
+			if(_data == null) return;
+			
+			var index:int = _data.getIndexByKey(key);
+			if(_page != null) index -= _page.currentPage * numPerPage;
+			
+			var item:IItemRenderer = _itemList[index];
+			if(item != null) {
+				item.dispose();
+				item.data = data;
+			}
 		}
 		
 		
@@ -414,6 +434,18 @@ package reign.components
 			_lastShowState = {};
 			_currentSelectedIndex = 0;
 			_currentSelectedKeys = null;
+		}
+		
+		
+		
+		/**
+		 * 用于清理引用，释放内存
+		 * 在丢弃该组件时，需要主动调用该方法
+		 */
+		public function dispose():void
+		{
+			clear();
+			_page = null;
 		}
 		//
 	}

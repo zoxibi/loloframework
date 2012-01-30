@@ -5,6 +5,8 @@ package reign.components
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	
+	import reign.common.Common;
 
 	/**
 	 * 模态背景
@@ -39,7 +41,7 @@ package reign.components
 		{
 			if(stage != null) {
 				parent.removeEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
-				stage.addEventListener(Event.RESIZE, resizeHandler);
+				Common.stage.addEventListener(Event.RESIZE, resizeHandler);
 				draw();
 			}
 		}
@@ -61,10 +63,8 @@ package reign.components
 		 */
 		private function mouseDownHandler(event:Event):void
 		{
-			if(stage != null) {
-				stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-				stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
-			}
+			Common.stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+			Common.stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 		}
 		
 		/**
@@ -82,11 +82,9 @@ package reign.components
 		 */
 		private function mouseUpHandler(event:Event):void
 		{
-			if(stage != null) {
-				stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-				stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
-				draw();
-			}
+			Common.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+			Common.stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+			draw();
 		}
 		
 		
@@ -97,16 +95,14 @@ package reign.components
 		 */
 		public function draw():void
 		{
-			if(stage != null)
-			{
-				var p:Point = parent.globalToLocal(new Point(0, 0));
-				
-				this.graphics.clear();
-				this.graphics.beginFill(_color);
-				this.graphics.drawRect(p.x - 100, p.y - 100, stage.stageWidth + 200, stage.stageHeight + 200);//在周围多绘制100像素的缓冲区
-				this.graphics.endFill();
-			}
+			var p:Point = parent.globalToLocal(new Point(0, 0));
+			
+			this.graphics.clear();
+			this.graphics.beginFill(_color);
+			this.graphics.drawRect(p.x - 100, p.y - 100, Common.ui.stageWidth + 200, Common.ui.stageHeight + 200);//在周围多绘制100像素的缓冲区
+			this.graphics.endFill();
 		}
+		
 		
 		
 		/**
@@ -119,6 +115,22 @@ package reign.components
 			draw();
 		}
 		public function get color():uint { return _color; }
+		
+		
+		
+		
+		/**
+		 * 用于清理引用，释放内存
+		 * 在丢弃该组件时，需要主动调用该方法
+		 */
+		public function dispose():void
+		{
+			if(parent != null) parent.removeChild(this);
+			
+			Common.stage.removeEventListener(Event.RESIZE, resizeHandler);
+			Common.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+			Common.stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+		}
 		//
 	}
 }

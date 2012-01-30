@@ -281,7 +281,6 @@
 		
 		
 		
-		
 		/**
 		 * 当前文本的内容
 		 */
@@ -302,6 +301,18 @@
 			labelText.visible = !value;
 		}
 		public function get editable():Boolean { return _editable; }
+		
+		
+		
+		/**
+		 * 用于清理引用，释放内存
+		 * 在丢弃该组件时，需要主动调用该方法
+		 */
+		public function dispose():void
+		{
+			labelText.dispose();
+			arrowBtn.dispose();
+		}
 		//
 	}
 }

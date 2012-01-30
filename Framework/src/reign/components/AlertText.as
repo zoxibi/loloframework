@@ -130,7 +130,8 @@ package reign.components
 		 */
 		private function hideComplete():void
 		{
-			if(this.parent) this.parent.removeChild(this);
+			if(parent != null) parent.removeChild(this);
+			_parent = null;
 			
 			if(callback != null)
 			{

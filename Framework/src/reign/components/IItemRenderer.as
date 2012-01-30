@@ -62,8 +62,8 @@ package reign.components
 		function get index():uint;
 		
 		/**
-		 * 用于清理所占用的资源
-		 * 在所属的组进行清理工作时，将会主动调用该方法
+		 * 用于清理引用，释放内存
+		 * 在所属的组进行清理时，会自动调用该方法，无需手动调用
 		 */
 		function dispose():void;
 		//

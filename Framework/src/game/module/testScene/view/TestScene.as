@@ -1,8 +1,10 @@
 package game.module.testScene.view
 {
+	import flash.display.Loader;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.net.URLRequest;
 	
 	import game.module.testScene.model.TestSceneData;
 	
@@ -39,6 +41,8 @@ package game.module.testScene.view
 		private var _alert:Alert;
 		
 		private var _data:TestSceneData;
+		
+		private var _c:Sprite;
 		
 		
 		public function TestScene()
@@ -117,7 +121,10 @@ package game.module.testScene.view
 			
 			
 			var t:RTimer = RTimer.getInstance(2000, timerHandler);
-			t.start()
+//			t.start();
+			
+			_c = new Sprite();
+			this.addChild(_c);
 		}
 		
 		
@@ -146,6 +153,7 @@ package game.module.testScene.view
 		private var _b:RequestModel = new RequestModel("b");
 		private var n:int = 0;
 		
+		
 		private function mouseDownHandler(event:MouseEvent):void
 		{
 //			n++;
@@ -157,7 +165,39 @@ package game.module.testScene.view
 //				Common.ui.requesModal.endModal(_a);
 //			}
 			
+			var loader:Loader;
+			if(Math.random() > 0)
+			{
+				loader = new Loader();
+				loader.load(new URLRequest("http://bbs.gigabyte.cn/space/upload/2009/07/31/795965153202.jpg"));
+				_c.addChild(loader);
+			}
+			else {
+				if(_c.numChildren > 0) {
+//					loader = _c.getChildAt(0) as Loader;
+//					try {
+//						loader.close();
+//					}
+//					catch(err:Error) {}
+//					loader.unload();
+//					
+//					_c.removeChild(loader);
+				}
+				
+			}
 			
+			trace("Loader数：", _c.numChildren);
+			
+			if(_c.numChildren > 140) test222();
+		}
+		
+		
+		private function test222():void
+		{
+			trace("回收");
+			
+			while(_c.numChildren > 0) _c.removeChildAt(0);
+			Common.gc();
 		}
 		
 		

@@ -4,10 +4,10 @@ package reign.components
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.geom.Rectangle;
-	import flash.utils.Timer;
 	
 	import reign.common.Common;
 	import reign.utils.AutoUtil;
+	import reign.utils.RTimer;
 
 	/**
 	 * 滚动条
@@ -31,6 +31,8 @@ package reign.components
 		
 		/**滚动的内容*/
 		private var _content:Sprite;
+		/**内容的遮罩*/
+		private var _contentMask:Mask;
 		/**内容的显示区域（滚动区域）*/
 		private var _disArea:Rectangle;
 		
@@ -52,12 +54,12 @@ package reign.components
 		/**当前是否显示（内容尺寸是否超出了显示区域）*/
 		private var _isShow:Boolean;
 		
-		/**用于在对应的鼠标按下状态，定时滚动行或页*/
-		private var _timer:Timer;
-		
-		
 		/**在显示内容尺寸改变时，是否自动隐藏或显示*/
-		public var autoDisplay:Boolean;
+		private var _autoDisplay:Boolean;
+		
+		/**用于在对应的鼠标按下状态，定时滚动行或页*/
+		private var _timer:RTimer;
+		
 		/**是否自动调整滑块尺寸*/
 		public var autoThumbSize:Boolean;
 		
@@ -85,8 +87,7 @@ package reign.components
 			_upArrow	= AutoUtil.init(new BaseButton(), this);
 			_downArrow	= AutoUtil.init(new BaseButton(), this);
 			
-			_timer = new Timer(0);
-			_timer.addEventListener(TimerEvent.TIMER, timerHandler);
+			_timer = RTimer.getInstance(repeatDelay, timerHandler);
 		}
 		
 		
@@ -101,7 +102,7 @@ package reign.components
 			if(value.downArrowSkin != null) _downArrow.skin = value.downArrowSkin;
 			
 			if(value.direction != null) direction = value.direction;
-			if(value.autoDisplay != null) autoDisplay = value.autoDisplay;
+			if(value.autoDisplay != null) _autoDisplay = value.autoDisplay;
 			if(value.autoThumbSize != null) autoThumbSize = value.autoThumbSize;
 			if(value.thumbMinSize != null) thumbMinSize = value.thumbMinSize;
 			
@@ -161,10 +162,12 @@ package reign.components
 		 */
 		public function update():void
 		{
+			if(_disArea == null || _content == null) return;
+			
 			_content.graphics.clear();//清除用于填充空白区域的绘制内容
 			_isShow = _content[_wh] > _disArea[_wh];
 			
-			if(autoDisplay) this.visible = _isShow;
+			if(_autoDisplay) this.visible = _isShow;
 			enabled = _enabled;
 			
 			if(_isShow) {
@@ -214,8 +217,8 @@ package reign.components
 				: new Rectangle(_track.x, _track.y, 0, _track.height - _thumb.height);
 			
 			_thumb.startDrag(false, thumbDragBounds);
-			stage.addEventListener(MouseEvent.MOUSE_MOVE, thumb_stageMouseMoveHandler);
-			stage.addEventListener(MouseEvent.MOUSE_UP, thumb_stageMouseUpHandler);
+			Common.stage.addEventListener(MouseEvent.MOUSE_MOVE, thumb_stageMouseMoveHandler);
+			Common.stage.addEventListener(MouseEvent.MOUSE_UP, thumb_stageMouseUpHandler);
 		}
 		/**
 		 * 鼠标在场景移动（滑块按下状态）
@@ -233,8 +236,8 @@ package reign.components
 		private function thumb_stageMouseUpHandler(event:MouseEvent):void
 		{
 			_thumb.stopDrag();
-			stage.removeEventListener(MouseEvent.MOUSE_MOVE, thumb_stageMouseMoveHandler);
-			stage.removeEventListener(MouseEvent.MOUSE_UP, thumb_stageMouseUpHandler);
+			Common.stage.removeEventListener(MouseEvent.MOUSE_MOVE, thumb_stageMouseMoveHandler);
+			Common.stage.removeEventListener(MouseEvent.MOUSE_UP, thumb_stageMouseUpHandler);
 		}
 		
 		
@@ -253,7 +256,7 @@ package reign.components
 			_timer.start();
 			
 			moveContentByLine();
-			stage.addEventListener(MouseEvent.MOUSE_UP, arrow_stageMouseUpHandler);
+			Common.stage.addEventListener(MouseEvent.MOUSE_UP, arrow_stageMouseUpHandler);
 		}
 		/**
 		 * 鼠标在场景释放（箭头按下状态）
@@ -261,7 +264,7 @@ package reign.components
 		 */
 		private function arrow_stageMouseUpHandler(event:MouseEvent):void
 		{
-			stage.removeEventListener(MouseEvent.MOUSE_UP, arrow_stageMouseUpHandler);
+			Common.stage.removeEventListener(MouseEvent.MOUSE_UP, arrow_stageMouseUpHandler);
 			_timer.reset();
 		}
 		
@@ -282,7 +285,7 @@ package reign.components
 			_timer.start();
 			
 			moveContentByPage();
-			stage.addEventListener(MouseEvent.MOUSE_UP, track_stageMouseUpHandler);
+			Common.stage.addEventListener(MouseEvent.MOUSE_UP, track_stageMouseUpHandler);
 		}
 		/**
 		 * 鼠标在场景释放（轨道按下状态）
@@ -290,7 +293,7 @@ package reign.components
 		 */
 		private function track_stageMouseUpHandler(event:MouseEvent):void
 		{
-			stage.removeEventListener(MouseEvent.MOUSE_UP, track_stageMouseUpHandler);
+			Common.stage.removeEventListener(MouseEvent.MOUSE_UP, track_stageMouseUpHandler);
 			_timer.reset();
 		}
 		
@@ -440,11 +443,11 @@ package reign.components
 		{
 			if(_disArea != null && _content != null)
 			{
-				var mask:Mask = new Mask();
-				mask.target = _content;
-				mask.x = _content.x;
-				mask.y = _content.y;
-				mask.rect = { width:_disArea.width, height:_disArea.height };
+				_contentMask = new Mask();
+				_contentMask.target = _content;
+				_contentMask.x = _content.x;
+				_contentMask.y = _content.y;
+				_contentMask.rect = { width:_disArea.width, height:_disArea.height };
 				
 				update();
 			}
@@ -531,6 +534,40 @@ package reign.components
 		 * 当前是否显示（内容尺寸是否超出了显示区域）
 		 */
 		public function get isShow():Boolean { return _isShow; }
+		
+		
+		/**
+		 * 在显示内容尺寸改变时，是否自动隐藏或显示
+		 */
+		public function get autoDisplay():Boolean { return _autoDisplay; }
+		public function set autoDisplay(value:Boolean):void
+		{
+			_autoDisplay = value;
+			update();
+		}
+		
+		
+		
+		
+		/**
+		 * 用于清理引用，释放内存
+		 * 在丢弃该组件时，需要主动调用该方法
+		 */
+		public function dispose():void
+		{
+			_timer.reset();
+			
+			Common.stage.removeEventListener(MouseEvent.MOUSE_MOVE, thumb_stageMouseMoveHandler);
+			Common.stage.removeEventListener(MouseEvent.MOUSE_UP, thumb_stageMouseUpHandler);
+			Common.stage.removeEventListener(MouseEvent.MOUSE_UP, arrow_stageMouseUpHandler);
+			Common.stage.removeEventListener(MouseEvent.MOUSE_UP, track_stageMouseUpHandler);
+			
+			if(_contentMask != null) _contentMask.dispose();
+			if(_track != null) _track.dispose();
+			if(_thumb != null) _thumb.dispose();
+			if(_upArrow != null) _upArrow.dispose();
+			if(_downArrow != null) _downArrow.dispose();
+		}
 		//
 	}
 }

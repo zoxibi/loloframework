@@ -3,6 +3,7 @@ package reign.utils
 	import flash.events.TimerEvent;
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
+	import flash.utils.getTimer;
 
 	/**
 	 * 计时器
@@ -25,6 +26,8 @@ package reign.utils
 		/**计时器是否正在运行中*/
 		public var running:Boolean;
 		
+		/**计时器上次触发的时间*/
+		public var lastTime:int;
 		/**每次达到间隔时的回调*/
 		public var timerHander:Function;
 		/**计时器达到总运行次数时的回调*/
@@ -88,15 +91,30 @@ package reign.utils
 			var item:Object = _list[timer.delay];
 			
 			var running:Boolean;//是否还有计时器在运行状态
+			var time:int = getTimer();
 			for(var key:* in item.list)
 			{
 				var rTimer:RTimer = item.list[key];
 				if(!rTimer.running) continue;
 				
-				//计时器是运行状态，进行到达间隔回调
-				if(rTimer.timerHander != null) rTimer.timerHander();
+				//计时器是运行状态，回调计算后的次数
+				if(rTimer.timerHander != null)
+				{
+					//在FP失去焦点后，会导致定时器回调频率降低，所以需要计算应该回调的次数
+					var count:int = int((time - rTimer.lastTime - 10) / timer.delay);
+					if(count <= 0) count = 1;
+					
+					for(var i:int = 0; i < count; i++) {
+						rTimer.timerHander();
+						rTimer.currentCount++;
+						
+						//计时器已到达允许运行的最大次数
+						if(rTimer.repeatCount != 0 && rTimer.currentCount >= rTimer.repeatCount) break;
+					}
+				}
+				rTimer.lastTime = getTimer();
 				
-				rTimer.currentCount++;
+				
 				//计时器已到达允许运行的最大次数
 				if(rTimer.repeatCount != 0 && rTimer.currentCount >= rTimer.repeatCount) {
 					rTimer.running = false;
@@ -109,6 +127,8 @@ package reign.utils
 			
 			//该delay，已经没有计时器在运行了
 			if(!running) item.timer.reset();
+			
+			event.updateAfterEvent();
 		}
 		
 		
@@ -163,6 +183,8 @@ package reign.utils
 		public function start():void
 		{
 			running = true;
+			lastTime = getTimer();
+			
 			//没达到设置的运行最大次数
 			if(repeatCount == 0 || currentCount < repeatCount)
 			{

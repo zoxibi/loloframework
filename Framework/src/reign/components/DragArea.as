@@ -2,6 +2,8 @@ package reign.components
 {
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	
+	import reign.common.Common;
 
 	/**
 	 * 拖动区域
@@ -46,10 +48,10 @@ package reign.components
 		 */
 		private function mouseDownHandler(event:MouseEvent):void
 		{
-			if(stage != null && _target != null)
+			if(_target != null)
 			{
-				stage.addEventListener(MouseEvent.MOUSE_MOVE, stageMouseMoveHandler);
-				stage.addEventListener(MouseEvent.MOUSE_UP, stageMouseUpHandler);
+				Common.stage.addEventListener(MouseEvent.MOUSE_MOVE, stageMouseMoveHandler);
+				Common.stage.addEventListener(MouseEvent.MOUSE_UP, stageMouseUpHandler);
 				_target.startDrag();
 			}
 		}
@@ -70,11 +72,8 @@ package reign.components
 		 */
 		private function stageMouseUpHandler(event:MouseEvent):void
 		{
-			if(stage != null)
-			{
-				stage.removeEventListener(MouseEvent.MOUSE_MOVE, stageMouseMoveHandler);
-				stage.removeEventListener(MouseEvent.MOUSE_UP, stageMouseUpHandler);
-			}
+			Common.stage.removeEventListener(MouseEvent.MOUSE_MOVE, stageMouseMoveHandler);
+			Common.stage.removeEventListener(MouseEvent.MOUSE_UP, stageMouseUpHandler);
 			if(_target != null) _target.stopDrag();
 		}
 		//
