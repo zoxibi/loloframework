@@ -137,8 +137,6 @@ package reign.components
 		
 		override public function set text(value:String):void
 		{
-			var originalText:String = _originalText;
-			
 			//显示设置的文本
 			if(value == null) value = "";
 			_originalText = _currentText = value;

@@ -27,7 +27,7 @@ package reign.effects
 		public var duration:Number;
 		/**每次闪烁的延迟时间（秒）*/
 		public var delay:Number;
-		/**闪烁重复次数*/
+		/**闪烁重复次数（次数为0时，无限重复）*/
 		public var count:uint;
 		/**闪烁结束后的回调函数*/
 		public var callback:Function;
@@ -83,7 +83,7 @@ package reign.effects
 			//添加到目标的父级
 			this.x = _target.x + rect.x;
 			this.y = _target.y + rect.y;
-			_target.parent.addChild(this);
+			_target.parent.addChildAt(this, _target.parent.getChildIndex(_target) + 1);
 			
 			//开始闪烁
 			this.alpha = minAlpha;
@@ -99,7 +99,7 @@ package reign.effects
 			_currentCount++;
 			
 			//次数达到上限，或者目标不可见
-			if(_currentCount > count || !_target.visible || _target.alpha == 0 || _target.parent == null)
+			if( (_currentCount > count && count != 0) || !_target.visible || _target.alpha == 0 || _target.parent == null)
 			{
 				if(_currentCount > count && callback != null) callback();
 				reset();
