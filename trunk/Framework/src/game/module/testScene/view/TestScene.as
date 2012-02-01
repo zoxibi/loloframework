@@ -1,10 +1,8 @@
 package game.module.testScene.view
 {
-	import flash.display.Loader;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
-	import flash.net.URLRequest;
 	
 	import game.module.testScene.model.TestSceneData;
 	
@@ -17,7 +15,8 @@ package game.module.testScene.view
 	import reign.components.ScrollBar;
 	import reign.core.Scene;
 	import reign.data.HashMap;
-	import reign.data.RequestModel;
+	import reign.effects.drag.DragDrop;
+	import reign.effects.drag.DragDropEvent;
 	import reign.utils.RTimer;
 	import reign.utils.UbbUtil;
 
@@ -123,9 +122,65 @@ package game.module.testScene.view
 			var t:RTimer = RTimer.getInstance(2000, timerHandler);
 //			t.start();
 			
-			_c = new Sprite();
-			this.addChild(_c);
+			_tuo = new DD(0xFF0000);
+			_tuo.name = "拖";
+			_tuo.x = 100;
+			_tuo.y = 100;
+			this.addChild(_tuo);
+			
+			_ting = new DD(0x00FF00);
+			_ting.x = 160;
+			_ting.y = 100;
+			_ting.name = "t1";
+			this.addChild(_ting);
+			
+			var ting2:DD = new DD(0x0000FF);
+			ting2.name = "t2";
+			ting2.x = 180;
+			ting2.y = 100;
+			this.addChild(ting2);
+			
+			var s111:Sprite = new Sprite();
+			s111.addChild(_ting);
+			
+			var s222:Sprite = new Sprite();
+			s222.addChild(ting2);
+			
+			this.addChild(s222);
+			this.addChild(s111);
+			
+			var dd:DragDrop = new DragDrop(_tuo);
+			
+			dd.addEventListener(DragDropEvent.DRAG_DROP, testtest);
+			dd.addEventListener(DragDropEvent.DRAG_END, testtest);
+			dd.addEventListener(DragDropEvent.DRAG_MOVE, testtest);
+			dd.addEventListener(DragDropEvent.DRAG_IN, testtest);
+			dd.addEventListener(DragDropEvent.DRAG_OUT, testtest);
+			dd.addEventListener(DragDropEvent.DRAG_START, testtest);
 		}
+		
+		private var _tuo:DD;
+		private var _ting:DD;
+		
+		
+		private function testtest(event:DragDropEvent):void
+		{
+			var str:String = event.dropTarget == null ? "不能停放" : event.dropTarget["name"];
+			trace(event.type, str);
+			
+			if(event.type == DragDropEvent.DRAG_DROP)
+			{
+				var ting:DD = event.dropTarget as DD;
+				var color:uint = _tuo.color;
+				
+				_tuo.color = event.dropTarget.dropTargetData;
+				_tuo.draw();
+				
+				ting.color = color;
+				ting.draw();
+			}
+		}
+		
 		
 		
 		private function timerHandler():void
@@ -149,55 +204,10 @@ package game.module.testScene.view
 			hsb.update();
 		}
 		
-		private var _a:RequestModel = new RequestModel("a");
-		private var _b:RequestModel = new RequestModel("b");
-		private var n:int = 0;
-		
 		
 		private function mouseDownHandler(event:MouseEvent):void
 		{
-//			n++;
-//			if(n % 2 == 0) {
-//				Common.ui.requesModal.startModal(_a);
-//				Common.ui.requesModal.startModal(_b);
-//			}
-//			else {
-//				Common.ui.requesModal.endModal(_a);
-//			}
 			
-			var loader:Loader;
-			if(Math.random() > 0)
-			{
-				loader = new Loader();
-				loader.load(new URLRequest("http://bbs.gigabyte.cn/space/upload/2009/07/31/795965153202.jpg"));
-				_c.addChild(loader);
-			}
-			else {
-				if(_c.numChildren > 0) {
-//					loader = _c.getChildAt(0) as Loader;
-//					try {
-//						loader.close();
-//					}
-//					catch(err:Error) {}
-//					loader.unload();
-//					
-//					_c.removeChild(loader);
-				}
-				
-			}
-			
-			trace("Loader数：", _c.numChildren);
-			
-			if(_c.numChildren > 140) test222();
-		}
-		
-		
-		private function test222():void
-		{
-			trace("回收");
-			
-			while(_c.numChildren > 0) _c.removeChildAt(0);
-			Common.gc();
 		}
 		
 		
