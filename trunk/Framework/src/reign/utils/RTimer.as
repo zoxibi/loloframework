@@ -92,9 +92,15 @@ package reign.utils
 			
 			var running:Boolean;//是否还有计时器在运行状态
 			var time:int = getTimer();
-			for(var key:* in item.list)
+			
+			//克隆一份list进行for...in操作，直接对list进行操作将会导致for..in无序
+			var key:*;
+			var list:Dictionary = new Dictionary();
+			for(key in item.list) list[key] = item.list[key];
+			
+			for(key in list)
 			{
-				var rTimer:RTimer = item.list[key];
+				var rTimer:RTimer = list[key];
 				if(!rTimer.running) continue;
 				
 				//计时器是运行状态，回调计算后的次数

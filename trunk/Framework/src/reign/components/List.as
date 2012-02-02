@@ -186,6 +186,8 @@ package reign.components
 			_isSelectItem = isSelect;
 			_lastShowState = {};
 			show();
+			
+			if(_page != null && _data != null) _page.init(numPerPage, _data.length);
 		}
 		
 		
@@ -245,18 +247,28 @@ package reign.components
 		
 		
 		/**
+		 * 通过在数据中的键来获取子项
+		 * @param key
+		 */
+		public function getItemByKey(key:*):IItemRenderer
+		{
+			if(_data == null) return null;
+			
+			var index:int = _data.getIndexByKey(key);
+			if(_page != null) index -= (_page.currentPage - 1) * numPerPage;
+			
+			return _itemList[index];
+		}
+		
+		
+		/**
 		 * 通过在数据中的键来设置子项的数据
 		 * @param key
 		 * @param data
 		 */
 		public function setItemDataByKey(key:*, data:*):void
 		{
-			if(_data == null) return;
-			
-			var index:int = _data.getIndexByKey(key);
-			if(_page != null) index -= _page.currentPage * numPerPage;
-			
-			var item:IItemRenderer = _itemList[index];
+			var item:IItemRenderer = getItemByKey(key);
 			if(item != null) {
 				item.dispose();
 				item.data = data;
