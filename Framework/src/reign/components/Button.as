@@ -111,7 +111,10 @@ package reign.components
 		
 		override public function update():void
 		{
-			if(_skin == null || _labelText.originalText.length == 0) return;
+			if(_skin == null) return;
+			super.update();
+			
+			if(_labelText.originalText.length == 0) return;
 			
 			var w:int;
 			if(_autoSize)
@@ -170,7 +173,6 @@ package reign.components
 				_height - _labelPaddingTop - _labelPaddingBottom + 2
 			);//水平加上1像素，垂直加上2像素，遮罩才会显示完整
 			_labelMask.graphics.endFill();
-			super.update();
 		}
 		
 		/**
