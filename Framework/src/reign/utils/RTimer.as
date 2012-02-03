@@ -25,6 +25,8 @@ package reign.utils
 		public var repeatCount:uint;
 		/**计时器是否正在运行中*/
 		public var running:Boolean;
+		/**计时器是否已经被主动停止*/
+		public var isStop:Boolean;
 		
 		/**计时器上次触发的时间*/
 		public var lastTime:int;
@@ -111,6 +113,7 @@ package reign.utils
 					if(count <= 0) count = 1;
 					
 					for(var i:int = 0; i < count; i++) {
+						if(rTimer.isStop) break;
 						rTimer.timerHander();
 						rTimer.currentCount++;
 						
@@ -189,6 +192,7 @@ package reign.utils
 		public function start():void
 		{
 			running = true;
+			isStop = false;
 			lastTime = getTimer();
 			
 			//没达到设置的运行最大次数
@@ -205,6 +209,7 @@ package reign.utils
 		public function stop():void
 		{
 			running = false;
+			isStop = true;
 			
 			var item:Object = _list[delay];
 			for(var key:* in item.list)
@@ -230,6 +235,8 @@ package reign.utils
 		 */
 		public function clear():void
 		{
+			isStop = true;
+			
 			delete _list[_delay].list[_key];
 		}
 		//
