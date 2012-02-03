@@ -2,6 +2,7 @@ package reign.effects.drag
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
@@ -26,6 +27,7 @@ package reign.effects.drag
 		{
 			super();
 			this.dragTarget = dragTarget;
+			this.alpha = 0.8;
 		}
 		
 		
@@ -113,17 +115,33 @@ package reign.effects.drag
 		 */
 		private function getDropTarget():IDropTarget
 		{
-			//取出最上层的停放目标
+			//从最上层开始取出显示对象
 			var childs:Array = Common.stage.getObjectsUnderPoint(new Point(Common.stage.mouseX, Common.stage.mouseY));
 			childs.reverse();
 			
 			var dropTarget:IDropTarget;
+			var parent:DisplayObjectContainer;
 			for(var i:int = 0; i < childs.length; i++)
 			{
+				//显示对象是停放目标
 				if(childs[i] is IDropTarget) {
 					dropTarget = childs[i];
-					break;
 				}
+				else {
+					//查找他的父级是否为停放目标
+					parent = childs[i].parent;
+					while(parent != null)
+					{
+						if(parent is IDropTarget) {
+							dropTarget = parent as IDropTarget;
+							break;
+						}
+						parent = parent.parent;
+					}
+				}
+				
+				//已经找到了停放目标
+				if(dropTarget != null) break;
 			}
 			
 			//停放目标有改变

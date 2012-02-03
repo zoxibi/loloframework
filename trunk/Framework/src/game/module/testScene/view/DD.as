@@ -1,14 +1,19 @@
 package game.module.testScene.view
 {
 	import flash.display.DisplayObject;
+	import flash.display.Loader;
 	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.net.URLRequest;
 	
+	import reign.components.Label;
 	import reign.effects.drag.IDragTarget;
 	import reign.effects.drag.IDropTarget;
+	import reign.utils.RandomUtil;
 	
 	public class DD extends Sprite implements IDragTarget, IDropTarget
 	{
-		
+		public var label:Label;
 		public var color:uint;
 		
 		
@@ -16,15 +21,36 @@ package game.module.testScene.view
 		{
 			super();
 			this.color = color;
+			
+			var loader:Loader = new Loader();
+			loader.load(new URLRequest("http://www.qqtouxiang888.com/uploads/allimg/100903/1010292618-9.jpg"));
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, test);
+			this.addChild(loader);
+			
+			label = new Label();
+			label.stroke = "0";
+			label.color = 0xFFFFFF;
+			label.text = String(int(RandomUtil.getBetween(1, 10)));
+			label.x = 43;
+			this.addChild(label);
+			
+			
 			draw();
+		}
+		
+		private function test(event:Event):void
+		{
+			var loader:Loader = Loader(event.target.loader);
+			loader.x = loader.y = 1;
+			loader.width = loader.height = 48;
 		}
 		
 		
 		public function draw():void
 		{
-			graphics.beginFill(color);
-			graphics.drawRect(0, 0, 50, 50);
-			graphics.endFill();
+//			graphics.beginFill(color);
+//			graphics.drawRect(0, 0, 50, 50);
+//			graphics.endFill();
 		}
 		
 		
