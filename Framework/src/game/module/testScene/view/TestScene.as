@@ -172,12 +172,15 @@ package game.module.testScene.view
 			{
 				var ting:DD = event.dropTarget as DD;
 				var color:uint = _tuo.color;
+				var text:String = _tuo.label.text;
 				
 				_tuo.color = event.dropTarget.dropTargetData;
 				_tuo.draw();
+				_tuo.label.text = ting.label.text;
 				
 				ting.color = color;
 				ting.draw();
+				ting.label.text = text;
 			}
 		}
 		
