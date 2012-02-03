@@ -1,5 +1,7 @@
 package reign.data
 {
+	import flash.utils.Dictionary;
+
 	/**
 	 * 哈希表数据接口
 	 * 可多个键对应一个值
@@ -27,6 +29,15 @@ package reign.data
 		function setValueByIndex(index:uint, value:*):void;
 		/**通过键设置值*/
 		function setValueByKey(key:*, value:*):void;
+		
+		
+		/**值列表*/
+		function get values():Array;
+		function set values(value:Array):void;
+		
+		/**与值列表对应的键列表*/
+		function get keys():Dictionary;
+		function set keys(value:Dictionary):void;
 		
 		
 		/**移除某个键与值的映射关系*/

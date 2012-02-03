@@ -170,6 +170,15 @@ package reign.data
 		{
 			return _values.length;
 		}
+		
+		
+		/**值列表*/
+		public function get values():Array { return _values; }
+		public function set values(value:Array):void { _values = value; }
+		
+		/**与值列表对应的键列表*/
+		public function get keys():Dictionary { return _keys; }
+		public function set keys(value:Dictionary):void { _keys = value; }
 		//
 	}
 }
