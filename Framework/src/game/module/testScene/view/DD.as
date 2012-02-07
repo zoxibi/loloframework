@@ -15,6 +15,8 @@ package game.module.testScene.view
 	{
 		public var label:Label;
 		public var color:uint;
+		private var loader:Loader;
+		private var s:Sprite;
 		
 		
 		public function DD(color:uint)
@@ -22,10 +24,13 @@ package game.module.testScene.view
 			super();
 			this.color = color;
 			
-			var loader:Loader = new Loader();
+			s = new Sprite();
+			this.addChild(s);
+			
+			loader = new Loader();
 			loader.load(new URLRequest("http://www.qqtouxiang888.com/uploads/allimg/100903/1010292618-9.jpg"));
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, test);
-			this.addChild(loader);
+			s.addChild(loader);
 			
 			label = new Label();
 			label.stroke = "0";
@@ -40,7 +45,7 @@ package game.module.testScene.view
 		
 		private function test(event:Event):void
 		{
-			var loader:Loader = Loader(event.target.loader);
+			loader = Loader(event.target.loader);
 			loader.x = loader.y = 1;
 			loader.width = loader.height = 48;
 		}
@@ -60,7 +65,7 @@ package game.module.testScene.view
 		 */
 		public function get source():DisplayObject
 		{
-			return this;
+			return s;
 		}
 		
 		

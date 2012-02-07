@@ -2,12 +2,15 @@ package reign.effects.drag
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
 	import reign.common.Common;
 	import reign.common.Constants;
+	import reign.effects.AsEffect;
 	
 	/**
 	 * 拖放效果
@@ -21,6 +24,12 @@ package reign.effects.drag
 		private var _dropTarget:IDropTarget;
 		/**鼠标按下的点*/
 		private var _mouseDownPoint:Point;
+		
+		/**拖动开始时，拖动目标的属性{filters:Array, alpha:Number}。在拖动过程中，拖动目标相关属性的改变，在拖动结束时，将会被忽略*/
+		private var _dragTargetProp:Object;
+		
+		/**是否在拖动开始时，自动改变拖动对象的属性，达到区别的效果*/
+		private var _autoChangeDragTarget:Boolean = true;
 		
 		
 		public function DragDrop(dragTarget:IDragTarget=null)
@@ -64,6 +73,14 @@ package reign.effects.drag
 			if(bitmapData == null) {
 				drawDragTarget();
 				dispatchEvent(new DragDropEvent(DragDropEvent.DRAG_START, _dragTarget, dropTarget));
+				
+				//记录拖动目标的属性，然后改变
+				if(_autoChangeDragTarget) {
+					var dt:DisplayObject = _dragTarget as DisplayObject;
+					_dragTargetProp = { filters:dt.filters, alpha:dt.alpha };
+					dt.alpha = 0.6;
+					dt.filters = [AsEffect.GRAY_FILTER];
+				}
 			}
 			else {
 				dispatchEvent(new DragDropEvent(DragDropEvent.DRAG_MOVE, _dragTarget, dropTarget));
@@ -82,6 +99,15 @@ package reign.effects.drag
 		{
 			Common.stage.removeEventListener(MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler);
 			Common.stage.removeEventListener(MouseEvent.MOUSE_UP, stage_mouseUpHandler);
+			
+			
+			//还原拖动目标的属性到拖动前的状态
+			if(_dragTargetProp != null) {
+				var dt:DisplayObject = _dragTarget as DisplayObject;
+				dt.alpha = _dragTargetProp.alpha;
+				dt.filters = _dragTargetProp.filters;
+			}
+			
 			
 			Common.ui.removeChildToLayer(this, Constants.LAYER_NAME_ALERT);
 			if(bitmapData != null) {
@@ -188,15 +214,24 @@ package reign.effects.drag
 		public function set dragTarget(value:IDragTarget):void
 		{
 			if(_dragTarget != null) {
-				_dragTarget.source.removeEventListener(MouseEvent.MOUSE_DOWN, dragTarget_mouseDownHandler);
+				(_dragTarget as IEventDispatcher).removeEventListener(MouseEvent.MOUSE_DOWN, dragTarget_mouseDownHandler);
 			}
 			
 			_dragTarget = value;
 			if(_dragTarget != null) {
-				_dragTarget.source.addEventListener(MouseEvent.MOUSE_DOWN, dragTarget_mouseDownHandler);
+				(_dragTarget as IEventDispatcher).addEventListener(MouseEvent.MOUSE_DOWN, dragTarget_mouseDownHandler);
 			}
 		}
 		public function get dragTarget():IDragTarget { return _dragTarget; }
+		
+		
+		
+		
+		/**
+		 * 是否在拖动开始时，自动改变拖动对象的属性，达到区别的效果
+		 */
+		public function set autoChangeDragTarget(value:Boolean):void { _autoChangeDragTarget = value; }
+		public function get autoChangeDragTarget():Boolean { return _autoChangeDragTarget; }
 		
 		
 		
@@ -212,6 +247,7 @@ package reign.effects.drag
 				bitmapData = null;
 			}
 			
+			_dragTargetProp = null;
 			dragTarget = null;
 		}
 		//

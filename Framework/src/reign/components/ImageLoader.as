@@ -100,8 +100,8 @@ package reign.components
 			//加载完成
 			if(event.type == Event.COMPLETE)
 			{
-				if(_widht > 0) super.width = _widht;
-				if(_height > 0) super.height = _height;
+				if(_widht > 0) width = _widht;
+				if(_height > 0) height = _height;
 				
 				this.alpha = 0;
 				TweenMax.to(this, showEffectDuration, { alpha:1 });
@@ -131,8 +131,8 @@ package reign.components
 		
 		override public function set width(value:Number):void
 		{
-			super.width = value;
 			_widht = value;
+			if(content != null) content.width = _widht;
 		}
 		override public function get width():Number
 		{
@@ -142,8 +142,8 @@ package reign.components
 		
 		override public function set height(value:Number):void
 		{
-			super.height = value;
 			_height = value;
+			if(content != null) content.height = _height;
 		}
 		override public function get height():Number
 		{
