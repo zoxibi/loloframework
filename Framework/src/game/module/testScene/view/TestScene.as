@@ -10,6 +10,7 @@ package game.module.testScene.view
 	import reign.components.Alert;
 	import reign.components.ComboBox;
 	import reign.components.List;
+	import reign.components.MultiColorLabel;
 	import reign.components.Page;
 	import reign.components.RichText;
 	import reign.components.ScrollBar;
@@ -157,6 +158,37 @@ package game.module.testScene.view
 			dd.addEventListener(DragDropEvent.DRAG_IN, testtest);
 			dd.addEventListener(DragDropEvent.DRAG_OUT, testtest);
 			dd.addEventListener(DragDropEvent.DRAG_START, testtest);
+			
+			
+			var label:MultiColorLabel = new MultiColorLabel();
+			label.multiColor = "TestMultiColor";
+			label.x = 100;
+			label.y = 200;
+			label.stroke = "0x302010";
+			label.labelProp = { font:"微软雅黑", size:20, bold:true };
+			this.addChild(label);
+			label.text = "测试单行渲染";
+			
+			
+			label = new MultiColorLabel();
+			label.multiColor = "TestMultiColor";
+			label.x = 100;
+			label.y = 250;
+			label.stroke = "0x302010";
+			label.labelProp = { width:400, font:"微软雅黑", size:20, bold:true, multiline:true };
+			this.addChild(label);
+			label.text = "测试多行逐行渲染，第一行\n第二行\n逐行渲染，第三行";
+			
+			
+			label = new MultiColorLabel();
+			label.multiColor = "TestMultiColor";
+			label.x = 100;
+			label.y = 350;
+			label.stroke = "0x302010";
+			label.lineFill = false;
+			label.labelProp = { width:400, font:"微软雅黑", size:20, bold:true, multiline:true };
+			this.addChild(label);
+			label.text = "测试多行统一渲染，第一行\n第二行\n统一渲染，第三行";
 		}
 		
 		private var _tuo:DD;
