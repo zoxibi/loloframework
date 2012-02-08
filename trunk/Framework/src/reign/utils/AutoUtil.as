@@ -22,6 +22,7 @@ package reign.utils
 	import reign.components.List;
 	import reign.components.Mask;
 	import reign.components.ModalBackground;
+	import reign.components.MultiColorLabel;
 	import reign.components.NumberText;
 	import reign.components.Page;
 	import reign.components.RadioButton;
@@ -78,6 +79,11 @@ package reign.utils
 					//显示文本
 					case "label":
 						if(obj == null) obj = new Label();
+						break;
+					
+					//内容多色（可以是动画）显示文本
+					case "mcLabel":
+						if(obj == null) obj = new MultiColorLabel();
 						break;
 					
 					//富显示文本
@@ -274,11 +280,10 @@ package reign.utils
 				target.autoTooltip = obj.autoTooltip;
 				delete obj.autoTooltip;
 			}
-			if(obj.direction != null) {//滚动条
+			if(obj.direction != null) {
 				target.direction = obj.direction;
 				delete obj.direction;
 			}
-			
 			
 			for(var properties:String in obj)
 			{
