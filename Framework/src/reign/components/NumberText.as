@@ -25,6 +25,9 @@ package reign.components
 		/**新的值*/
 		private var _newValue:Number;
 		
+		/**动画播放完成后，更新成新值时的回调函数*/
+		public var callback:Function;
+		
 		
 		public function NumberText()
 		{
@@ -89,11 +92,31 @@ package reign.components
 			if(count >= 10)
 			{
 				super.text = _newValue.toString();
+				
+				if(callback != null) {
+					callback();
+					callback = null;
+				}
+				
 				return;
 			}
 			
 			TweenMax.delayedCall(delay, changeColor, [count, color]);
 		}
+		
+		
+		
+		/**
+		 * 改编值
+		 * @param value 新值
+		 * @param callback 动画播放完成后，更新成新值时的回调函数
+		 */
+		public function changeValue(value:String, callback:Function=null):void
+		{
+			this.callback = callback;
+			this.text = value;
+		}
+		
 		
 		
 		
