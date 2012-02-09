@@ -47,6 +47,16 @@ package reign.effects.drag
 		 */
 		private function dragTarget_mouseDownHandler(event:MouseEvent):void
 		{
+			if(!_dragTarget.dragEnabled) {
+				if(bitmapData != null) {
+					bitmapData.dispose();
+					bitmapData = null;
+				}
+				return;
+			}
+			
+			if(_dragTarget.source == null || _dragTarget.source.width == 0 || _dragTarget.source.height == 0) return;
+			
 			_mouseDownPoint = new Point(_dragTarget.source.mouseX, _dragTarget.source.mouseY);
 			Common.stage.addEventListener(MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler);
 			Common.stage.addEventListener(MouseEvent.MOUSE_UP, stage_mouseUpHandler);
@@ -59,14 +69,6 @@ package reign.effects.drag
 		private function stage_mouseMoveHandler(event:MouseEvent):void
 		{
 			if(!event.buttonDown) return;
-			
-			if(!_dragTarget.dragEnabled) {
-				if(bitmapData != null) {
-					bitmapData.dispose();
-					bitmapData = null;
-				}
-				return;
-			}
 			
 			var dropTarget:IDropTarget = getDropTarget();
 			//开始拖动
@@ -198,8 +200,6 @@ package reign.effects.drag
 		 */
 		public function drawDragTarget():void
 		{
-			if(_dragTarget.source == null) return;
-			
 			if(bitmapData != null) bitmapData.dispose();
 			bitmapData = new BitmapData(_dragTarget.source.width, _dragTarget.source.height, true, 0);
 			bitmapData.draw(_dragTarget.source);
