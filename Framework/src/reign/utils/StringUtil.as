@@ -71,6 +71,32 @@ package reign.utils
 			s += ">" + str + "</font>";
 			return s;
 		}
+		
+		
+		
+		
+		/**
+		 * 千分位格式化数字
+		 * @param value 要格式化的值
+		 * @param decimals 保留小数的位数（小于0为保留所有）
+		 * @param thousandsSep 千位分隔符
+		 */
+		public static function numberFormat(value:Number, decimals:int=2, thousandsSep:String=","):String
+		{
+			var str:String = "";
+			var arr:Array = value.toString().split(".");
+			
+			var count:int = Math.ceil(arr[0].length / 3);
+			for(var i:int=0; i < arr[0].length; i++) {
+				if(i % 3 == 0 && str != "") str = thousandsSep + str;
+				str = arr[0].charAt(arr[0].length - i - 1) + str;
+			}
+			
+			var d:int = arr[1].slice(0, (decimals > 0) ? decimals : arr[1].length);
+			if(d > 0) str += "." + d.toString();
+			
+			return str;
+		}
 		//
 	}
 }

@@ -10,7 +10,7 @@ package reign.data
 		public var command:String;
 		
 		/**这条请求的代号*/
-		public var token:Number;
+		public var token:Number = 0;
 		
 		/**通信时，是否需要模态*/
 		public var modal:Boolean;
