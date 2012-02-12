@@ -152,7 +152,7 @@ package reign.effects.drag
 			for(var i:int = 0; i < childs.length; i++)
 			{
 				//显示对象是停放目标
-				if(childs[i] is IDropTarget) {
+				if(childs[i] is IDropTarget && (childs[i] as IDropTarget).dropEnabled) {
 					dropTarget = childs[i];
 				}
 				else {
@@ -160,7 +160,7 @@ package reign.effects.drag
 					parent = childs[i].parent;
 					while(parent != null)
 					{
-						if(parent is IDropTarget) {
+						if(parent is IDropTarget && (parent as IDropTarget).dropEnabled) {
 							dropTarget = parent as IDropTarget;
 							break;
 						}
