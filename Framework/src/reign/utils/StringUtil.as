@@ -92,8 +92,10 @@ package reign.utils
 				str = arr[0].charAt(arr[0].length - i - 1) + str;
 			}
 			
-			var d:int = arr[1].slice(0, (decimals > 0) ? decimals : arr[1].length);
-			if(d > 0) str += "." + d.toString();
+			if(arr[1] != null) {
+				var d:int = arr[1].slice(0, (decimals > 0) ? decimals : arr[1].length);
+				if(d > 0) str += "." + d.toString();
+			}
 			
 			return str;
 		}
