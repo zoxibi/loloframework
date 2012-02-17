@@ -432,7 +432,12 @@ package reign.components
 		 */
 		private function clearItemPool():void
 		{
-			_itemPool = new Vector.<IItemRenderer>();
+			var item:IItemRenderer;
+			while(_itemPool.length > 0)
+			{
+				item = _itemPool.shift();
+				item.clear();
+			}
 		}
 		
 		

@@ -150,6 +150,22 @@ package reign.data
 		}
 		
 		
+		
+		/**通过索引为该值添加一个键，并返回该值的索引*/
+		public function addKeyByIndex(newKey:*, index:uint):uint
+		{
+			_keys[newKey] = index;
+			return index;
+		}
+		/**通过键为该值添加一个键，并返回该值的索引。如果没有源键将返回-1*/
+		public function addKeyByKey(newKey:*, key:*):int
+		{
+			if(_keys[key] == null) return -1;
+			return addKeyByIndex(newKey, _keys[key]);
+		}
+		
+		
+		
 		/**清空*/
 		public function clear():void
 		{
