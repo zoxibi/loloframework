@@ -48,8 +48,14 @@ package reign.data
 		function removeByIndex(index:uint):void;
 		
 		
-		/**添加一个值，以及对应的键列表。并返回该值的索引*/
+		/**添加一个值，以及对应的键列表，并返回该值的索引*/
 		function add(value:*, ...keys):uint;
+		
+		/**通过索引为该值添加一个键，并返回该值的索引*/
+		function addKeyByIndex(newKey:*, index:uint):uint;
+		/**通过键为该值添加一个键，并返回该值的索引。如果没有源键将返回-1*/
+		function addKeyByKey(newKey:*, key:*):int;
+		
 		
 		/**清空*/
 		function clear():void;

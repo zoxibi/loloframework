@@ -143,13 +143,22 @@ package reign.components
 		
 		
 		/**
-		 * 用于清理引用，释放内存
-		 * 在所属的组进行清理时，会自动调用该方法，无需手动调用
+		 * 在被回收到缓存池时，回调的方法
+		 * 所在的列表进行回收时，会自动调用该方法，无需手动调用
 		 */
 		public function dispose():void
 		{
 			_group = null;
 			ToolTip.unregister(this);
+		}
+		
+		/**
+		 * 该Item已经不会再使用时，回调的方法
+		 * 所在的列表进行清理时，会自动调用该方法，无需手动调用
+		 */
+		public function clear():void
+		{
+			
 		}
 		//
 	}
