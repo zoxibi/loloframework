@@ -38,6 +38,9 @@ package reign.common
 		/**绑定的样式列表，以实例为key*/
 		private var _bindStyleList:Dictionary;
 		
+		/**当前正在显示样式的目标*/
+		private var _currentTarget:DisplayObject;
+		
 		
 		
 		/**
@@ -273,6 +276,11 @@ package reign.common
 		 */
 		public function unbindStyle(target:DisplayObject, overEventType:String=null, outEventType:String=null):void
 		{
+			if(_currentTarget == target) {
+				style = _defaultStyle;
+				_currentTarget = null;
+			}
+			
 			target.removeEventListener((overEventType == null) ? MouseEvent.ROLL_OVER : overEventType, styleBingTarget_rollOverHandler);
 			target.removeEventListener((outEventType == null) ? MouseEvent.ROLL_OUT : outEventType, styleBingTarget_rollOutHandler);
 			delete _bindStyleList[target];
@@ -285,6 +293,7 @@ package reign.common
 		 */
 		private function styleBingTarget_rollOverHandler(event:MouseEvent):void
 		{
+			_currentTarget = event.currentTarget as DisplayObject;
 			style = _bindStyleList[event.currentTarget];
 		}
 		
@@ -294,6 +303,7 @@ package reign.common
 		 */
 		private function styleBingTarget_rollOutHandler(event:MouseEvent):void
 		{
+			_currentTarget = null;
 			style = _defaultStyle;
 		}
 		//

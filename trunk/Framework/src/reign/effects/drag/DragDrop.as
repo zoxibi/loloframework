@@ -157,7 +157,7 @@ package reign.effects.drag
 				}
 				else {
 					//查找他的父级是否为停放目标
-					parent = childs[i].parent;
+					parent = childs[i].parent as DisplayObjectContainer;
 					while(parent != null)
 					{
 						if(parent is IDropTarget && (parent as IDropTarget).dropEnabled) {
