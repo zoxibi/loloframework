@@ -15,6 +15,8 @@ package reign.common
 		private var _resConfig:XML;
 		/**界面配置文件*/
 		private var _uiConfig:XML;
+		/**音频配置文件*/
+		private var _soundConfig:XML;
 		
 		
 		
@@ -61,12 +63,21 @@ package reign.common
 		
 		/**
 		 * 初始化界面配置文件
-		 * @param resName 配置在资源列表中的名称
 		 */
 		public function initUIConfig():void
 		{
 			_uiConfig = Common.loader.getXML("uiConfig", true);
 		}
+		
+		
+		/**
+		 * 初始化音频配置文件
+		 */
+		public function initSoundConfig():void
+		{
+			_soundConfig = Common.loader.getXML("soundConfig", true);
+		}
+		
 		
 		
 		/**
@@ -97,6 +108,17 @@ package reign.common
 		public function getUIConfig(name:String):String
 		{
 			return _uiConfig[name].@value;
+		}
+		
+		
+		/**
+		 * 获取音频配置文件信息
+		 * @param name 配置的名称
+		 * @return
+		 */
+		public function getSoundConfig(name:String):String
+		{
+			return _soundConfig[name].@value;
 		}
 		//
 	}

@@ -91,7 +91,7 @@ package game
 		
 		
 		/**
-		 * 加载语言包、样式配置、界面配置
+		 * 加载语言包、样式配置、界面配置、音频配置
 		 */
 		private function loadLanguage():void
 		{
@@ -111,6 +111,10 @@ package game
 			info = Common.config.getResConfig("uiConfig");
 			Common.loader.add("uiConfig", info.url, "xml", info.version);
 			
+			//音频配置文件
+			info = Common.config.getResConfig("soundConfig");
+			Common.loader.add("soundConfig", info.url, "xml", info.version);
+			
 			Common.loader.addEventListener(LoadResourceEvent.ALL_COMPLETE, loadLanguageComplete);
 			Common.loader.load();
 		}
@@ -122,6 +126,7 @@ package game
 			Common.language.addEventListener("initLanguageComplete", checkInit);
 			Common.language.initLanguage();
 			Common.config.initUIConfig();
+			Common.config.initSoundConfig();
 			Common.style.initStyle();
 			
 			loadLoadingMovie();

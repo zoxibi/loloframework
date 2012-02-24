@@ -21,6 +21,11 @@ package reign.common
 		 */
 		function initUIConfig():void;
 		
+		/**
+		 * 初始化音频配置文件
+		 */
+		function initSoundConfig():void;
+		
 		
 		/**
 		 * 获取网页目录下Config.xml文件的配置信息
@@ -42,5 +47,13 @@ package reign.common
 		 * @return
 		 */
 		function getUIConfig(name:String):String;
+		
+		/**
+		 * 获取音频配置文件信息
+		 * @param name 配置的名称
+		 * @return
+		 */
+		function getSoundConfig(name:String):String;
+		//
 	}
 }
