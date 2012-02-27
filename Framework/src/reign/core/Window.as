@@ -208,8 +208,12 @@ package reign.core
 		
 		
 		
-		override protected function reset():void
+		override public function hide():void
 		{
+			if(!_isShow) return;
+			
+			super.hide();
+			
 			//清除选中
 			_currentPanel = null;
 			_tabBtnGroup.selectedItem = null;
