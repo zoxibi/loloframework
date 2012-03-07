@@ -120,6 +120,9 @@ package reign.common
 				return null;
 			}
 			
+			//声音无法构建，可能由于音频url错误，或硬件问题
+			if(sndChannel == null) return null;
+			
 			//没有对应的正在播放列表
 			if(sndChannelInfo == null || clearOther) {
 				isBackgroundMusic ?

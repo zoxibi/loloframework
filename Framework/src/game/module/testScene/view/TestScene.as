@@ -14,6 +14,7 @@ package game.module.testScene.view
 	import reign.components.Page;
 	import reign.components.RichText;
 	import reign.components.ScrollBar;
+	import reign.core.BitmapMovieClip;
 	import reign.core.Scene;
 
 	/**
@@ -95,7 +96,16 @@ package game.module.testScene.view
 			btn.y = 150;
 			btn.addEventListener(MouseEvent.CLICK, test);
 			this.addChild(btn);
+			
+			
+			
+			_mc = new BitmapMovieClip("testScene.TestMovieClip", 3);
+			_mc.x = 50;
+			_mc.y = 300;
+			this.addChild(_mc);
 		}
+		
+		private var _mc:BitmapMovieClip;
 		
 		
 		private function test(event:Event):void
@@ -105,24 +115,28 @@ package game.module.testScene.view
 			{
 				case "背景1":
 					Common.sound.play("background", "1", true);
+					_mc.sourceName = "testScene.TestMovieClip2";
 					break;
 				
 				case "背景2":
 					Common.sound.play("background", "2", true);
-//					Common.sound.stop("background", "1");
+					_mc.play(11, 2, 10);
 					break;
 				
 				
 				case "音效1":
 					Common.sound.play("fight", "att1");
+					_mc.dispose();
 					break;
 				
 				case "音效2":
 					Common.sound.play("fight", "lose", false, true, 1, false);
+					_mc.gotoAndStop(2);
 					break;
 				
 				case "音效3":
 					Common.sound.play("fight", "win");
+					_mc.playing ? _mc.stop() : _mc.play();
 					break;
 			}
 		}
