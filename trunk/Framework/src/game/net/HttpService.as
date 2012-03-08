@@ -81,7 +81,7 @@ package game.net
 			loader.alertError = alertError;
 			if(alertError) loader.mousePoint = new Point(Common.stage.mouseX, Common.stage.mouseY);
 			
-			var url:String = Common.serviceUrl + rm.command + "&t=" + rm.token;
+			var url:String = Common.serviceUrl + rm.command + "?t=" + rm.token;
 			var request:URLRequest = new URLRequest(url);
 			request.method = URLRequestMethod.POST;
 			
