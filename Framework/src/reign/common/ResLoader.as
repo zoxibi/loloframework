@@ -381,14 +381,14 @@ package reign.common
 			//检查当前是否正在加载该资源
 			if(name == _nowLoadInfo.name) return;
 			
-			//使用默认key
-			if(key == null) key = _key.toString();;
-			
 			//检查加载队列中是否已经有该资源存在
 			for(var i:int = 0; i < _loadList.length; i++)
 			{
-				if(name == _loadList[i].name && key == _loadList[i].key) return;
+				if(name == _loadList[i].name) return;
 			}
+			
+			//使用默认key
+			if(key == null) key = _key.toString();
 			
 			//将资源信息添加到加载队列中
 			_loadList.push({ name:name, url:url, type:type, version:version, key:key, isBackground:isBackground });
