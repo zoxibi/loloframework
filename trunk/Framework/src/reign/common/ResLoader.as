@@ -415,8 +415,8 @@ package reign.common
 			_callbackList[key] = callback;
 			_key++;
 			
-			//加载队列中没有需要加载的资源
-			if(_loadList.length == 0) {
+			//没有在加载中，并且加载队列中没有需要加载的资源
+			if(!_isRun && _loadList.length == 0) {
 				_nowLoadInfo = { key:key };
 				loadAllComplete();
 				return;
