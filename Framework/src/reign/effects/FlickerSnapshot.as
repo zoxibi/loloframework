@@ -67,9 +67,9 @@ package reign.effects
 			this.count = count;
 			
 			//绘制快照
-			var rect:Rectangle = _target.getBounds(_target.parent);
+			var rect:Rectangle = _target.getBounds(_target);
 			var bitmapData:BitmapData = new BitmapData(rect.width, rect.height, true, 0);
-			bitmapData.draw(_target, new Matrix(1, 0, 0, 1, rect.x - _target.x, rect.y - _target.y));
+			bitmapData.draw(_target, new Matrix(1, 0, 0, 1, -rect.x, -rect.y));
 			this.bitmapData = bitmapData;
 			
 			//设置快照颜色
@@ -81,8 +81,8 @@ package reign.effects
 			this.transform.colorTransform = colorTransform;
 			
 			//添加到目标的父级
-			this.x = rect.x;
-			this.y = rect.y;
+			this.x = _target.x + rect.x;
+			this.y = _target.y + rect.y;
 			_target.parent.addChildAt(this, _target.parent.getChildIndex(_target) + 1);
 			
 			//开始闪烁
