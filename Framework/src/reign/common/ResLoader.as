@@ -43,6 +43,8 @@ package reign.common
 		private var _zipLoader:URLLoader;
 		/**用于加载xml资源*/
 		private var _xmlLoader:URLLoader;
+		/**临时保存loader的储存列表（防止loader被回收）*/
+		private var _tempLoaderList:Dictionary;
 		
 		/**加载队列*/
 		private var _loadList:Array;
@@ -96,6 +98,7 @@ package reign.common
 				return;
 			}
 			
+			_tempLoaderList = new Dictionary();
 			_resList = new Dictionary();
 			_callbackList = new Dictionary();
 			_loadList = [];
@@ -219,6 +222,7 @@ package reign.common
 					var loader:Loader = new Loader();
 					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, getClassResDataHandler);
 					loader.loadBytes(_claLoader.contentLoaderInfo.bytes, new LoaderContext(false, ApplicationDomain.currentDomain));
+					_tempLoaderList[loader] = loader;
 					return;
 				}
 			}
@@ -230,6 +234,7 @@ package reign.common
 		private function getClassResDataHandler(event:Event=null):void
 		{
 			if(event != null) {
+				delete _tempLoaderList[event.target.loader];
 				event.target.loader.unload();
 				event.target.removeEventListener(Event.COMPLETE, getClassResDataHandler);
 			}
