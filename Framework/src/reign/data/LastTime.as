@@ -10,7 +10,7 @@ package reign.data
 	 */
 	public class LastTime
 	{
-		/**开始计时的时间戳*/
+		/**计时开始的时间*/
 		private var _startTime:Number;
 		/**剩余时间*/
 		private var _lastTime:Number;
@@ -54,12 +54,12 @@ package reign.data
 		
 		
 		/**
-		 * 获取初始化时的时间
+		 * 计时开始的时间
 		 * @return 
 		 */
-		public function get initTime():Number
+		public function get startTime():Number
 		{
-			return _lastTime;
+			return _startTime;
 		}
 		//
 	}

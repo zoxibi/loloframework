@@ -21,12 +21,12 @@ package reign.core
 	{
 		/**背景的容器*/
 		protected var _backgroundC:Sprite;
-		/**面板容器*/
-		protected var _panelC:Sprite;
 		/**选项卡按钮组*/
 		protected var _tabBtnGroup:ItemGroup;
 		/**关闭按钮*/
 		protected var _closeBtn:BaseButton;
+		/**面板容器*/
+		protected var _panelC:Sprite;
 		/**当前显示的面板*/
 		protected var _currentPanel:IRSprite;
 		
@@ -44,9 +44,9 @@ package reign.core
 		{
 			super();
 			_backgroundC = AutoUtil.init(new Sprite(), this);
-			_panelC = AutoUtil.init(new Sprite(), this);
 			_tabBtnGroup = AutoUtil.init(new ItemGroup(), this);
 			_closeBtn = AutoUtil.init(new BaseButton(), this);
+			_panelC = AutoUtil.init(new Sprite(), this);
 			
 			style = Common.style.getStyle("window");
 			Common.ui.centerToStage(this);
