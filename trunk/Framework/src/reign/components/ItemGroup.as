@@ -74,7 +74,7 @@ package reign.components
 						
 						case LAYOUT_VERTICAL:
 							item.y = position;
-							position += item.itemHeight + _horizontalGap;
+							position += item.itemHeight + _verticalGap;
 							break;
 					}
 				}

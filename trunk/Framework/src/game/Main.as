@@ -17,7 +17,7 @@ package game
 	
 	[SWF(width="1000", height="600", backgroundColor="#FFFFFF", frameRate="25")]
 	/**
-	 * 测试框架
+	 * LOLO的Web框架
 	 * @author LOLO
 	 */
 	public class Main extends Sprite
