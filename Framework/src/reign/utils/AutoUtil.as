@@ -185,8 +185,10 @@ package reign.utils
 				
 				if(obj != null)
 				{
-					initToolTip(obj, item.@toolTip);
-					initJsonString(obj, item.@properties);
+					if(!(obj is Container) && !(obj is ComboBox)) {
+						initToolTip(obj, item.@toolTip);
+						initJsonString(obj, item.@properties);
+					}
 					
 					//有指定实例名称，将引用赋值给target
 					if(name != "") target[name] = obj;

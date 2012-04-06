@@ -41,6 +41,9 @@ package game.module.testScene.view
 		private var _c:Sprite;
 		
 		
+		public var c:TestC = new TestC();
+		
+		
 		public function TestScene()
 		{
 			super();

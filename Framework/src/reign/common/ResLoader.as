@@ -253,7 +253,7 @@ package reign.common
 		 */
 		private function imageCompleteHandler(event:Event):void
 		{
-			_resList[_nowLoadInfo.name] = (_imgLoader.content as Bitmap).bitmapData;
+			_resList[_nowLoadInfo.name] = (_imgLoader.content as Bitmap).bitmapData.clone();
 			_imgLoader.unload();
 			
 			this.dispatchEvent(new LoadResourceEvent(LoadResourceEvent.COMPLETE, _nowLoadInfo.name));
