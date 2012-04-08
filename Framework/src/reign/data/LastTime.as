@@ -3,15 +3,15 @@ package reign.data
 	import flash.utils.getTimer;
 	
 	import reign.utils.TimeUtil;
-
+	
 	/**
 	 * 剩余时间(CD时间)
 	 * @author LOLO
 	 */
 	public class LastTime
 	{
-		/**计时开始的时间*/
-		private var _startTime:Number;
+		/**开始计时的时间戳*/
+		private var _initTime:Number;
 		/**剩余时间*/
 		private var _lastTime:Number;
 		
@@ -35,7 +35,7 @@ package reign.data
 		 */		
 		public function setTime(time:Number, type:String="ms"):void
 		{
-			_startTime = getTimer();
+			_initTime = getTimer();
 			_lastTime = TimeUtil.convertType(type, TimeUtil.TYPE_MS, time);
 		}
 		
@@ -48,18 +48,18 @@ package reign.data
 		 */
 		public function getTime(type:String="ms"):Number
 		{
-			var time:Number = _lastTime - (getTimer() - _startTime);
+			var time:Number = _lastTime - (getTimer() - _initTime);
 			return TimeUtil.convertType(TimeUtil.TYPE_MS, type, time);
 		}
 		
 		
 		/**
-		 * 计时开始的时间
+		 * 获取初始化时的时间
 		 * @return 
 		 */
-		public function get startTime():Number
+		public function get initTime():Number
 		{
-			return _startTime;
+			return _initTime;
 		}
 		//
 	}
