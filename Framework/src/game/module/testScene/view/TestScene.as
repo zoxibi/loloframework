@@ -1,21 +1,21 @@
 package game.module.testScene.view
 {
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Linear;
+	
+	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
+	import flash.utils.getTimer;
 	
 	import game.module.testScene.model.TestSceneData;
 	
 	import reign.common.Common;
-	import reign.components.Alert;
-	import reign.components.Button;
-	import reign.components.ComboBox;
-	import reign.components.List;
-	import reign.components.Page;
-	import reign.components.RichText;
-	import reign.components.ScrollBar;
-	import reign.core.BitmapMovieClip;
 	import reign.core.Scene;
+	import reign.utils.bezier.CubicBezier;
+	import reign.utils.bezier.QuadraticBezier;
 
 	/**
 	 * 测试场景
@@ -26,19 +26,11 @@ package game.module.testScene.view
 		/**单例的实例*/
 		public static var instance:TestScene;
 		
-		public var list:List;
-		public var page:Page;
-		public var vsb:ScrollBar;
-		public var hsb:ScrollBar;
-		public var cb:ComboBox;
 		
-		public var richText:RichText;
+		public var triangle:Sprite;
 		
-		private var _alert:Alert;
 		
 		private var _data:TestSceneData;
-		
-		private var _c:Sprite;
 		
 		
 		public function TestScene()
@@ -49,96 +41,172 @@ package game.module.testScene.view
 			initUI(Common.loader.getXML(Common.language.getLanguage("020201")));
 			
 			
-			var btn:Button;
+			_dottedLineC = new Sprite();
+			addChild(_dottedLineC);
 			
-			btn = new Button();
-			btn.styleName = "button1";
-			btn.label = "背景1";
-			btn.width = 90;
-			btn.x = 100;
-			btn.y = 100;
-			btn.addEventListener(MouseEvent.CLICK, test);
-			this.addChild(btn);
+			var pStart:Point = new Point(100, 100);
+			var pEnd:Point = new Point(100, 400);
+			var pBezierList:Array = [new Point(0, 200), new Point(600, 300)];
+			drawRoute(pStart, pEnd, pBezierList, 0, true);
 			
-			btn = new Button();
-			btn.styleName = "button1";
-			btn.label = "背景2";
-			btn.width = 90;
-			btn.x = 200;
-			btn.y = 100;
-			btn.addEventListener(MouseEvent.CLICK, test);
-			this.addChild(btn);
+			startSail(0, 0.5 * 60 * 1000/*, 15 * 1000*/);
 			
+			Common.stage.addEventListener(MouseEvent.CLICK, test);
+		}
+		private var t:int;
+		
+		
+		/**
+		 * 
+		 */
+		private function clearAllDottedLine():void
+		{
 			
-			btn = new Button();
-			btn.styleName = "button1";
-			btn.label = "音效1";
-			btn.width = 90;
-			btn.x = 100;
-			btn.y = 150;
-			btn.addEventListener(MouseEvent.CLICK, test);
-			this.addChild(btn);
-			
-			btn = new Button();
-			btn.styleName = "button1";
-			btn.label = "音效2";
-			btn.width = 90;
-			btn.x = 200;
-			btn.y = 150;
-			btn.addEventListener(MouseEvent.CLICK, test);
-			this.addChild(btn);
-			
-			btn = new Button();
-			btn.styleName = "button1";
-			btn.label = "音效3";
-			btn.width = 90;
-			btn.x = 300;
-			btn.y = 150;
-			btn.addEventListener(MouseEvent.CLICK, test);
-			this.addChild(btn);
-			
-			
-			
-			_mc = new BitmapMovieClip("testScene.TestMovieClip", 3);
-			_mc.x = 50;
-			_mc.y = 300;
-			this.addChild(_mc);
 		}
 		
-		private var _mc:BitmapMovieClip;
+		
+		private function drawRoute(pStart:Point, pEnd:Point, pBezierList:Array, routeIndex:uint, isReset:Boolean=false):void
+		{
+			if(isReset) {
+				while(_dottedLineC.numChildren > 0) _dottedLineC.removeChildAt(0);
+				_bezierList = new Vector.<CubicBezier>();
+			}
+			
+			var bezier:CubicBezier = new CubicBezier(pStart, pEnd, pBezierList, 5);
+			_bezierList[routeIndex] = bezier;
+			
+			for(var i:int=0; i < bezier.anchorCount; i++)
+			{
+				if(i == 0) continue;//起点
+				
+				var anchor:Object = bezier.getAnchorInfo(i);
+				var frontAnchor:Object = bezier.getAnchorInfo(i - 1);
+				var pt1:Point = new Point(frontAnchor.x, frontAnchor.y);
+				var pt2:Point = new Point(anchor.x, anchor.y);
+				if(i != bezier.anchorCount - 1) pt2 = Point.interpolate(pt1, pt2, 0.45);
+				
+				var line:Shape = new Shape();
+				line.name = "r" + routeIndex + "l" + i;
+				line.alpha = 0.2;
+				line.graphics.lineStyle(3);
+				line.graphics.moveTo(pt1.x, pt1.y);
+				line.graphics.lineTo(pt2.x, pt2.y);
+				_dottedLineC.addChild(line);
+			}
+		}
+		
+		
+		
+		/**当前航线索引*/
+		private var _routeIndex:uint;
+		/**航线的贝塞尔曲线列表*/
+		private var _bezierList:Vector.<CubicBezier>;
+		/**虚线列表容器*/
+		private var _dottedLineC:Sprite;
+		/**总时间*/
+		private var _totalTime:int;
+		/**开始行驶的时间*/
+		private var _startTime:int;
+		/**现在所航行到的锚点索引*/
+		private var _anchorIndex:uint;
+		/**锚点间的航行时间（秒）*/
+		private var _anchorDuration:Number;
+		
+		
+		
+		/**
+		 * 开始航行
+		 * @param totalTime 总时间（毫秒）
+		 * @param lastTime 已航行时间（毫秒）
+		 */
+		private function startSail(routeIndex:uint, totalTime:int, lastTime:int=0):void
+		{
+			_routeIndex = routeIndex;
+			_totalTime = totalTime;
+			_startTime = getTimer() - lastTime;
+			t = getTimer();
+			
+			//将之前航线的锚点全部变亮
+			for(var i:int = 0; i < routeIndex; i++)
+			{
+				var bezier:CubicBezier = _bezierList[i];
+				for(var n:int = 0; n < bezier.anchorCount; n++) {
+					_dottedLineC.getChildByName("r" + i + "l" + n).alpha = 1;
+				}
+			}
+			
+			sailNextAnchor(true);
+		}
+		
+		
+		/**
+		 * 航行到下个锚点
+		 * @param isFirst 是否为首次航行
+		 */
+		private function sailNextAnchor(isFirst:Boolean=false):void
+		{
+			TweenMax.killTweensOf(triangle);
+			var bezier:CubicBezier = _bezierList[_routeIndex];
+			
+			//初次航行
+			if(isFirst) {
+				var time:int = getTimer() - _startTime;
+				var ratio:Number = time / _totalTime;
+				_anchorIndex = ratio * (bezier.anchorCount - 1);
+				_anchorDuration = _totalTime / (bezier.anchorCount - 1) / 1000;
+				
+				//将当前锚点之前的锚点全部变亮
+				for(var i:int = 1; i < _anchorIndex; i++) {
+					_dottedLineC.getChildByName("r" + _routeIndex + "l" + i).alpha = 1;
+				}
+			}
+			else {
+				_anchorIndex++;
+			}
+			
+			//将当前锚点变亮
+			if(_anchorIndex > 0) {
+				_dottedLineC.getChildByName("r" + _routeIndex + "l" + _anchorIndex).alpha = 1;
+			}
+			
+			//当前锚点和下个锚点
+			var nowAnchor:Object = bezier.getAnchorInfo(_anchorIndex);
+			var nextAnchor:Object = bezier.getAnchorInfo(_anchorIndex + 1);
+			
+			//已航行完毕
+			if(nextAnchor == null) {
+				trace("ok");
+				trace(getTimer() - t);
+				return;
+			}
+			
+			//航行
+			var nowRotation:Number = nowAnchor.degrees + 90;
+			var nextRotation:Number = nextAnchor.degrees + 90;
+			
+			if(nowRotation > 180) nowRotation -= 360;
+			if(nextRotation > 180) nextRotation -= 360;
+			
+			if((nowRotation < 0) && (nextRotation > 0)) {
+				nextRotation = nowRotation;
+			}
+			if((nextRotation < 0) && (nowRotation > 0)) {
+				nowRotation = nextRotation;
+			}
+			
+			triangle.x = nowAnchor.x;
+			triangle.y = nowAnchor.y;
+			triangle.rotation = nowRotation;
+			TweenMax.to(triangle, _anchorDuration, {
+				x:nextAnchor.x, y:nextAnchor.y, rotation:nextRotation,
+				onComplete:sailNextAnchor, ease:Linear.easeNone
+			});
+		}
 		
 		
 		private function test(event:Event):void
 		{
-			var btn:Button = event.currentTarget as Button;
-			switch(btn.label)
-			{
-				case "背景1":
-					Common.sound.play("background", "1", true);
-					_mc.sourceName = "testScene.TestMovieClip2";
-					break;
-				
-				case "背景2":
-					Common.sound.play("background", "2", true);
-					_mc.play(11, 2, 10);
-					break;
-				
-				
-				case "音效1":
-					Common.sound.play("fight", "att1");
-					_mc.dispose();
-					break;
-				
-				case "音效2":
-					Common.sound.play("fight", "lose", false, true, 1, false);
-					_mc.gotoAndStop(2);
-					break;
-				
-				case "音效3":
-					Common.sound.play("fight", "win");
-					_mc.playing ? _mc.stop() : _mc.play();
-					break;
-			}
+			
 		}
 		//
 	}
