@@ -101,7 +101,7 @@ package game
 			info = Common.config.getResConfig("language");
 			var type:String = Common.config.getConfig("languageType");
 			var url:String = (type == "xml") ? (info.url + ".xml") : info.url;
-			Common.loader.add("language", url, "xml", info.version);
+			Common.loader.add("language", url, type, info.version);
 			
 			//组件样式配置文件
 			info = Common.config.getResConfig("style");
