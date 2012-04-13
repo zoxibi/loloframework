@@ -219,7 +219,7 @@ package reign.common
 		 * @param soundName 音频的名称
 		 * @param isBackgroundMusic 是否为背景音乐
 		 */
-		public function stop(configName:String, soundName:String, isBackgroundMusic:Boolean=true):void
+		public function stop(configName:String, soundName:String, isBackgroundMusic:Boolean=false):void
 		{
 			//获取音频的url
 			var url:String = getSoundUrl(configName, soundName);

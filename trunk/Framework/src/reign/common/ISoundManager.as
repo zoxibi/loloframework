@@ -32,7 +32,7 @@ package reign.common
 		 * @param soundName 音频的名称
 		 * @param isBackgroundMusic 是否为背景音乐
 		 */
-		function stop(configName:String, soundName:String, isBackgroundMusic:Boolean=true):void;
+		function stop(configName:String, soundName:String, isBackgroundMusic:Boolean=false):void;
 		
 		
 		/**

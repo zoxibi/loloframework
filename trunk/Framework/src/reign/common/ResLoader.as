@@ -67,12 +67,6 @@ package reign.common
 		/**已经加载完成的资源列表*/
 		private var _resList:Dictionary;
 		
-		/**上次的加载队列*/
-		private var _lastLoadList:Array;
-		/**上次的加载队列*/
-		private var _lastKey:String;
-		/**上次加载是否为后台加载*/
-		private var _lastIsBackground:Boolean;
 		/**用于重新加载*/
 		private var _reloadTimer:RTimer;
 		
@@ -141,7 +135,7 @@ package reign.common
 			_xmlLoader.addEventListener(ProgressEvent.PROGRESS, progressHandler);
 			_xmlLoader.addEventListener(Event.COMPLETE, xmlCompleteHandler);
 			
-			_reloadTimer = RTimer.getInstance(5000, reload);
+			_reloadTimer = RTimer.getInstance(10 * 1000, reload);
 		}
 		
 		
@@ -185,8 +179,6 @@ package reign.common
 			
 			trace("加载{ name:" + _nowLoadInfo.name + ", url:" + Common.getResUrl(_nowLoadInfo.url) + " }出错！", event.type);
 			this.dispatchEvent(new LoadResourceEvent(LoadResourceEvent.ERROR, _nowLoadInfo.name));
-			
-			if(_lastIsBackground) loadNext();
 		}
 		
 		/**
@@ -415,8 +407,6 @@ package reign.common
 			//使用默认key
 			if(key == null) key = _key.toString();
 			
-			_lastKey = key;
-			_lastIsBackground = isBackground;
 			_callbackList[key] = callback;
 			_key++;
 			
@@ -440,8 +430,6 @@ package reign.common
 			}
 			
 			if(!_isRun) {
-				_lastLoadList = _loadList.concat();
-				
 				_isRun = true;
 				_numTotal = _loadList.length;//记录需要加载的资源总数
 				loadNext();
@@ -455,18 +443,33 @@ package reign.common
 		private function reload():void
 		{
 			_reloadTimer.reset();
+			stopLoad();
 			
-			_isRun = false;
-			_loadList = _lastLoadList.concat();
-			for(var i:int = 0; i < _loadList.length; i++)
-			{
-				if(hasResByName(_loadList[i].name)) {
-					_loadList.splice(i, 1);
-					i--;
-				}
-			}
+			_loadList.unshift(_nowLoadInfo);
+			loadNext();
+		}
+		
+		
+		
+		/**
+		 * 终止所有加载
+		 */
+		public function stopLoad():void
+		{
+			try { _claLoader.close(); }
+			catch(error:Error) {}
 			
-			load(_callbackList[_lastKey], _lastKey, _lastIsBackground);
+			try { _swfLoader.close(); }
+			catch(error:Error) {}
+			
+			try { _imgLoader.close(); }
+			catch(error:Error) {}
+			
+			try { _zipLoader.close(); }
+			catch(error:Error) {}
+			
+			try { _xmlLoader.close(); }
+			catch(error:Error) {}
 		}
 		
 		
