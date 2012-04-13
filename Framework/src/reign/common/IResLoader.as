@@ -34,6 +34,12 @@ package reign.common
 		
 		
 		/**
+		 * 终止所有加载
+		 */
+		function stopLoad():void;
+		
+		
+		/**
 		 * 是否正在加载中
 		 * @return 
 		 */

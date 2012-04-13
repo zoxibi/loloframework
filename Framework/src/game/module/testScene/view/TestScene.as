@@ -13,9 +13,9 @@ package game.module.testScene.view
 	import game.module.testScene.model.TestSceneData;
 	
 	import reign.common.Common;
+	import reign.components.Button;
 	import reign.core.Scene;
 	import reign.utils.bezier.CubicBezier;
-	import reign.utils.bezier.QuadraticBezier;
 
 	/**
 	 * 测试场景
@@ -27,7 +27,27 @@ package game.module.testScene.view
 		public static var instance:TestScene;
 		
 		
+		/**三角形*/
 		public var triangle:Sprite;
+		/**当前航线索引*/
+		private var _routeIndex:uint;
+		/**航线的贝塞尔曲线列表*/
+		private var _bezierList:Vector.<CubicBezier>;
+		/**虚线列表容器*/
+		private var _dottedLineC:Sprite;
+		/**总时间*/
+		private var _totalTime:int;
+		/**开始行驶的时间*/
+		private var _startTime:int;
+		/**现在所航行到的锚点索引*/
+		private var _anchorIndex:uint;
+		/**锚点间的航行时间（秒）*/
+		private var _anchorDuration:Number;
+		
+		
+		public var sndBtn:Button;
+		
+		public var soundPop:SoundPop = new SoundPop();
 		
 		
 		private var _data:TestSceneData;
@@ -44,27 +64,35 @@ package game.module.testScene.view
 			_dottedLineC = new Sprite();
 			addChild(_dottedLineC);
 			
-			var pStart:Point = new Point(100, 100);
-			var pEnd:Point = new Point(100, 400);
-			var pBezierList:Array = [new Point(0, 200), new Point(600, 300)];
+			var pStart:Point = new Point(200, 200);
+			var pEnd:Point = new Point(200, 200);
+			var pBezierList:Array = [new Point(0, 100), new Point(150, 0), new Point(200, 100), new Point(300, 0), new Point(400, 100)];
 			drawRoute(pStart, pEnd, pBezierList, 0, true);
 			
 			startSail(0, 0.5 * 60 * 1000/*, 15 * 1000*/);
 			
-			Common.stage.addEventListener(MouseEvent.CLICK, test);
+			
+			sndBtn.addEventListener(MouseEvent.CLICK, sndBtn_clickHandler);
 		}
-		private var t:int;
+		
+		private function sndBtn_clickHandler(event:Event):void
+		{
+			soundPop.showOrHide();
+		}
+		
+		
+		
+		
 		
 		
 		/**
-		 * 
+		 * 绘制航线
+		 * @param pStart
+		 * @param pEnd
+		 * @param pBezierList
+		 * @param routeIndex
+		 * @param isReset
 		 */
-		private function clearAllDottedLine():void
-		{
-			
-		}
-		
-		
 		private function drawRoute(pStart:Point, pEnd:Point, pBezierList:Array, routeIndex:uint, isReset:Boolean=false):void
 		{
 			if(isReset) {
@@ -72,7 +100,7 @@ package game.module.testScene.view
 				_bezierList = new Vector.<CubicBezier>();
 			}
 			
-			var bezier:CubicBezier = new CubicBezier(pStart, pEnd, pBezierList, 5);
+			var bezier:CubicBezier = new CubicBezier(pStart, pEnd, pBezierList);
 			_bezierList[routeIndex] = bezier;
 			
 			for(var i:int=0; i < bezier.anchorCount; i++)
@@ -95,25 +123,6 @@ package game.module.testScene.view
 			}
 		}
 		
-		
-		
-		/**当前航线索引*/
-		private var _routeIndex:uint;
-		/**航线的贝塞尔曲线列表*/
-		private var _bezierList:Vector.<CubicBezier>;
-		/**虚线列表容器*/
-		private var _dottedLineC:Sprite;
-		/**总时间*/
-		private var _totalTime:int;
-		/**开始行驶的时间*/
-		private var _startTime:int;
-		/**现在所航行到的锚点索引*/
-		private var _anchorIndex:uint;
-		/**锚点间的航行时间（秒）*/
-		private var _anchorDuration:Number;
-		
-		
-		
 		/**
 		 * 开始航行
 		 * @param totalTime 总时间（毫秒）
@@ -124,7 +133,6 @@ package game.module.testScene.view
 			_routeIndex = routeIndex;
 			_totalTime = totalTime;
 			_startTime = getTimer() - lastTime;
-			t = getTimer();
 			
 			//将之前航线的锚点全部变亮
 			for(var i:int = 0; i < routeIndex; i++)
@@ -176,7 +184,6 @@ package game.module.testScene.view
 			//已航行完毕
 			if(nextAnchor == null) {
 				trace("ok");
-				trace(getTimer() - t);
 				return;
 			}
 			
@@ -201,12 +208,6 @@ package game.module.testScene.view
 				x:nextAnchor.x, y:nextAnchor.y, rotation:nextRotation,
 				onComplete:sailNextAnchor, ease:Linear.easeNone
 			});
-		}
-		
-		
-		private function test(event:Event):void
-		{
-			
 		}
 		//
 	}
