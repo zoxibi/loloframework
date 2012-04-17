@@ -153,6 +153,7 @@ package game.module.testScene.view
 		
 		override protected function reset():void
 		{
+			_effect.graphics.clear();
 			Common.sound.stop("background", "3");
 			this.removeEventListener(Event.ENTER_FRAME, enterFrameHandler);
 		}

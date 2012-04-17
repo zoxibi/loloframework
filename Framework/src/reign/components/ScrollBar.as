@@ -2,7 +2,6 @@ package reign.components
 {
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
-	import flash.events.TimerEvent;
 	import flash.geom.Rectangle;
 	
 	import reign.common.Common;
@@ -317,7 +316,7 @@ package reign.components
 		 * 在对应的鼠标按下状态，滚动行或页
 		 * @param event
 		 */
-		private function timerHandler(event:TimerEvent):void
+		private function timerHandler():void
 		{
 			//刚到达回调时间
 			if(_timer.delay == repeatDelay) {
@@ -328,7 +327,6 @@ package reign.components
 			//滚动
 			else {
 				_scrollLine ? moveContentByLine() : moveContentByPage();
-				event.updateAfterEvent();
 			}
 		}
 		

@@ -325,8 +325,6 @@ package reign.common
 					_nowLoadInfo = arr[0];
 				}
 				
-//				_nowLoadInfo = (arr == null) ? _loadList.shift() : arr[0];
-				
 				var resUrl:String = Common.getResUrl(_nowLoadInfo.url, _nowLoadInfo.version);
 				
 				//根据资源的类型，进行不同的加载操作
@@ -418,7 +416,12 @@ package reign.common
 			}
 			
 			//不是后台加载，清除资源列表中的后台加载项
-			if(!isBackground) {
+			if(!isBackground)
+			{
+				if(_nowLoadInfo.isBackground) {
+					stopLoad();
+					_isRun = false;
+				}
 				for(var i:int = 0; i < _loadList.length; i++)
 				{
 					if(_loadList[i].isBackground) {
