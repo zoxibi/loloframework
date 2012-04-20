@@ -187,7 +187,6 @@ package reign.components
 				if(_downArrow != null) _downArrow.addEventListener(MouseEvent.MOUSE_DOWN, arrowMouseDownHandler);
 				
 				//绘制内容的空白区域
-				_content.graphics.clear();
 				_content.graphics.beginFill(0x0, 0.001);
 				_content.graphics.drawRect(0, 0, _content.width, _content.height);
 				_content.graphics.endFill();
