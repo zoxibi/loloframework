@@ -99,7 +99,7 @@ package game.module.testScene.view
 						_effect.graphics.moveTo(offsetsX + i * 4, offsetsY);
 						_effect.graphics.lineTo(offsetsX + i * 4, offsetsY - n);
 						
-						_effect.graphics.lineStyle(3, 0xFF0000, 0.2, true, "noSacle", "none");
+						_effect.graphics.lineStyle(3, 0xFF0000, 0.25, true, "noSacle", "none");
 						_effect.graphics.moveTo(offsetsX + i * 4, offsetsY);
 						_effect.graphics.lineTo(offsetsX + i * 4, offsetsY + n);
 					}
