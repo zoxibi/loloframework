@@ -1,6 +1,6 @@
 package game.module.core.events
 {
-	import reign.mvc.control.MvcEvent;
+	import lolo.mvc.control.MvcEvent;
 	
 	/**
 	 * 更改后台服务类型

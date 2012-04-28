@@ -1,6 +1,6 @@
 package game.module.loginScene.view
 {
-	import reign.core.IScene;
+	import lolo.core.IScene;
 
 	/**
 	 * 登录场景接口

@@ -4,8 +4,8 @@ package game.module.loginScene.controls
 	import game.module.loginScene.events.LoginEvent;
 	import game.module.loginScene.events.RegisterEvent;
 	
-	import reign.mvc.control.FrontController;
-	import reign.mvc.control.MvcEventDispatcher;
+	import lolo.mvc.control.FrontController;
+	import lolo.mvc.control.MvcEventDispatcher;
 
 	/**
 	 * 【登录场景】命令管理

@@ -4,8 +4,8 @@ package game.module.core.controls
 	import game.module.core.events.ChangeServiceTypeEvent;
 	import game.module.core.events.ConsoleEvent;
 	
-	import reign.mvc.control.FrontController;
-	import reign.mvc.control.MvcEventDispatcher;
+	import lolo.mvc.control.FrontController;
+	import lolo.mvc.control.MvcEventDispatcher;
 
 	/**
 	 * 【游戏核心】命令管理

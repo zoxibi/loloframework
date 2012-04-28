@@ -1,6 +1,6 @@
 package game.module.core.events
 {
-	import reign.mvc.control.MvcEvent;
+	import lolo.mvc.control.MvcEvent;
 	
 	/**
 	 * 处理控制台推送过来的数据

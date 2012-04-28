@@ -4,8 +4,8 @@ package game.ui
 	import flash.display.Sprite;
 	import flash.events.Event;
 	
-	import reign.common.Common;
-	import reign.events.LoadResourceEvent;
+	import lolo.common.Common;
+	import lolo.events.LoadResourceEvent;
 
 	/**
 	 * 游戏开始时的加载条

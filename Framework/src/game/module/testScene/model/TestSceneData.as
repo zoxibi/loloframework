@@ -1,6 +1,6 @@
 package game.module.testScene.model
 {
-	import reign.utils.bind.Data;
+	import lolo.utils.bind.Data;
 	
 	/**
 	 * 【测试场景】数据

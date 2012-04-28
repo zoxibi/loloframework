@@ -1,6 +1,6 @@
 package game.module.loginScene.events
 {
-	import reign.mvc.control.MvcEvent;
+	import lolo.mvc.control.MvcEvent;
 	
 	/**
 	 * 注册帐号

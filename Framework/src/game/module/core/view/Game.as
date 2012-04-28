@@ -10,25 +10,25 @@ package game.module.core.view
 	import game.module.core.controls.CoreController;
 	import game.module.core.events.ConsoleEvent;
 	
-	import reign.common.Common;
-	import reign.common.ConfigManager;
-	import reign.common.LanguageManager;
-	import reign.common.MouseManager;
-	import reign.common.ResLoader;
-	import reign.common.SoundManager;
-	import reign.components.Alert;
-	import reign.core.Scene;
-	import reign.core.Window;
-	import reign.data.HashMap;
-	import reign.data.LastTime;
-	import reign.mvc.control.MvcEventDispatcher;
-	import reign.ui.Console;
-	import reign.ui.Stats;
-	import reign.utils.AutoUtil;
-	import reign.utils.RandomUtil;
-	import reign.utils.TimeUtil;
-	import reign.utils.Validator;
-	import reign.utils.bind.BindUtil;
+	import lolo.common.Common;
+	import lolo.common.ConfigManager;
+	import lolo.common.LanguageManager;
+	import lolo.common.MouseManager;
+	import lolo.common.ResLoader;
+	import lolo.common.SoundManager;
+	import lolo.components.Alert;
+	import lolo.core.Scene;
+	import lolo.core.Window;
+	import lolo.data.HashMap;
+	import lolo.data.LastTime;
+	import lolo.mvc.control.MvcEventDispatcher;
+	import lolo.ui.Console;
+	import lolo.ui.Stats;
+	import lolo.utils.AutoUtil;
+	import lolo.utils.RandomUtil;
+	import lolo.utils.TimeUtil;
+	import lolo.utils.Validator;
+	import lolo.utils.bind.BindUtil;
 
 	/**
 	 * 游戏核心

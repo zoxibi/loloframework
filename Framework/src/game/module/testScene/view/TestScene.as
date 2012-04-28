@@ -12,10 +12,10 @@ package game.module.testScene.view
 	
 	import game.module.testScene.model.TestSceneData;
 	
-	import reign.common.Common;
-	import reign.components.Button;
-	import reign.core.Scene;
-	import reign.utils.bezier.CubicBezier;
+	import lolo.common.Common;
+	import lolo.components.Button;
+	import lolo.core.Scene;
+	import lolo.utils.bezier.CubicBezier;
 
 	/**
 	 * 测试场景
