@@ -7,12 +7,12 @@ package game
 	
 	import game.ui.Loading;
 	
-	import reign.common.Common;
-	import reign.common.ConfigManager;
-	import reign.common.LanguageManager;
-	import reign.common.ResLoader;
-	import reign.common.StyleManager;
-	import reign.events.LoadResourceEvent;
+	import lolo.common.Common;
+	import lolo.common.ConfigManager;
+	import lolo.common.LanguageManager;
+	import lolo.common.ResLoader;
+	import lolo.common.StyleManager;
+	import lolo.events.LoadResourceEvent;
 	
 	
 	[SWF(width="1000", height="600", backgroundColor="#FFFFFF", frameRate="25")]

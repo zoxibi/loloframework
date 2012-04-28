@@ -2,10 +2,10 @@ package game.module.core.controls
 {
 	import game.module.core.events.ConsoleEvent;
 	
-	import reign.mvc.command.ICommand;
-	import reign.mvc.control.MvcEvent;
-	import reign.ui.Console;
-	import reign.ui.Stats;
+	import lolo.mvc.command.ICommand;
+	import lolo.mvc.control.MvcEvent;
+	import lolo.ui.Console;
+	import lolo.ui.Stats;
 	
 	/**
 	 * 处理控制台推送过来的数据

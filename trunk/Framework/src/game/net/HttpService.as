@@ -14,11 +14,11 @@ package game.net
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	
-	import reign.common.Common;
-	import reign.components.AlertText;
-	import reign.data.RequestModel;
-	import reign.net.IService;
-	import reign.ui.Console;
+	import lolo.common.Common;
+	import lolo.components.AlertText;
+	import lolo.data.RequestModel;
+	import lolo.net.IService;
+	import lolo.ui.Console;
 	
 	/**
 	 * 与后台通信的HTTP服务

@@ -6,9 +6,9 @@ package game.module.testScene.view
 	import flash.media.SoundMixer;
 	import flash.utils.ByteArray;
 	
-	import reign.common.Common;
-	import reign.components.Button;
-	import reign.core.Container;
+	import lolo.common.Common;
+	import lolo.components.Button;
+	import lolo.core.Container;
 	
 	public class SoundPop extends Container
 	{

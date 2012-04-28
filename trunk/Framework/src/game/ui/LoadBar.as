@@ -3,11 +3,11 @@ package game.ui
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
-	import reign.common.Common;
-	import reign.components.ModalBackground;
-	import reign.core.Container;
-	import reign.events.LoadResourceEvent;
-	import reign.ui.ILoadBar;
+	import lolo.common.Common;
+	import lolo.components.ModalBackground;
+	import lolo.core.Container;
+	import lolo.events.LoadResourceEvent;
+	import lolo.ui.ILoadBar;
 
 	/**
 	 * 加载条

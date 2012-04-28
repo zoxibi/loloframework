@@ -5,9 +5,9 @@
 	import game.common.RmList;
 	import game.module.loginScene.events.LoginEvent;
 	
-	import reign.common.Common;
-	import reign.mvc.command.ICommand;
-	import reign.mvc.control.MvcEvent;
+	import lolo.common.Common;
+	import lolo.mvc.command.ICommand;
+	import lolo.mvc.control.MvcEvent;
 	
 	/**
 	 * 登录游戏

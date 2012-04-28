@@ -4,10 +4,10 @@ package game.module.core.controls
 	import game.net.HttpService;
 	import game.net.SocketService;
 	
-	import reign.common.Common;
-	import reign.common.Constants;
-	import reign.mvc.command.ICommand;
-	import reign.mvc.control.MvcEvent;
+	import lolo.common.Common;
+	import lolo.common.Constants;
+	import lolo.mvc.command.ICommand;
+	import lolo.mvc.control.MvcEvent;
 	
 	/**
 	 * 更改后台服务类型

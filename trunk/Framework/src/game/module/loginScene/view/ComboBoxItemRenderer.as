@@ -1,11 +1,11 @@
 package game.module.loginScene.view
 {
-	import reign.common.Common;
-	import reign.components.BaseButton;
-	import reign.components.Label;
-	import reign.components.ToolTip;
-	import reign.events.components.ToolTipEvent;
-	import reign.utils.AutoUtil;
+	import lolo.common.Common;
+	import lolo.components.BaseButton;
+	import lolo.components.Label;
+	import lolo.components.ToolTip;
+	import lolo.events.components.ToolTipEvent;
+	import lolo.utils.AutoUtil;
 	
 	/**
 	 * 组合框，列表，子项

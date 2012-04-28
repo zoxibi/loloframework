@@ -11,17 +11,17 @@
 	import game.module.loginScene.events.LoginEvent;
 	import game.module.loginScene.events.RegisterEvent;
 	
-	import reign.common.Common;
-	import reign.common.Constants;
-	import reign.components.Button;
-	import reign.components.ComboBox;
-	import reign.components.InputText;
-	import reign.components.ItemGroup;
-	import reign.core.Scene;
-	import reign.data.HashMap;
-	import reign.events.components.ItemEvent;
-	import reign.mvc.control.MvcEventDispatcher;
-	import reign.utils.Validator;
+	import lolo.common.Common;
+	import lolo.common.Constants;
+	import lolo.components.Button;
+	import lolo.components.ComboBox;
+	import lolo.components.InputText;
+	import lolo.components.ItemGroup;
+	import lolo.core.Scene;
+	import lolo.data.HashMap;
+	import lolo.events.components.ItemEvent;
+	import lolo.mvc.control.MvcEventDispatcher;
+	import lolo.utils.Validator;
 
 	/**
 	 * 登录场景
