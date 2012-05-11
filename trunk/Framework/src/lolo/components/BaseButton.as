@@ -1,5 +1,6 @@
 package lolo.components
 {
+	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -252,6 +253,18 @@ package lolo.components
 				rollOutHandler(event);
 			}
 		}
+		
+		
+		/**
+		 * 返回皮肤中具有指定名称的子显示对象。如果多个子显示对象具有指定名称，则该方法会返回子级列表中的第一个对象。
+		 * @param name
+		 * @return 
+		 */
+		public function getSkinChildByName(name:String):DisplayObject
+		{
+			return _skin.getChildByName(name);
+		}
+		
 		
 		
 		/**

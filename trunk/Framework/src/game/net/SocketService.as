@@ -9,6 +9,7 @@ package game.net
 	import flash.geom.Point;
 	import flash.net.Socket;
 	import flash.net.URLVariables;
+	import flash.system.Security;
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	
@@ -318,6 +319,11 @@ package game.net
 		
 		override public function connect(host:String, port:int):void
 		{
+			var socketPolicyFileUrl:String = Common.config.getConfig("socketPolicyFileUrl");
+			if(socketPolicyFileUrl != "" && Common.config.getConfig("bin") != "debug") {
+				Security.loadPolicyFile("xmlsocket://" + socketPolicyFileUrl);
+			}
+			
 			super.connect(host, port);
 			_host = host;
 			_port = port;
