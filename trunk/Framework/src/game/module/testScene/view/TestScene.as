@@ -7,7 +7,6 @@ package game.module.testScene.view
 	import lolo.common.Common;
 	import lolo.components.Button;
 	import lolo.core.Scene;
-	import lolo.utils.TimeUtil;
 
 	/**
 	 * 测试场景
@@ -35,25 +34,7 @@ package game.module.testScene.view
 			
 			
 			sndBtn.addEventListener(MouseEvent.CLICK, sndBtn_clickHandler);
-			Common.stage.addEventListener(MouseEvent.CLICK, stage_mouseDownHandler, true, 222);
-			Common.stage.addEventListener(MouseEvent.CLICK, test, true, 111);
-			
-			var t:int = 5.11 * 24 * 60 * 60 * 1000;
-			trace(TimeUtil.format(t, "ms", "", "", "", "", false, true));
 		}
-		
-		private function test(event:MouseEvent):void
-		{
-			trace("test");
-		}
-		
-		private function stage_mouseDownHandler(event:MouseEvent):void
-		{
-			trace("ok!");
-			event.stopPropagation();
-//			event.stopImmediatePropagation();
-		}
-		
 		
 		
 		private function sndBtn_clickHandler(event:MouseEvent):void
