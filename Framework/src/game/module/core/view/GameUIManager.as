@@ -57,8 +57,26 @@ package game.module.core.view
 			_loadBar = new LoadBar();
 			_requestModal = new RequestModal();
 			
-//			showLoginScene([]);
-			showTestScene([]);
+			showScene(GameConstants.SCENE_ID_TEST);
+		}
+		
+		
+		override public function showScene(sceneID:int, ...rest):void
+		{
+			super.showScene(sceneID, rest);
+			
+			switch(sceneID)
+			{
+				//测试场景
+				case GameConstants.SCENE_ID_TEST:
+					showTestScene(rest);
+					break;
+				
+				//登录场景
+				case GameConstants.SCENE_ID_LOGIN:
+					showLoginScene(rest);
+					break;
+			}
 		}
 		
 		

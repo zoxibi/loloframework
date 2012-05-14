@@ -280,7 +280,8 @@ package lolo.common
 		 */
 		public function showScene(sceneID:int, ...rest):void
 		{
-			throw new Error("showScene方法应由子类实现");
+			//临时储存这次切换场景时，携带的参数。在显示的时候，再记录到当前场景参数中
+			_args.sceneArgs = rest[0];
 		}
 		
 		/**
@@ -288,7 +289,11 @@ package lolo.common
 		 */
 		public function showLastScene():void
 		{
-			showScene(_args.lastSceneID);
+			if(_args.lastSceneID != null) {
+				var args:Array = _args.lastSceneArgs.concat();
+				args.unshift(_args.lastSceneID);
+				showScene.apply(null, args);
+			}
 		}
 		
 		/**
@@ -321,16 +326,17 @@ package lolo.common
 			if(_nowScene == scene) return;
 			
 			closeAllWindow();
+			
 			if(_nowScene != null) {
 				_args.lastSceneID = _nowScene.sceneID;
+				_args.lastSceneArgs = _args.currentSceneArgs;//记录到上个场景参数中
 				_nowScene.hide();
 			}
 			
 			_nowScene = scene;
+			_args.currentSceneArgs = _args.sceneArgs;//记录到当前场景参数中
 			showDisplayObject(_nowScene as DisplayObject, _sceneLayer);
 		}
-		
-		
 		
 		
 		/**
