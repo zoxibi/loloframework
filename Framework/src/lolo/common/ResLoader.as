@@ -8,6 +8,7 @@ package lolo.common
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
 	import flash.events.SecurityErrorEvent;
+	import flash.events.TimerEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
@@ -15,10 +16,10 @@ package lolo.common
 	import flash.system.LoaderContext;
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
+	import flash.utils.Timer;
 	import flash.utils.getTimer;
 	
 	import lolo.events.LoadResourceEvent;
-	import lolo.utils.RTimer;
 	import lolo.utils.zip.ZipReader;
 
 	/**
@@ -68,7 +69,7 @@ package lolo.common
 		private var _resList:Dictionary;
 		
 		/**用于重新加载*/
-		private var _reloadTimer:RTimer;
+		private var _reloadTimer:Timer;
 		
 		
 		
@@ -135,7 +136,8 @@ package lolo.common
 			_xmlLoader.addEventListener(ProgressEvent.PROGRESS, progressHandler);
 			_xmlLoader.addEventListener(Event.COMPLETE, xmlCompleteHandler);
 			
-			_reloadTimer = RTimer.getInstance(10 * 1000, reload);
+			_reloadTimer = new Timer(10 * 1000);
+			_reloadTimer.addEventListener(TimerEvent.TIMER, reload);
 		}
 		
 		
@@ -420,7 +422,6 @@ package lolo.common
 			{
 				if(_nowLoadInfo.isBackground) {
 					stopLoad();
-					_isRun = false;
 				}
 				for(var i:int = 0; i < _loadList.length; i++)
 				{
@@ -443,7 +444,7 @@ package lolo.common
 		/**
 		 * 重新加载
 		 */
-		private function reload():void
+		private function reload(event:TimerEvent):void
 		{
 			_reloadTimer.reset();
 			stopLoad();
@@ -459,6 +460,8 @@ package lolo.common
 		 */
 		public function stopLoad():void
 		{
+			_isRun = false;
+			
 			try { _claLoader.close(); }
 			catch(error:Error) {}
 			
