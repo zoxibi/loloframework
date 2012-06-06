@@ -1,12 +1,15 @@
 package game.module.testScene.view
 {
+	import flash.display.BitmapData;
 	import flash.events.MouseEvent;
 	
 	import game.module.testScene.model.TestSceneData;
 	
 	import lolo.common.Common;
 	import lolo.components.Button;
+	import lolo.core.BitmapMovieClip;
 	import lolo.core.Scene;
+	import lolo.events.BitmapMovieClipEvent;
 
 	/**
 	 * 测试场景
@@ -24,7 +27,6 @@ package game.module.testScene.view
 		
 		private var _data:TestSceneData;
 		
-		
 		public function TestScene()
 		{
 			super();
@@ -36,10 +38,13 @@ package game.module.testScene.view
 			sndBtn.addEventListener(MouseEvent.CLICK, sndBtn_clickHandler);
 		}
 		
-		
+		private var _d:Array = [];
 		private function sndBtn_clickHandler(event:MouseEvent):void
 		{
-			soundPop.showOrHide();
+			//soundPop.showOrHide();
+			
+			var bmd:BitmapData = new BitmapData(1000, 1000);
+			_d.push(bmd);
 		}
 		//
 	}

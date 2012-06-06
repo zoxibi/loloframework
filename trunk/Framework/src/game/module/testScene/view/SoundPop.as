@@ -147,7 +147,7 @@ package game.module.testScene.view
 		
 		override protected function startup():void
 		{
-			Common.sound.play("background", "3");
+//			Common.sound.play("background", "3");
 			this.addEventListener(Event.ENTER_FRAME, enterFrameHandler);
 		}
 		
