@@ -7,6 +7,7 @@ package game.module.testScene.view
 	
 	import lolo.common.Common;
 	import lolo.components.Button;
+	import lolo.components.NumberText;
 	import lolo.core.BitmapMovieClip;
 	import lolo.core.Scene;
 	import lolo.events.BitmapMovieClipEvent;
@@ -24,6 +25,8 @@ package game.module.testScene.view
 		
 		public var soundPop:SoundPop = new SoundPop();
 		
+		public var nt:NumberText;
+		
 		
 		private var _data:TestSceneData;
 		
@@ -36,15 +39,20 @@ package game.module.testScene.view
 			
 			
 			sndBtn.addEventListener(MouseEvent.CLICK, sndBtn_clickHandler);
+			
+			
+			nt = new NumberText();
+			nt.size = 20;
+			nt.originalColor = 0;
+			this.addChild(nt);
 		}
 		
-		private var _d:Array = [];
+		private var _n:int = 100;
 		private function sndBtn_clickHandler(event:MouseEvent):void
 		{
 			//soundPop.showOrHide();
-			
-			var bmd:BitmapData = new BitmapData(1000, 1000);
-			_d.push(bmd);
+			_n--;
+			nt.text = _n.toString();
 		}
 		//
 	}
