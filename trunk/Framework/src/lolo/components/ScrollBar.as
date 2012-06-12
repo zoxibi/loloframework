@@ -441,10 +441,12 @@ package lolo.components
 		{
 			if(_disArea != null && _content != null)
 			{
-				_contentMask = new Mask();
-				_contentMask.target = _content;
-				_contentMask.x = _content.x;
-				_contentMask.y = _content.y;
+				if(_contentMask == null) {
+					_contentMask = new Mask();
+					_contentMask.target = _content;
+				}
+				_contentMask.x = _disArea.x;
+				_contentMask.y = _disArea.y;
 				_contentMask.rect = { width:_disArea.width, height:_disArea.height };
 				
 				update();
