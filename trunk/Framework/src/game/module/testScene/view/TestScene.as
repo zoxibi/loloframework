@@ -1,16 +1,16 @@
 package game.module.testScene.view
 {
-	import flash.display.BitmapData;
 	import flash.events.MouseEvent;
 	
 	import game.module.testScene.model.TestSceneData;
 	
 	import lolo.common.Common;
 	import lolo.components.Button;
-	import lolo.components.NumberText;
-	import lolo.core.BitmapMovieClip;
+	import lolo.components.Label;
 	import lolo.core.Scene;
-	import lolo.events.BitmapMovieClipEvent;
+	import lolo.data.LastTime;
+	import lolo.utils.RTimer;
+	import lolo.utils.TimeUtil;
 
 	/**
 	 * 测试场景
@@ -25,10 +25,12 @@ package game.module.testScene.view
 		
 		public var soundPop:SoundPop = new SoundPop();
 		
-		public var nt:NumberText;
-		
-		
 		private var _data:TestSceneData;
+		
+		private var _label:Label;
+		private var _time:LastTime;
+		private var _timer:RTimer = RTimer.getInstance(1000, timerHandler);
+		private var _timer2:RTimer = RTimer.getInstance(1000, timerHandler);
 		
 		public function TestScene()
 		{
@@ -41,18 +43,25 @@ package game.module.testScene.view
 			sndBtn.addEventListener(MouseEvent.CLICK, sndBtn_clickHandler);
 			
 			
-			nt = new NumberText();
-			nt.size = 20;
-			nt.originalColor = 0;
-			this.addChild(nt);
+			_label = new Label();
+			_label.x = _label.y = 50;
+			_label.size = 14;
+			this.addChild(_label);
 		}
 		
-		private var _n:int = 100;
 		private function sndBtn_clickHandler(event:MouseEvent):void
 		{
-			//soundPop.showOrHide();
-			_n--;
-			nt.text = _n.toString();
+			_time = new LastTime(10, "s");
+			_timer.start();
+			timerHandler();
+		}
+		
+		
+		private function timerHandler():void
+		{
+			var time:int = _time.getTime();
+			trace(time);
+			_label.text = TimeUtil.format(time);
 		}
 		//
 	}
