@@ -12,7 +12,7 @@ package lolo.core
 	import lolo.events.components.ItemEvent;
 	import lolo.ui.ICenterDisplayObject;
 	import lolo.utils.AutoUtil;
-
+	
 	/**
 	 * 窗口
 	 * @author LOLO
@@ -21,12 +21,12 @@ package lolo.core
 	{
 		/**背景的容器*/
 		protected var _backgroundC:Sprite;
+		/**面板容器*/
+		protected var _panelC:Sprite;
 		/**选项卡按钮组*/
 		protected var _tabBtnGroup:ItemGroup;
 		/**关闭按钮*/
 		protected var _closeBtn:BaseButton;
-		/**面板容器*/
-		protected var _panelC:Sprite;
 		/**当前显示的面板*/
 		protected var _currentPanel:IRSprite;
 		
@@ -212,8 +212,6 @@ package lolo.core
 		{
 			if(!_isShow) return;
 			
-			super.hide();
-			
 			//清除选中
 			_currentPanel = null;
 			_tabBtnGroup.selectedItem = null;
@@ -223,8 +221,9 @@ package lolo.core
 				var panel:IRSprite = _panelC.getChildAt(i) as IRSprite;
 				panel.hide();
 			}
+			
+			super.hide();
 		}
-		
 		
 		
 		
