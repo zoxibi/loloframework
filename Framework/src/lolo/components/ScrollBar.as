@@ -373,8 +373,8 @@ package lolo.components
 		
 		private function moveContent(p:int):void
 		{
-			var max:int = _disArea[_xy];
-			var min:int = -(_content[_wh] - _disArea[_wh] - _disArea[_xy]);
+			var max:Number = _disArea[_xy];
+			var min:Number = -(_content[_wh] - _disArea[_wh] - _disArea[_xy]);
 			
 			//向下移动超出区域了
 			if(p >= max) {
