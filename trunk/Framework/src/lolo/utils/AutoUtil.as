@@ -29,6 +29,7 @@ package lolo.utils
 	import lolo.components.RichText;
 	import lolo.components.ScrollBar;
 	import lolo.components.ToolTip;
+	import lolo.core.BitmapMovieClip;
 	import lolo.core.Container;
 	
 	/**
@@ -74,6 +75,11 @@ package lolo.utils
 					//普通容器(flash.display.Sprite)
 					case "sprite":
 						if(obj == null) obj = new Sprite();
+						break;
+					
+					//位图影片剪辑
+					case "bitmapMC":
+						if(obj == null) obj = new BitmapMovieClip();
 						break;
 					
 					//显示文本
