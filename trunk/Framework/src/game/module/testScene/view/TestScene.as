@@ -6,11 +6,9 @@ package game.module.testScene.view
 	
 	import lolo.common.Common;
 	import lolo.components.Button;
-	import lolo.components.Label;
+	import lolo.components.ImageLoader;
 	import lolo.core.Scene;
-	import lolo.data.LastTime;
-	import lolo.utils.RTimer;
-	import lolo.utils.TimeUtil;
+	import lolo.effects.PropertyMovie;
 
 	/**
 	 * 测试场景
@@ -27,10 +25,6 @@ package game.module.testScene.view
 		
 		private var _data:TestSceneData;
 		
-		private var _label:Label;
-		private var _time:LastTime;
-		private var _timer:RTimer = RTimer.getInstance(1000, timerHandler);
-		private var _timer2:RTimer = RTimer.getInstance(1000, timerHandler);
 		
 		public function TestScene()
 		{
@@ -43,25 +37,26 @@ package game.module.testScene.view
 			sndBtn.addEventListener(MouseEvent.CLICK, sndBtn_clickHandler);
 			
 			
-			_label = new Label();
-			_label.x = _label.y = 50;
-			_label.size = 14;
-			this.addChild(_label);
+			var img:ImageLoader = new ImageLoader();
+			img.path = "assets/{resVersion}/img/background/{0}.jpg";
+			img.fileName = "2";
+			this.addChild(img);
+			
+			this.addChild(sndBtn);
+			
+			_pm = new PropertyMovie(img, PropertyMovie.FRAMES_SHAKE);
 		}
+		
+		
+		
+		
+		private var _pm:PropertyMovie;
 		
 		private function sndBtn_clickHandler(event:MouseEvent):void
 		{
-			_time = new LastTime(10, "s");
-			_timer.start();
-			timerHandler();
-		}
-		
-		
-		private function timerHandler():void
-		{
-			var time:int = _time.getTime();
-			trace(time);
-			_label.text = TimeUtil.format(time);
+			if(!_pm.running) _pm.play(0);
+			
+			_pm.fps = (_pm.fps == 25) ? 5 : 25;
 		}
 		//
 	}
