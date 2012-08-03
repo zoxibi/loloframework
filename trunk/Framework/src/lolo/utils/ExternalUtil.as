@@ -34,7 +34,7 @@ package lolo.utils
 				return navigateToURL(urlRequest, window)
 			}
 			
-			if(/safari|opera/i.test(ExternalInterface.call('function(){return navigator.userAgent}') || 'opera'))
+			if(/safari|opera/i.test(ExternalInterface.call("function(){return navigator.userAgent}") || "opera"))
 			{
 				navigateToURL(urlRequest, window);
 			}
@@ -43,7 +43,6 @@ package lolo.utils
 				ExternalInterface.call("function(){window.open('" + getURLString(urlRequest) + "','" + window + "');}");
 			}
 		}
-		
 		
 		/**
 		 * 获取url字符串
@@ -61,18 +60,54 @@ package lolo.utils
 		}
 		
 		
+		
 		/**
-		 * 将指定url和title加入到收藏夹
-		 * @param url 要收藏的url
-		 * @param title 标题、描述
+		 * 设置页面是否启用鼠标滑轮事件
+		 * @param value
 		 */
-		public static function addFavorite(url:String, title:String):void
+		public static function set mouseWheelEnable(value:Boolean):void
 		{
-			if(ExternalInterface.available)
+			if(!ExternalInterface.available) return;
+			
+			//还未初始化
+			if(ExternalInterface.call("lolo.isInitialized") == null)
 			{
-				//调用页面的js函数
-				ExternalInterface.call("AddFavorite", url, title);
+				var jsCode:XML = <script><![CDATA[
+				function()
+				{
+					lolo = {};
+					lolo.isInitialized = function() { return true; }
+					
+					lolo.mouseWheelHandler = function(event) 
+					{
+						if(!event) event = window.event;//Cover for IE
+						if(event.preventDefault) {
+							event.preventDefault();
+						}
+					}
+					
+					lolo.addMouseWheelListener = function()
+					{
+						if(typeof window.addEventListener != 'undefined') {
+							window.addEventListener('DOMMouseScroll', lolo.mouseWheelHandler, false);
+						}
+						window.onmousewheel = document.onmousewheel = lolo.mouseWheelHandler;
+					}
+					
+					lolo.removeMouseWheelListener = function()
+					{
+						if(typeof window.removeEventListener != 'undefined') {
+							window.removeEventListener('DOMMouseScroll', lolo.mouseWheelHandler, false);
+						}
+						window.onmousewheel = document.onmousewheel = null;
+					}
+				}
+				]]></script>;
+				
+				ExternalInterface.call(jsCode);
 			}
+			
+			ExternalInterface.call(value ? "lolo.removeMouseWheelListener" : "lolo.addMouseWheelListener");
 		}
 		//
 	}

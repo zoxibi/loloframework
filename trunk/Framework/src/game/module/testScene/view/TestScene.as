@@ -1,5 +1,6 @@
 package game.module.testScene.view
 {
+	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	
 	import game.module.testScene.model.TestSceneData;
@@ -7,8 +8,8 @@ package game.module.testScene.view
 	import lolo.common.Common;
 	import lolo.components.Button;
 	import lolo.components.ImageLoader;
+	import lolo.components.ScrollBar;
 	import lolo.core.Scene;
-	import lolo.effects.PropertyMovie;
 
 	/**
 	 * 测试场景
@@ -39,24 +40,41 @@ package game.module.testScene.view
 			
 			var img:ImageLoader = new ImageLoader();
 			img.path = "assets/{resVersion}/img/background/{0}.jpg";
-			img.fileName = "2";
-			this.addChild(img);
+			img.fileName = "1";
+			var s:Sprite = new Sprite();
+			s.addChild(img);
+			this.addChild(s);
+			
+			_sb = new ScrollBar();
+			_sb.styleName = "vScrollBar1";
+			_sb.disArea = {x:100, y:100, width:200, height:200};
+			_sb.content = s;
+			_sb.x = 300;
+			_sb.y = 100;
+			_sb.size = 200;
+			this.addChild(_sb);
+			
+			_hSB = new ScrollBar();
+			_hSB.styleName = "hScrollBar1";
+			_hSB.direction = ScrollBar.HORIZONTAL;
+			_hSB.disArea = {x:100, y:100, width:200, height:200};
+			_hSB.content = s;
+			_hSB.x = 100;
+			_hSB.y = 300;
+			_hSB.size = 200;
+			this.addChild(_hSB);
 			
 			this.addChild(sndBtn);
-			
-			_pm = new PropertyMovie(img, PropertyMovie.FRAMES_SHAKE);
 		}
+		private var _sb:ScrollBar;
+		private var _hSB:ScrollBar;
 		
 		
-		
-		
-		private var _pm:PropertyMovie;
 		
 		private function sndBtn_clickHandler(event:MouseEvent):void
 		{
-			if(!_pm.running) _pm.play(0);
-			
-			_pm.fps = (_pm.fps == 25) ? 5 : 25;
+			_sb.update();
+			_hSB.update();
 		}
 		//
 	}
