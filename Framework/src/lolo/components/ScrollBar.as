@@ -6,6 +6,7 @@ package lolo.components
 	
 	import lolo.common.Common;
 	import lolo.utils.AutoUtil;
+	import lolo.utils.ExternalUtil;
 	import lolo.utils.RTimer;
 
 	/**
@@ -305,9 +306,18 @@ package lolo.components
 		private function mouseWheelHandler(event:MouseEvent):void
 		{
 			if(!_enabled) return;
+			ExternalUtil.mouseWheelEnable = false;
+			event.target.addEventListener(MouseEvent.MOUSE_OUT, mouseWheelTarget_mouseOutHandler);
+			
 			_scrollUp = event.delta > 0;
 			var line:int = (event.delta < 0) ? -event.delta : event.delta;
 			moveContentByLine(line);
+		}
+		
+		private function mouseWheelTarget_mouseOutHandler(event:MouseEvent):void
+		{
+			event.target.removeEventListener(MouseEvent.MOUSE_OUT, mouseWheelTarget_mouseOutHandler);
+			ExternalUtil.mouseWheelEnable = true;
 		}
 		
 		
