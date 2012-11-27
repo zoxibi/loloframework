@@ -84,6 +84,8 @@ package lolo.utils
 						if(event.preventDefault) {
 							event.preventDefault();
 						}
+						var detail = (event.wheelDelta) ? event.wheelDelta : event.detail;
+						alert(detail);
 					}
 					
 					lolo.addMouseWheelListener = function()

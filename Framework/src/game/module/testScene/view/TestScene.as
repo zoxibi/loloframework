@@ -1,5 +1,6 @@
 package game.module.testScene.view
 {
+	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	
 	import game.module.testScene.model.TestSceneData;
@@ -42,42 +43,42 @@ package game.module.testScene.view
 			
 			sndBtn.addEventListener(MouseEvent.CLICK, sndBtn_clickHandler);
 			
-			var img:ImageLoader = new ImageLoader();
-			img.path = "assets/{resVersion}/img/background/{0}.jpg";
-			img.fileName = "map";
-			this.addChild(img);
-			
-			this.addEventListener(MouseEvent.CLICK, mouseDownHandler);
-			
 //			var img:ImageLoader = new ImageLoader();
 //			img.path = "assets/{resVersion}/img/background/{0}.jpg";
-//			img.fileName = "1";
-//			var s:Sprite = new Sprite();
-//			s.addChild(img);
-//			this.addChild(s);
-//			
-//			_sb = new ScrollBar();
-//			_sb.styleName = "vScrollBar1";
-//			_sb.disArea = {x:100, y:100, width:200, height:200};
-//			_sb.content = s;
-//			_sb.x = 300;
-//			_sb.y = 100;
-//			_sb.size = 200;
-//			this.addChild(_sb);
-//			
-//			_hSB = new ScrollBar();
-//			_hSB.styleName = "hScrollBar1";
-//			_hSB.direction = ScrollBar.HORIZONTAL;
-//			_hSB.disArea = {x:100, y:100, width:200, height:200};
-//			_hSB.content = s;
-//			_hSB.x = 100;
-//			_hSB.y = 300;
-//			_hSB.size = 200;
-//			this.addChild(_hSB);
-//			
-//			this.addChild(sndBtn);
-//			
-//			
+//			img.fileName = "map";
+//			this.addChild(img);
+			
+//			this.addEventListener(MouseEvent.CLICK, mouseDownHandler);
+			
+			var img:ImageLoader = new ImageLoader();
+			img.path = "assets/{resVersion}/img/background/{0}.jpg";
+			img.fileName = "1";
+			var s:Sprite = new Sprite();
+			s.addChild(img);
+			this.addChild(s);
+			
+			_sb = new ScrollBar();
+			_sb.styleName = "vScrollBar1";
+			_sb.disArea = {x:100, y:100, width:200, height:200};
+			_sb.content = s;
+			_sb.x = 300;
+			_sb.y = 100;
+			_sb.size = 200;
+			this.addChild(_sb);
+			
+			_hSB = new ScrollBar();
+			_hSB.styleName = "hScrollBar1";
+			_hSB.direction = ScrollBar.HORIZONTAL;
+			_hSB.disArea = {x:100, y:100, width:200, height:200};
+			_hSB.content = s;
+			_hSB.x = 100;
+			_hSB.y = 300;
+			_hSB.size = 200;
+			this.addChild(_hSB);
+			
+			this.addChild(sndBtn);
+			
+			
 //			var item:TestItem;
 //			
 //			item = new TestItem("11");
@@ -97,10 +98,10 @@ package game.module.testScene.view
 //			
 //			_timer.start();
 			
-			_fog = new Fog(1000, 600, 80, 80);
-			this.addChild(_fog);
-			
-			this.addChild(new FogConsole(_fog));
+//			_fog = new Fog(1000, 600, 80, 80);
+//			this.addChild(_fog);
+//			
+//			this.addChild(new FogConsole(_fog));
 		}
 		
 		
