@@ -464,11 +464,17 @@ package lolo.common
 			
 			try { _claLoader.close(); }
 			catch(error:Error) {}
+			try { _claLoader.unload(); }
+			catch(error:Error) {}
 			
 			try { _swfLoader.close(); }
 			catch(error:Error) {}
+			try { _swfLoader.unload(); }
+			catch(error:Error) {}
 			
 			try { _imgLoader.close(); }
+			catch(error:Error) {}
+			try { _imgLoader.unload(); }
 			catch(error:Error) {}
 			
 			try { _zipLoader.close(); }
@@ -496,6 +502,7 @@ package lolo.common
 		public function clearLoadList():void
 		{
 			_loadList = [];
+			_nowLoadInfo = {};
 			_callbackList = new Dictionary();
 		}
 		

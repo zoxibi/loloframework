@@ -1,10 +1,8 @@
 package lolo.common
 {
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.Dictionary;
 	
-	import lolo.utils.RTimer;
 	import lolo.utils.StringUtil;
 	import lolo.utils.zip.ZipReader;
 
@@ -19,12 +17,6 @@ package lolo.common
 		
 		/**提取完成的语言包储存在此*/
 		private var _language:Dictionary;
-		/**语言包原始xml数据*/
-		private var _languageXML:XML;
-		/**目前已提取的数量*/
-		private var _extractNum:int = 0;
-		/**用于提取语言包*/
-		private var _extractTimer:RTimer;
 		
 		
 		
@@ -48,8 +40,6 @@ package lolo.common
 			}
 			
 			_language = new Dictionary();
-			
-			_extractTimer = RTimer.getInstance(80, extractTimerHandler);
 		}
 		
 		
@@ -58,17 +48,21 @@ package lolo.common
 		 */
 		public function initLanguage():void
 		{
+			var languageXML:XML;
 			//获取zip类型的语言包
 			if(Common.config.getConfig("languageType") == "zip")
 			{
 				var zip:ZipReader = Common.loader.getZIP("language");
-				_languageXML = new XML(zip.getFile("Language.xml"));
+				languageXML = new XML(zip.getFile("Language.xml"));
 			}
 			else {
-				_languageXML = Common.loader.getXML("language", true);
+				languageXML = Common.loader.getXML("language", true);
 			}
 			
-			extractTimerHandler();
+			for each(var item:XML in languageXML.item)
+			{
+				_language[String(item.@id)] = item.toString().replace(/\[br\]/g, "\n");
+			}
 		}
 		
 		
@@ -85,39 +79,6 @@ package lolo.common
 				str = StringUtil.substitute(str, rest);
 			}
 			return str;
-		}
-		
-		
-		/**
-		 * 定时解析语言包
-		 * @param event
-		 */
-		private function extractTimerHandler():void
-		{
-			_extractTimer.reset();
-			
-			var len:int = _extractNum + 300;//每次解析的数量
-			if(len > _languageXML.item.length()) len = _languageXML.item.length();
-			var i:int = _extractNum;
-			for(; i < len; i++) {
-				var content:String = _languageXML.item[i];
-				content = content.replace(/\[br\]/g, "\n");
-				_language[String(_languageXML.item[i].@id)] = content;
-			}
-			_extractNum = len;
-			
-			//还有语言包需要提取
-			if(_extractNum < _languageXML.item.length()) {
-				_extractTimer.start();
-			}
-			//提取完毕
-			else {
-				_languageXML = null;
-				_extractTimer.clear();
-				_extractTimer = null;
-				
-				this.dispatchEvent(new Event("initLanguageComplete"));
-			}
 		}
 		//
 	}

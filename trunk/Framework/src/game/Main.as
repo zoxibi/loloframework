@@ -26,8 +26,6 @@ package game
 		private var _loading:Loading;
 		/**进场动画*/
 		private var _enterMovie:MovieClip;
-		/**已经初始化成功的步骤数*/
-		private var _initNum:int = 0;
 		
 		
 		public function Main()
@@ -123,7 +121,6 @@ package game
 		{
 			Common.loader.removeEventListener(LoadResourceEvent.ALL_COMPLETE, loadLanguageComplete);
 			
-			Common.language.addEventListener("initLanguageComplete", checkInit);
 			Common.language.initLanguage();
 			Common.config.initUIConfig();
 			Common.config.initSoundConfig();
@@ -182,34 +179,17 @@ package game
 			Common.loader.add(Common.language.getLanguage("020105"), info.url, "swf", info.version);
 			
 			_loading.start();
-			_loading.addEventListener("loadingMoviePlayFinished", checkInit);
+			_loading.addEventListener("loadingMoviePlayFinished", enterGame);
 			Common.loader.load();
-		}
-		
-		
-		/**
-		 * 检查初始化步骤是否已经全部完成，是否已经可以进入游戏了
-		 * @param event
-		 */
-		private function checkInit(event:Event=null):void
-		{
-			_initNum++;
-			
-			//共两步：提取语言包完成，加载游戏完成
-			if(_initNum == 2) {
-				enterGame();
-			}
 		}
 		
 		
 		/**
 		 * 进入游戏
 		 */
-		private function enterGame():void
+		private function enterGame(event:Event):void
 		{
-			Common.language.removeEventListener("initLanguageComplete", checkInit);
-			
-			_loading.removeEventListener("loadingMoviePlayFinished", checkInit);
+			_loading.removeEventListener("loadingMoviePlayFinished", enterGame);
 			this.removeChild(_loading);
 			_loading.dispose();
 			_loading = null;
