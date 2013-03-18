@@ -5,7 +5,7 @@ package game.ui
 	import flash.events.Event;
 	
 	import lolo.common.Common;
-	import lolo.events.LoadResourceEvent;
+	import lolo.events.LoadEvent;
 
 	/**
 	 * 游戏开始时的加载条
@@ -37,10 +37,10 @@ package game.ui
 		 */
 		public function start():void
 		{
-			Common.loader.addEventListener(LoadResourceEvent.COMPLETE, completeHandler);
-			Common.loader.addEventListener(LoadResourceEvent.ALL_COMPLETE, allCompleteHandler);
-			Common.loader.addEventListener(LoadResourceEvent.PROGRESS, progressHandler);
-			Common.loader.addEventListener(LoadResourceEvent.ERROR, errorHandler);
+			Common.loader.addEventListener(LoadEvent.ITEM_COMPLETE, completeHandler);
+			Common.loader.addEventListener(LoadEvent.GROUP_COMPLETE, allCompleteHandler);
+			Common.loader.addEventListener(LoadEvent.PROGRESS, progressHandler);
+			Common.loader.addEventListener(LoadEvent.ERROR, errorHandler);
 			this.addEventListener(Event.ENTER_FRAME, enterFrameHandler);
 		}
 		
@@ -50,10 +50,10 @@ package game.ui
 		 */
 		public function dispose():void
 		{
-			Common.loader.removeEventListener(LoadResourceEvent.COMPLETE, completeHandler);
-			Common.loader.removeEventListener(LoadResourceEvent.ALL_COMPLETE, allCompleteHandler);
-			Common.loader.removeEventListener(LoadResourceEvent.PROGRESS, progressHandler);
-			Common.loader.removeEventListener(LoadResourceEvent.ERROR, errorHandler);
+			Common.loader.removeEventListener(LoadEvent.ITEM_COMPLETE, completeHandler);
+			Common.loader.removeEventListener(LoadEvent.GROUP_COMPLETE, allCompleteHandler);
+			Common.loader.removeEventListener(LoadEvent.PROGRESS, progressHandler);
+			Common.loader.removeEventListener(LoadEvent.ERROR, errorHandler);
 			this.removeEventListener(Event.ENTER_FRAME, enterFrameHandler);
 		}
 		
@@ -62,26 +62,31 @@ package game.ui
 		 * 资源加载中
 		 * @param event
 		 */
-		private function progressHandler(event:LoadResourceEvent):void
+		private function progressHandler(event:LoadEvent):void
 		{
-			this.progress = event.progress;
-			this.text = Common.language.getLanguage("010101", event.name, event.speed, event.numLoaded, event.numTotal);
+			var info:Object = Common.loader.getGroupProgress();
+			this.progress = info.progress;
+			this.text = Common.language.getLanguage(
+				"010101", event.lim.name,
+				int(info.progress * 100),
+				info.numCurrent, info.numTotal
+			);
 		}
 		
 		/**
 		 * 加载单个资源完成
 		 * @param event
 		 */
-		private function completeHandler(event:LoadResourceEvent):void
+		private function completeHandler(event:LoadEvent):void
 		{
-			this.text = Common.language.getLanguage("010103", event.name);
+			this.text = Common.language.getLanguage("010103", event.lim.name);
 		}
 		
 		/**
 		 * 加载所有资源完成
 		 * @param event
 		 */
-		private function allCompleteHandler(event:LoadResourceEvent):void
+		private function allCompleteHandler(event:LoadEvent):void
 		{
 			_isAllComplete = true;
 			
@@ -93,12 +98,12 @@ package game.ui
 		 * 加载资源失败
 		 * @param event
 		 */
-		private function errorHandler(event:LoadResourceEvent):void
+		private function errorHandler(event:LoadEvent):void
 		{
 			_isAllComplete = true;
 			
 			this.progress = 1;
-			this.text = Common.language.getLanguage("010105", event.name);
+			this.text = Common.language.getLanguage("010105", event.lim.name);
 		}
 		
 		

@@ -10,9 +10,10 @@ package game
 	import lolo.common.Common;
 	import lolo.common.ConfigManager;
 	import lolo.common.LanguageManager;
-	import lolo.common.ResLoader;
+	import lolo.common.LoadManager;
 	import lolo.common.StyleManager;
-	import lolo.events.LoadResourceEvent;
+	import lolo.data.LoadItemModel;
+	import lolo.events.LoadEvent;
 	
 	
 	[SWF(width="1000", height="600", backgroundColor="#FFFFFF", frameRate="25")]
@@ -22,6 +23,8 @@ package game
 	 */
 	public class Main extends Sprite
 	{
+		/**当前加载到第几步了*/
+		private var _loadStep:int = 0;
 		/**游戏开始时的加载条*/
 		private var _loading:Loading;
 		/**进场动画*/
@@ -37,183 +40,98 @@ package game
 			Common.stage = this.stage;
 			Common.initData = LoaderInfo(root.loaderInfo).parameters;
 			
-			Common.loader = ResLoader.getInstance();
 			Common.style = StyleManager.getInstance();
 			Common.config = ConfigManager.getInstance();
 			Common.language = LanguageManager.getInstance();
+			Common.loader = LoadManager.getInstance();
 			
-			loadConfigXml();
+			Common.loader.addEventListener(LoadEvent.GROUP_COMPLETE, loadGroupCompleteHander);
+			loadGroupCompleteHander();
 		}
 		
 		
 		/**
-		 * 加载网页目录下的Config.xml文件
-		 */
-		private function loadConfigXml():void
-		{
-			Common.loader.add("config", "Config.xml", "xml", Math.random() * 999999);
-			Common.loader.addEventListener(LoadResourceEvent.ALL_COMPLETE, loadConfigXmlComplete);
-			Common.loader.load();
-		}
-		
-		private function loadConfigXmlComplete(event:LoadResourceEvent):void
-		{
-			Common.loader.removeEventListener(LoadResourceEvent.ALL_COMPLETE, loadConfigXmlComplete);
-			
-			Common.config.initConfig();
-			var resurl:String = Common.getInitDataByKey("resurl");
-			if(resurl != null) Common.resServerUrl = resurl;
-			loadResConfig();
-		}
-		
-		
-		
-		/**
-		 * 加载资源配置文件
-		 */
-		private function loadResConfig():void
-		{
-			var url:String = "assets/{resVersion}/xml/core/ResConfig.xml";
-			Common.loader.add("resConfig", url, "xml");
-			Common.loader.addEventListener(LoadResourceEvent.ALL_COMPLETE, loadResConfigComplete);
-			Common.loader.load();
-		}
-		
-		private function loadResConfigComplete(event:LoadResourceEvent):void
-		{
-			Common.loader.removeEventListener(LoadResourceEvent.ALL_COMPLETE, loadResConfigComplete);
-			Common.config.initResConfig();
-			loadLanguage();
-		}
-		
-		
-		
-		/**
-		 * 加载语言包、样式配置、界面配置、音频配置
-		 */
-		private function loadLanguage():void
-		{
-			var info:Object;
-			
-			//语言包
-			info = Common.config.getResConfig("language");
-			var type:String = Common.config.getConfig("languageType");
-			var url:String = (type == "xml") ? (info.url + ".xml") : info.url;
-			Common.loader.add("language", url, type, info.version);
-			
-			//组件样式配置文件
-			info = Common.config.getResConfig("style");
-			Common.loader.add("style", info.url, "xml", info.version);
-			
-			//用户界面配置文件
-			info = Common.config.getResConfig("uiConfig");
-			Common.loader.add("uiConfig", info.url, "xml", info.version);
-			
-			//音频配置文件
-			info = Common.config.getResConfig("soundConfig");
-			Common.loader.add("soundConfig", info.url, "xml", info.version);
-			
-			Common.loader.addEventListener(LoadResourceEvent.ALL_COMPLETE, loadLanguageComplete);
-			Common.loader.load();
-		}
-		
-		private function loadLanguageComplete(event:LoadResourceEvent):void
-		{
-			Common.loader.removeEventListener(LoadResourceEvent.ALL_COMPLETE, loadLanguageComplete);
-			
-			Common.language.initLanguage();
-			Common.config.initUIConfig();
-			Common.config.initSoundConfig();
-			Common.style.initStyle();
-			
-			loadLoadingMovie();
-		}
-		
-		
-		
-		/**
-		 * 加载loading动画
-		 */
-		private function loadLoadingMovie():void
-		{
-			var url:String = "assets/{resVersion}/swf/core/Loading.swf";
-			Common.loader.add("loadingMovie", url, "swf", 1);
-			Common.loader.addEventListener(LoadResourceEvent.ALL_COMPLETE, loadLoadingMovieComplete);
-			Common.loader.load();
-		}
-		
-		private function loadLoadingMovieComplete(event:LoadResourceEvent):void
-		{
-			Common.loader.removeEventListener(LoadResourceEvent.ALL_COMPLETE, loadLoadingMovieComplete);
-			
-			_loading = new Loading(Common.loader.getSWF("loadingMovie") as MovieClip);
-			this.addChildAt(_loading, 0);
-			
-			loadGame();
-		}
-		
-		
-		/**
-		 * 加载游戏，以及运行时必须的文件
-		 */
-		private function loadGame():void
-		{
-			var info:Object;
-			
-			//组件皮肤
-			info = Common.config.getResConfig("component");
-			Common.loader.add(Common.language.getLanguage("020101"), info.url, "class", info.version);
-			//游戏核心
-			info = Common.config.getResConfig("game");
-			Common.loader.add(Common.language.getLanguage("020102"), info.url, "swf", info.version);
-			
-			//核心UI配置
-			info = Common.config.getResConfig("mainUIConfig");
-			Common.loader.add(Common.language.getLanguage("020103"), info.url, "xml", info.version);
-			//核心UI界面
-			info = Common.config.getResConfig("mainUIView");
-			Common.loader.add(Common.language.getLanguage("020104"), info.url, "class", info.version);
-			
-			//开发商信息（进场动画）
-			info = Common.config.getResConfig("enterMovie");
-			Common.loader.add(Common.language.getLanguage("020105"), info.url, "swf", info.version);
-			
-			_loading.start();
-			_loading.addEventListener("loadingMoviePlayFinished", enterGame);
-			Common.loader.load();
-		}
-		
-		
-		/**
-		 * 进入游戏
-		 */
-		private function enterGame(event:Event):void
-		{
-			_loading.removeEventListener("loadingMoviePlayFinished", enterGame);
-			this.removeChild(_loading);
-			_loading.dispose();
-			_loading = null;
-			
-			_enterMovie = Common.loader.getSWF(Common.language.getLanguage("020105")) as MovieClip;
-			_enterMovie.gotoAndPlay(1);
-			_enterMovie.addEventListener("skip", skipEnterMovie);
-			this.addChild(_enterMovie);
-		}
-		
-		
-		
-		
-		/**
-		 * 进场动画播放完成，进入游戏
+		 * 加载完成
 		 * @param event
 		 */
-		private function skipEnterMovie(event:Event):void
+		private function loadGroupCompleteHander(event:Event=null):void
 		{
-			_enterMovie.removeEventListener("skip", skipEnterMovie);
-			this.removeChild(_enterMovie);
-			_enterMovie = null;
-			
-			this.addChild(Common.loader.getSWF(Common.language.getLanguage("020102")));
+			_loadStep++;
+			switch(_loadStep)
+			{
+				case 1:
+					//加载网页目录下的Config.xml文件
+					Common.loader.add(new LoadItemModel(null, "public", false, 0, null, null,
+						"Config.xml", "xml"));
+					break;
+				
+				case 2:
+					Common.config.initConfig();
+					var resurl:String = Common.getInitDataByKey("resurl");
+					if(resurl != null) Common.resServerUrl = resurl;
+					
+					//加载资源配置文件
+					Common.loader.add(new LoadItemModel(null, "public", false, 0, null, null,
+						"assets/{resVersion}/xml/core/ResConfig.xml", "xml"));
+					break;
+					
+				case 3:
+					Common.config.initResConfig();
+					
+					//语言包
+					var lim:LoadItemModel = new LoadItemModel("language");
+					lim.type = Common.config.getConfig("languageType");
+					if(lim.type == "xml") lim.url += ".xml";
+					Common.loader.add(lim);
+					//组件样式配置文件
+					Common.loader.add(new LoadItemModel("style"));
+					//用户界面配置文件
+					Common.loader.add(new LoadItemModel("uiConfig"));
+					//音频配置文件
+					Common.loader.add(new LoadItemModel("soundConfig"));
+					//loading动画
+					Common.loader.add(new LoadItemModel("loadingMovie"));
+					break;
+				
+				case 4:
+					Common.language.initLanguage();
+					Common.config.initUIConfig();
+					Common.config.initSoundConfig();
+					Common.style.initStyle();
+					_loading = new Loading(Common.loader.getResByConfigName("loadingMovie", true));
+					this.addChildAt(_loading, 0);
+					
+					Common.loader.removeEventListener(LoadEvent.GROUP_COMPLETE, loadGroupCompleteHander);
+					Common.loader.add(new LoadItemModel("component"));
+					Common.loader.add(new LoadItemModel("game"));
+					Common.loader.add(new LoadItemModel("mainUIConfig"));
+					Common.loader.add(new LoadItemModel("mainUIView"));
+					Common.loader.add(new LoadItemModel("enterMovie"));
+					
+					_loading.start();
+					_loading.addEventListener("loadingMoviePlayFinished", loadGroupCompleteHander);
+					break;
+				
+				case 5:
+					_loading.removeEventListener("loadingMoviePlayFinished", loadGroupCompleteHander);
+					this.removeChild(_loading);
+					_loading.dispose();
+					_loading = null;
+					
+					_enterMovie = Common.loader.getResByConfigName("enterMovie", true);
+					_enterMovie.gotoAndPlay(1);
+					_enterMovie.addEventListener("skip", loadGroupCompleteHander);
+					this.addChild(_enterMovie);
+					break;
+				
+				case 6:
+					_enterMovie.removeEventListener("skip", loadGroupCompleteHander);
+					this.removeChild(_enterMovie);
+					_enterMovie = null;
+					this.addChild(Common.loader.getResByConfigName("game", true));
+					return;
+			}
+			Common.loader.start();
 		}
 		//
 	}

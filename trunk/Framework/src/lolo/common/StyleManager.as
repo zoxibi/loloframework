@@ -36,8 +36,6 @@ package lolo.common
 				throw new Error("请通过Common.style获取实例");
 				return;
 			}
-			
-			_styleList = new Dictionary();
 		}
 		
 		
@@ -46,11 +44,11 @@ package lolo.common
 		 */
 		public function initStyle():void
 		{
-			var list:XML = Common.loader.getXML("style", true);
-			
-			for(var i:int = 0; i < list.style.length(); i++)
+			var config:XML = Common.loader.getResByConfigName("style", true);
+			_styleList = new Dictionary();
+			for each(var item:XML in config.children())
 			{
-				_styleList[String(list.style[i].@name)] = AdobeJSON.decode(list.style[i].@style);
+				_styleList[String(item.@name)] = AdobeJSON.decode(item.@style);
 			}
 		}
 		

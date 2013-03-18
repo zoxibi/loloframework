@@ -13,8 +13,8 @@ package game.module.core.view
 	import lolo.common.Common;
 	import lolo.common.ConfigManager;
 	import lolo.common.LanguageManager;
+	import lolo.common.LoadManager;
 	import lolo.common.MouseManager;
-	import lolo.common.ResLoader;
 	import lolo.common.SoundManager;
 	import lolo.components.Alert;
 	import lolo.core.Scene;
@@ -130,7 +130,7 @@ package game.module.core.view
 			Scene;
 			Window;
 			
-			ResLoader;
+			LoadManager;
 			ConfigManager;
 			LanguageManager;
 			

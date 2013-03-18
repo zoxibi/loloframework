@@ -8,15 +8,22 @@ package lolo.ui
 	public interface ILoadBar extends IContainer
 	{
 		/**
-		 * 设置是否侦听Common.res资源加载事件
-		 * @param value
+		 * 是否侦听Common.loader资源加载事件
 		 */
-		function set addListenerToRes(value:Boolean):void;
+		function set isListener(value:Boolean):void;
+		function get isListener():Boolean;
 		
 		/**
-		 * 设置显示文本
-		 * @param value
+		 * 显示文本内容
 		 */
 		function set text(value:String):void;
+		function get text():String;
+		
+		/**
+		 * 当前关注的组
+		 */
+		function set group(value:String):void;
+		function get group():String;
+		//
 	}
 }

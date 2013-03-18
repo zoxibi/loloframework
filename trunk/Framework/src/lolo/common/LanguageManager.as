@@ -52,11 +52,11 @@ package lolo.common
 			//获取zip类型的语言包
 			if(Common.config.getConfig("languageType") == "zip")
 			{
-				var zip:ZipReader = Common.loader.getZIP("language");
+				var zip:ZipReader = Common.loader.getResByConfigName("language", true);
 				languageXML = new XML(zip.getFile("Language.xml"));
 			}
 			else {
-				languageXML = Common.loader.getXML("language", true);
+				languageXML = Common.loader.getResByUrl(Common.config.getResConfig("language").url + ".xml", true);
 			}
 			
 			for each(var item:XML in languageXML.item)
