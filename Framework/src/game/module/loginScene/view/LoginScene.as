@@ -54,10 +54,10 @@
 		public function LoginScene()
 		{
 			super();
+			if(instance != null) return;
 			instance = this;
 			new LoginSceneController();
-			initUI(Common.loader.getXML(Common.language.getLanguage("020204")));
-			
+			initUI(Common.loader.getResByConfigName("loginSceneConfig"));
 			serviceCMB.list.itemRendererClass = ComboBoxItemRenderer;
 			
 			

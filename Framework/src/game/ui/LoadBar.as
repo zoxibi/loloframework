@@ -6,7 +6,7 @@ package game.ui
 	import lolo.common.Common;
 	import lolo.components.ModalBackground;
 	import lolo.core.Container;
-	import lolo.events.LoadResourceEvent;
+	import lolo.events.LoadEvent;
 	import lolo.ui.ILoadBar;
 
 	/**
@@ -22,39 +22,57 @@ package game.ui
 		
 		/**当前进度*/
 		private var _progress:uint;
+		/**当前关注的组*/
+		private var _group:String = "public";
 		
 		
 		public function LoadBar()
 		{
 			super();
 			
-			initUI(new XML(Common.loader.getXML(Common.language.getLanguage("020103")).loadBar));
+			initUI(new XML(Common.loader.getResByConfigName("mainUIConfig").loadBar));
 		}
 		
-		public function set addListenerToRes(value:Boolean):void
+		public function set isListener(value:Boolean):void
 		{
 			if(value) {
-				Common.loader.addEventListener(LoadResourceEvent.COMPLETE,	completeHandler);
-				Common.loader.addEventListener(LoadResourceEvent.PROGRESS,	progressHandler);
-				Common.loader.addEventListener(LoadResourceEvent.ERROR,		errorHandler);
+				Common.loader.addEventListener(LoadEvent.START, startHandler);
+				Common.loader.addEventListener(LoadEvent.PROGRESS, progressHandler);
+				Common.loader.addEventListener(LoadEvent.ITEM_COMPLETE, completeHandler);
+				Common.loader.addEventListener(LoadEvent.ERROR, errorHandler);
 				addEventListener(Event.ENTER_FRAME, enterFrameHandler);
 			}
 			else {
-				Common.loader.removeEventListener(LoadResourceEvent.COMPLETE,	completeHandler);
-				Common.loader.removeEventListener(LoadResourceEvent.PROGRESS,	progressHandler);
-				Common.loader.removeEventListener(LoadResourceEvent.ERROR,		errorHandler);
+				Common.loader.removeEventListener(LoadEvent.START, startHandler);
+				Common.loader.removeEventListener(LoadEvent.PROGRESS, progressHandler);
+				Common.loader.removeEventListener(LoadEvent.ITEM_COMPLETE, completeHandler);
+				Common.loader.removeEventListener(LoadEvent.ERROR, errorHandler);
 				removeEventListener(Event.ENTER_FRAME, enterFrameHandler);
 			}
 		}
 		
-		/**
-		 * 设置显示文本
-		 * @param value
-		 */
+		public function get isListener():Boolean
+		{
+			return hasEventListener(Event.ENTER_FRAME);
+		}
+		
+		
+		
 		public function set text(value:String):void
 		{
 			view["progressText"].text = value;
 		}
+		
+		public function get text():String { return view["progressText"].text; }
+		
+		
+		
+		public function set group(value:String):void
+		{
+			_group = value;
+		}
+		public function get group():String { return _group; }
+		
 		
 		
 		/**
@@ -73,13 +91,24 @@ package game.ui
 		
 		
 		/**
+		 * 开始加载资源
+		 * @param event
+		 */
+		private function startHandler(event:LoadEvent):void
+		{
+			text = Common.language.getLanguage("010201", event.lim.name);
+		}
+		
+		
+		/**
 		 * 资源加载中
 		 * @param event
 		 */
-		private function progressHandler(event:LoadResourceEvent):void
+		private function progressHandler(event:LoadEvent):void
 		{
-			_progress = event.progress * 100;
-			text = Common.language.getLanguage("010201", event.name, _progress, event.speed, event.numLoaded, event.numTotal);
+			var info:Object = Common.loader.getGroupProgress(_group);
+			_progress = info.progress * 100;
+			text = Common.language.getLanguage("010202", event.lim.name, _progress, info.numCurrent, info.numTotal);
 		}
 		
 		
@@ -87,19 +116,19 @@ package game.ui
 		 * 资源加载完成
 		 * @param event
 		 */
-		private function completeHandler(event:LoadResourceEvent):void
+		private function completeHandler(event:LoadEvent):void
 		{
-			text = Common.language.getLanguage("010202", event.name);
+			text = Common.language.getLanguage("010203", event.lim.name);
 		}
 		
 		/**
 		 * 资源加载失败
 		 * @param event
 		 */
-		private function errorHandler(event:LoadResourceEvent):void
+		private function errorHandler(event:LoadEvent):void
 		{
 			_progress = 1;
-			text = Common.language.getLanguage("010203", event.name);
+			text = Common.language.getLanguage("010204", event.lim.name);
 		}
 		//
 	}

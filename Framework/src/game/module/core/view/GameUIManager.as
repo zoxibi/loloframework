@@ -10,8 +10,8 @@ package game.module.core.view
 	import game.ui.RequestModal;
 	
 	import lolo.common.Common;
-	import lolo.common.Constants;
 	import lolo.common.UIManager;
+	import lolo.data.LoadItemModel;
 
 	/**
 	 * 游戏用户界面管理
@@ -90,16 +90,10 @@ package game.module.core.view
 		{
 			if(_loginScene == null)
 			{
-				showLoadBar();
-				var info:Object;
-				info = Common.config.getResConfig("loginSceneConfig");
-				Common.loader.add(Common.language.getLanguage("020204"), info.url, Constants.RES_TYPE_XML, info.version);
-				info = Common.config.getResConfig("loginSceneView");
-				Common.loader.add(Common.language.getLanguage("020205"), info.url, Constants.RES_TYPE_CLA, info.version);
-				info = Common.config.getResConfig("loginSceneModule");
-				Common.loader.add(Common.language.getLanguage("020206"), info.url, Constants.RES_TYPE_CLA, info.version);
-				
-				Common.loader.load(loadLoginSceneComplete);
+				showLoadBar(ModuleName.SCENE_LOGIN);
+				Common.loader.add(new LoadItemModel("loginSceneModule", ModuleName.SCENE_LOGIN).addUrlListByCN(
+					"loginSceneConfig", "loginSceneView"));
+				Common.loader.start(ModuleName.SCENE_LOGIN, loadLoginSceneComplete);
 			}
 			else {
 				loadLoginSceneComplete();
@@ -108,12 +102,11 @@ package game.module.core.view
 		private function loadLoginSceneComplete():void
 		{
 			hideLoadBar();
-			if(_loginScene == null)
-			{
+			
+			if(_loginScene == null) {
 				_loginScene = getDefinitionByName(ModuleName.SCENE_LOGIN).instance;
 				_loginScene.sceneID = GameConstants.SCENE_ID_LOGIN;
 			}
-			
 			switchScene(_loginScene);
 		}
 		
@@ -130,16 +123,10 @@ package game.module.core.view
 		{
 			if(_testScene == null)
 			{
-				showLoadBar();
-				var info:Object;
-				info = Common.config.getResConfig("testSceneConfig");
-				Common.loader.add(Common.language.getLanguage("020201"), info.url, Constants.RES_TYPE_XML, info.version);
-				info = Common.config.getResConfig("testSceneView");
-				Common.loader.add(Common.language.getLanguage("020202"), info.url, Constants.RES_TYPE_CLA, info.version);
-				info = Common.config.getResConfig("testSceneModule");
-				Common.loader.add(Common.language.getLanguage("020203"), info.url, Constants.RES_TYPE_CLA, info.version);
-				
-				Common.loader.load(loadTestSceneComplete);
+				showLoadBar(ModuleName.SCENE_TEST);
+				Common.loader.add(new LoadItemModel("testSceneModule", ModuleName.SCENE_TEST).addUrlListByCN(
+					"testSceneConfig", "testSceneView"));
+				Common.loader.start(ModuleName.SCENE_TEST, loadTestSceneComplete);
 			}
 			else {
 				loadTestSceneComplete();
@@ -148,12 +135,11 @@ package game.module.core.view
 		private function loadTestSceneComplete():void
 		{
 			hideLoadBar();
-			if(_testScene == null)
-			{
+			
+			if(_testScene == null) {
 				_testScene = getDefinitionByName(ModuleName.SCENE_TEST).instance;
 				_testScene.sceneID = GameConstants.SCENE_ID_TEST;
 			}
-			
 			switchScene(_testScene);
 		}
 		//

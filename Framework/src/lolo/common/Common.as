@@ -20,7 +20,7 @@ package lolo.common
 		/**用户界面管理*/
 		public static var ui:IUIManager;
 		/**资源加载、管理*/
-		public static var loader:IResLoader;
+		public static var loader:ILoadManager;
 		/**配置信息管理*/
 		public static var config:IConfigManager;
 		/**语言包管理*/

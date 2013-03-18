@@ -38,7 +38,7 @@ package game.module.testScene.view
 			super();
 			instance = this;
 			_data = TestSceneData.getInstance();
-			initUI(Common.loader.getXML(Common.language.getLanguage("020201")));
+			initUI(Common.loader.getResByConfigName("testSceneConfig"));
 			
 			
 			sndBtn.addEventListener(MouseEvent.CLICK, sndBtn_clickHandler);

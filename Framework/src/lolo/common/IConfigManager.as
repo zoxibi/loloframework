@@ -37,7 +37,7 @@ package lolo.common
 		/**
 		 * 获取资源配置文件信息
 		 * @param name 配置的名称
-		 * @return { url, version }
+		 * @return { url, version, type, nameID }
 		 */
 		function getResConfig(name:String):Object;
 		

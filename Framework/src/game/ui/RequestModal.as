@@ -49,7 +49,7 @@ package game.ui
 		public function RequestModal()
 		{
 			super();
-			AutoUtil.autoUI(this, new XML(Common.loader.getXML(Common.language.getLanguage("020103")).requestModal));
+			AutoUtil.autoUI(this, new XML(Common.loader.getResByConfigName("mainUIConfig").requestModal));
 			
 			view.getChildByName("bg").visible = false;
 			view.getChildByName("ing").visible = false;

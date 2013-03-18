@@ -21,9 +21,10 @@ package lolo.common
 		
 		/**
 		 * 显示加载条
-		 * @param listener 是否侦听资源加载事件
+		 * @param group 当前关注的组
+		 * @param isListener 是否侦听资源加载事件
 		 */
-		function showLoadBar(isListenResLoad:Boolean=true):void;
+		function showLoadBar(group:String="public", isListener:Boolean=true):void;
 		
 		/**
 		 * 隐藏加载条

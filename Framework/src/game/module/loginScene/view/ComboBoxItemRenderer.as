@@ -13,7 +13,7 @@ package game.module.loginScene.view
 	 */
 	public class ComboBoxItemRenderer extends BaseButton
 	{
-		public static var _config:XML = new XML( Common.loader.getXML(Common.language.getLanguage("020204")).comboBoxItemRenderer );
+		public static var _config:XML = new XML( Common.loader.getResByConfigName("loginSceneConfig").comboBoxItemRenderer );
 		
 		
 		/**显示文本*/

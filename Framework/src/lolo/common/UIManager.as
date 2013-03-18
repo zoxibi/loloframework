@@ -115,11 +115,13 @@ package lolo.common
 		
 		/**
 		 * 显示加载条
-		 * @param listener 是否侦听资源加载事件
+		 * @param group 当前关注的组
+		 * @param isListener 是否侦听资源加载事件
 		 */
-		public function showLoadBar(isListenResLoad:Boolean=true):void
+		public function showLoadBar(group:String="public", isListener:Boolean=true):void
 		{
-			_loadBar.addListenerToRes = isListenResLoad;
+			_loadBar.group = group;
+			_loadBar.isListener = isListener;
 			addChildToLayer(_loadBar as DisplayObject, Constants.LAYER_NAME_TOP);
 		}
 		

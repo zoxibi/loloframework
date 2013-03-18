@@ -1,5 +1,7 @@
 package lolo.common
 {
+	import flash.utils.Dictionary;
+
 	/**
 	 * 配置信息管理
 	 * @author LOLO
@@ -10,13 +12,13 @@ package lolo.common
 		private static var _instance:ConfigManager;
 		
 		/**网页目录下的Config.xml配置文件*/
-		private var _config:XML;
+		private var _config:Dictionary;
 		/**资源配置文件*/
-		private var _resConfig:XML;
+		private var _resConfig:Dictionary;
 		/**界面配置文件*/
-		private var _uiConfig:XML;
+		private var _uiConfig:Dictionary;
 		/**音频配置文件*/
-		private var _soundConfig:XML;
+		private var _soundConfig:Dictionary;
 		
 		
 		
@@ -46,7 +48,12 @@ package lolo.common
 		 */
 		public function initConfig():void
 		{
-			_config = Common.loader.getXML("config", true);
+			var config:XML = Common.loader.getResByUrl("Config.xml", true);
+			_config = new Dictionary();
+			for each(var item:XML in config.children())
+			{
+				_config[String(item.name())] = String(item.@value);
+			}
 			
 			Common.resVersion = getConfig("resVersion");
 			Common.serviceUrl = getConfig("socketServiceUrl");
@@ -57,8 +64,19 @@ package lolo.common
 		 */
 		public function initResConfig():void
 		{
-			_resConfig = Common.loader.getXML("resConfig", true);
-			Common.version = _resConfig.version;
+			var config:XML = Common.loader.getResByUrl("assets/{resVersion}/xml/core/ResConfig.xml", true);
+			Common.version = config.version;
+			
+			_resConfig = new Dictionary();
+			for each(var item:XML in config.children())
+			{
+				_resConfig[String(item.name())] = {
+					url		: String(item.@url),
+					version	: int(item.@url),
+					type	: String(item.@type),
+					nameID	: String(item.@nameID)
+				}
+			}
 		}
 		
 		/**
@@ -66,7 +84,12 @@ package lolo.common
 		 */
 		public function initUIConfig():void
 		{
-			_uiConfig = Common.loader.getXML("uiConfig", true);
+			var config:XML = Common.loader.getResByConfigName("uiConfig", true);
+			_uiConfig = new Dictionary();
+			for each(var item:XML in config.children())
+			{
+				_uiConfig[String(item.name())] = String(item.@value);
+			}
 		}
 		
 		
@@ -75,7 +98,12 @@ package lolo.common
 		 */
 		public function initSoundConfig():void
 		{
-			_soundConfig = Common.loader.getXML("soundConfig", true);
+			var config:XML = Common.loader.getResByConfigName("soundConfig", true);
+			_soundConfig = new Dictionary();
+			for each(var item:XML in config.children())
+			{
+				_uiConfig[String(item.name())] = String(item.@value);
+			}
 		}
 		
 		
@@ -87,17 +115,17 @@ package lolo.common
 		public function getConfig(name:String):String
 		{
 			if(_config == null) return "";
-			return _config[name].@value;
+			return _config[name];
 		}
 		
 		/**
 		 * 获取资源配置文件信息
 		 * @param name 配置的名称
-		 * @return { url, version }
+		 * @return { url, version, type, nameID }
 		 */
 		public function getResConfig(name:String):Object
 		{
-			return { url:_resConfig[name].@url, version:_resConfig[name].@version };
+			return _resConfig[name];
 		}
 		
 		/**
@@ -107,7 +135,7 @@ package lolo.common
 		 */
 		public function getUIConfig(name:String):String
 		{
-			return _uiConfig[name].@value;
+			return _uiConfig[name];
 		}
 		
 		
@@ -118,7 +146,7 @@ package lolo.common
 		 */
 		public function getSoundConfig(name:String):String
 		{
-			return _soundConfig[name].@value;
+			return _soundConfig[name];
 		}
 		//
 	}
