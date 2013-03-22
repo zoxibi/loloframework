@@ -17,12 +17,7 @@ package lolo.utils
 		{
 			if(str == null) return "";
 			
-			var args:Array;
-			if(rest.length == 1 && rest[0] is Array) {
-				args = rest[0];
-			}else {
-				args = rest;
-			}
+			var args:Array = (rest.length == 1 && rest[0] is Array) ? rest[0] : rest;
 			
 			for(var i:int = 0; i < args.length; i++)
 			{

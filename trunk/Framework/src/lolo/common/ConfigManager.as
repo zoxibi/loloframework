@@ -1,4 +1,4 @@
-package lolo.common
+﻿package lolo.common
 {
 	import flash.utils.Dictionary;
 
@@ -72,7 +72,7 @@ package lolo.common
 			{
 				_resConfig[String(item.name())] = {
 					url		: String(item.@url),
-					version	: int(item.@url),
+					version	: int(item.@version),
 					type	: String(item.@type),
 					nameID	: String(item.@nameID)
 				}

@@ -36,6 +36,7 @@ package game.ui
 		public function set isListener(value:Boolean):void
 		{
 			if(value) {
+				if(!hasEventListener(Event.ENTER_FRAME)) _progress = 1;
 				Common.loader.addEventListener(LoadEvent.START, startHandler);
 				Common.loader.addEventListener(LoadEvent.PROGRESS, progressHandler);
 				Common.loader.addEventListener(LoadEvent.ITEM_COMPLETE, completeHandler);
@@ -96,6 +97,7 @@ package game.ui
 		 */
 		private function startHandler(event:LoadEvent):void
 		{
+			if(event.lim.group != _group) return;
 			text = Common.language.getLanguage("010201", event.lim.name);
 		}
 		
@@ -106,6 +108,7 @@ package game.ui
 		 */
 		private function progressHandler(event:LoadEvent):void
 		{
+			if(event.lim.group != _group) return;
 			var info:Object = Common.loader.getGroupProgress(_group);
 			_progress = info.progress * 100;
 			text = Common.language.getLanguage("010202", event.lim.name, _progress, info.numCurrent, info.numTotal);
@@ -118,6 +121,7 @@ package game.ui
 		 */
 		private function completeHandler(event:LoadEvent):void
 		{
+			if(event.lim.group != _group) return;
 			text = Common.language.getLanguage("010203", event.lim.name);
 		}
 		
@@ -127,7 +131,7 @@ package game.ui
 		 */
 		private function errorHandler(event:LoadEvent):void
 		{
-			_progress = 1;
+			if(event.lim.group != _group) return;
 			text = Common.language.getLanguage("010204", event.lim.name);
 		}
 		//

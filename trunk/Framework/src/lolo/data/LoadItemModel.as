@@ -103,10 +103,12 @@ package lolo.data
 		 */
 		public function addUrlListByCN(...rest):LoadItemModel
 		{
-			for(var i:int=0; i < rest.length; i++)
+			var args:Array = (rest.length == 1 && rest[0] is Array) ? rest[0] : rest;
+			
+			for(var i:int=0; i < args.length; i++)
 			{
-				Common.loader.add(new LoadItemModel(rest[i], group, isSecretly));
-				urlList.push(Common.config.getResConfig(rest[i]).url);
+				Common.loader.add(new LoadItemModel(args[i], group, isSecretly));
+				urlList.push(Common.config.getResConfig(args[i]).url);
 			}
 			return this;
 		}
