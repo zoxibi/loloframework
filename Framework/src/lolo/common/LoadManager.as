@@ -19,6 +19,7 @@ package lolo.common
 	import lolo.data.IHashMap;
 	import lolo.data.LoadItemModel;
 	import lolo.events.LoadEvent;
+	import lolo.utils.RTimer;
 	import lolo.utils.StringUtil;
 	import lolo.utils.zip.ZipReader;
 	
@@ -47,6 +48,10 @@ package lolo.common
 		private var _isStop:Boolean = true;
 		/**回调列表（key:group）*/
 		private var _callbackList:Dictionary;
+		/**下次需要抛出加载事件的加载项列表*/
+		private var _progressEventLimList:Array;
+		/**用于延时派发progress事件*/
+		private var _dispatchProgressEventTimer:RTimer;
 		
 		
 		/**
@@ -74,6 +79,8 @@ package lolo.common
 			_resList = new HashMap();
 			_tempLoaderList = new Dictionary();
 			_callbackList = new Dictionary();
+			_progressEventLimList = [];
+			_dispatchProgressEventTimer = RTimer.getInstance(400, dispatchProgressEventTimerHandler);
 		}
 		
 		
@@ -156,13 +163,16 @@ package lolo.common
 			if(_isStop) return;//已经被停止了
 			if(_loadList.length == 0) return;//没有需要加载的资源
 			if(_loadingList.length >= LOADING_MAX_COUNT) return;//达到了允许的最大并发加载数
-			if(isSecretly && _loadingList.length >= SECRETLY_LOADING_MAX_COUNT) return;
+			
+			//暗中加载中，达到了允许的最大并发加载数。并且加载队列中，没有可以加载的正常项（不是暗中加载项）
+			if(isSecretly && _loadingList.length >= SECRETLY_LOADING_MAX_COUNT && canLoadNormalLim == null) return;
 			
 			var lim:LoadItemModel;
 			var prevLim:LoadItemModel;
 			var tempLim:LoadItemModel;
 			var i:int;
 			var n:int;
+			
 			//有文件正在加载，尝试取出与正在加载的文件组相同的文件
 			if(_loadingList.length > 0) {
 				for(n = 0; n < _loadingList.length; n++) {
@@ -188,11 +198,20 @@ package lolo.common
 				}
 			}
 			
-			//完全没文件可加载
-			if(lim == null) {
-//				trace("要加载的文件所依赖的文件列表中，有文件还未加载完毕。");
-				return;
+			//接下来要加载的文件是暗中加载项
+			if(lim != null && lim.isSecretly) {
+				tempLim = canLoadNormalLim;
+				if(tempLim != null) {
+					lim = tempLim;
+				}
+				else {
+					//找不到不是暗中加载的文件，并且，现在有不是暗中加载的文件
+					if(!isSecretly) return;
+				}
 			}
+			
+			//完全没文件可加载
+			if(lim == null) return;
 			
 			_loadList.removeByKey(lim.url);
 			_loadingList.add(lim, lim.url);
@@ -257,6 +276,19 @@ package lolo.common
 			return true;
 		}
 		
+		/**
+		 * 获取一个可以加载的正常项（不是暗中加载项）
+		 * @return 
+		 */
+		private function get canLoadNormalLim():LoadItemModel
+		{
+			for(var i:int = 0; i < _loadList.length; i++) {
+				var lim:LoadItemModel = _loadList.getValueByIndex(i);
+				if(!lim.isSecretly && getCanLoad(lim)) return lim;
+			}
+			return null;
+		}
+		
 		
 		/**
 		 * 加载中
@@ -267,7 +299,37 @@ package lolo.common
 			var lim:LoadItemModel = getLimByLoader(event.target);
 			lim.bytesLoaded = event.bytesLoaded;
 			lim.bytesTotal = event.bytesTotal;
-			dispatchEvent(new LoadEvent(LoadEvent.PROGRESS, lim));
+			updateProgressEventLimList(lim, false);
+		}
+		
+		/**
+		 * 将加载项添加到“下次需要抛出加载事件的加载项列表”，或移除
+		 * @param lim
+		 * @param isAdd
+		 */
+		private function updateProgressEventLimList(lim:LoadItemModel, isAdd:Boolean=false):void
+		{
+			for(var i:int=0; i < _progressEventLimList.length; i++) {
+				if(_progressEventLimList[i] == lim) {
+					if(!isAdd) _progressEventLimList.splice(i, 1);
+					return;
+				}
+			}
+			_progressEventLimList.push(lim);
+			_dispatchProgressEventTimer.start();
+		}
+		
+		private function dispatchProgressEventTimerHandler():void
+		{
+			if(_progressEventLimList.length > 0) {
+				if(running) {
+					dispatchEvent(new LoadEvent(LoadEvent.PROGRESS, _progressEventLimList.shift()));
+				}
+				else {
+					_progressEventLimList = [];
+				}
+			}
+			if(_progressEventLimList.length == 0) _dispatchProgressEventTimer.reset();
 		}
 		
 		/**
@@ -278,6 +340,7 @@ package lolo.common
 		{
 			var lim:LoadItemModel = getLimByLoader(event.target);
 			removeLoader(lim);
+			updateProgressEventLimList(lim);
 			dispatchEvent(new LoadEvent(LoadEvent.ERROR, lim));
 		}
 		
@@ -350,7 +413,9 @@ package lolo.common
 			lim.hasLoaded = true;
 			lim.bytesLoaded = lim.bytesTotal;
 			
+			updateProgressEventLimList(lim);
 			dispatchEvent(new LoadEvent(LoadEvent.ITEM_COMPLETE, lim));
+			
 			if(getGroupLoaded(lim.group)) {
 				if(_callbackList[lim.group] != null) {
 					for(var i:int=0; i < _callbackList[lim.group].length; i++) {
