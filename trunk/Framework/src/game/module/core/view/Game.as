@@ -1,5 +1,6 @@
 package game.module.core.view
 {
+	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.events.DataEvent;
 	import flash.events.Event;
@@ -10,6 +11,7 @@ package game.module.core.view
 	import game.module.core.controls.CoreController;
 	import game.module.core.events.ConsoleEvent;
 	
+	import lolo.common.AnimationManager;
 	import lolo.common.Common;
 	import lolo.common.ConfigManager;
 	import lolo.common.LanguageManager;
@@ -29,14 +31,21 @@ package game.module.core.view
 	import lolo.utils.TimeUtil;
 	import lolo.utils.Validator;
 	import lolo.utils.bind.BindUtil;
-
+	
+	import starling.core.Starling;
+	
+	
+	
 	/**
 	 * 游戏核心
 	 * 该类会引入其他模块中常用的类，同时，该类也是其他模块优化的针对程序
 	 * @author LOLO
 	 */
-	public class Game extends Sprite
+	public class Game extends flash.display.Sprite
 	{
+		private var _starling:Starling;
+		
+		
 		public function Game()
 		{
 			super();
@@ -79,6 +88,7 @@ package game.module.core.view
 			Stats.getInstance().container = Common.stage;
 			
 			Common.sound = SoundManager.getInstance();
+			Common.animation = AnimationManager.getInstance();
 			
 			Common.mouse = MouseManager.getInstance();
 			Common.mouse.skin = AutoUtil.getInstance("skin.Mouse");
@@ -88,6 +98,10 @@ package game.module.core.view
 			this.parent.addChild(GameUIManager.getInstance());
 			this.parent.removeChild(this);
 			Common.ui.init();
+			
+			
+			_starling = new Starling(StarlingRoot, Common.stage);
+			_starling.start();
 			
 			
 			Common.stage.addEventListener(KeyboardEvent.KEY_DOWN, stage_keyDownHandler);
@@ -142,3 +156,8 @@ package game.module.core.view
 		//
 	}
 }
+
+
+
+import starling.display.Sprite;
+class StarlingRoot extends starling.display.Sprite { }

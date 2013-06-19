@@ -85,7 +85,7 @@ package lolo.data
 			this.configName = configName;
 			this.urlArgs = urlArgs;
 			
-			if(configName != null) {
+			if(configName) {
 				var config:Object = Common.config.getResConfig(configName);
 				this.version = config.version;
 				this.type = config.type;

@@ -44,9 +44,10 @@ package lolo.common
 		/**
 		 * 获取界面配置文件信息
 		 * @param name 配置的名称
+		 * @param rest 可变参数
 		 * @return
 		 */
-		function getUIConfig(name:String):String;
+		function getUIConfig(name:String, ...rest):String;
 		
 		/**
 		 * 获取音频配置文件信息

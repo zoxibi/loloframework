@@ -27,6 +27,8 @@ package lolo.common
 		public static var language:ILanguageManager;
 		/**样式管理*/
 		public static var style:IStyleManager;
+		/**动画管理*/
+		public static var animation:IAnimationManager;
 		
 		/**音频管理*/
 		public static var sound:ISoundManager;

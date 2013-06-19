@@ -2,6 +2,7 @@ package game.module.core.controls
 {
 	import game.module.core.events.ConsoleEvent;
 	
+	import lolo.common.Common;
 	import lolo.mvc.command.ICommand;
 	import lolo.mvc.control.MvcEvent;
 	import lolo.ui.Console;
@@ -39,6 +40,10 @@ package game.module.core.controls
 			{
 				case "统计":
 					Stats.getInstance().isShow ? Stats.getInstance().hide() : Stats.getInstance().show();
+					break;
+				
+				case "gc":
+					Common.gc();
 					break;
 				
 				case "战报":

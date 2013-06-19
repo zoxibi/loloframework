@@ -37,6 +37,12 @@ package lolo.events
 			super(type, bubbles, cancelable);
 			this.lim = lim;
 		}
+		
+		
+		override public function clone():Event
+		{
+			return new LoadEvent(type, lim, bubbles, cancelable);
+		}
 		//
 	}
 }

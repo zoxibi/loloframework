@@ -13,6 +13,7 @@ package lolo.common
 	import flash.net.URLRequest;
 	import flash.system.ApplicationDomain;
 	import flash.system.LoaderContext;
+	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	
 	import lolo.data.HashMap;
@@ -144,11 +145,12 @@ package lolo.common
 			
 			if(getGroupLoaded(group)) {
 				if(callback != null) callback();
-				dispatchEvent(new LoadEvent(LoadEvent.GROUP_COMPLETE));
+				dispatchEvent(new LoadEvent(LoadEvent.GROUP_COMPLETE, new LoadItemModel(null, group)));
 			}
 			
+			if(callback != null) _callbackList[group].push(callback);
+			
 			if(_loadList.length > 0)  {
-				if(callback != null) _callbackList[group].push(callback);
 				_isStop = false;
 				loadNext();
 			}
@@ -219,7 +221,7 @@ package lolo.common
 			
 			//创建loader，并侦听事件
 			var loader:EventDispatcher;
-			if(lim.type == Constants.RES_TYPE_ZIP || lim.type == Constants.RES_TYPE_XML) {
+			if(lim.type == Constants.RES_TYPE_ZIP || lim.type == Constants.RES_TYPE_XML || lim.type == Constants.RES_TYPE_BINARY) {
 				lim.loader = new URLLoader();
 				loader = lim.loader;
 			}
@@ -252,10 +254,11 @@ package lolo.common
 				case Constants.RES_TYPE_SWF:
 					lim.loader.load(new URLRequest(resUrl), new LoaderContext(true, ApplicationDomain.currentDomain));
 					break;
-				case Constants.RES_TYPE_ZIP:
+				case Constants.RES_TYPE_ZIP: case Constants.RES_TYPE_BINARY:
 					lim.loader.dataFormat = URLLoaderDataFormat.BINARY;
 					lim.loader.load(new URLRequest(resUrl));
 					break;
+				
 				default:
 					trace("资源类型\"" + lim.type + "\"无法识别");
 			}
@@ -341,6 +344,7 @@ package lolo.common
 			var lim:LoadItemModel = getLimByLoader(event.target);
 			removeLoader(lim);
 			updateProgressEventLimList(lim);
+			trace("加载错误：", lim.url);
 			dispatchEvent(new LoadEvent(LoadEvent.ERROR, lim));
 		}
 		
@@ -364,6 +368,9 @@ package lolo.common
 					break;
 				case Constants.RES_TYPE_ZIP:
 					lim.data = new ZipReader(event.target.data);
+					break;
+				case Constants.RES_TYPE_BINARY:
+					lim.data = event.target.data;
 					break;
 			}
 			if(lim.type == Constants.RES_TYPE_CLA) {
@@ -418,10 +425,11 @@ package lolo.common
 			
 			if(getGroupLoaded(lim.group)) {
 				if(_callbackList[lim.group] != null) {
-					for(var i:int=0; i < _callbackList[lim.group].length; i++) {
-						_callbackList[lim.group][i]();
-					}
+					var callbackList:Array = _callbackList[lim.group].concat();
 					_callbackList[lim.group] = null;
+					for(var i:int=0; i < callbackList.length; i++) {
+						callbackList[i]();
+					}
 				}
 				dispatchEvent(new LoadEvent(LoadEvent.GROUP_COMPLETE, lim));
 			}
@@ -462,7 +470,7 @@ package lolo.common
 		private function removeLoader(lim:LoadItemModel):void
 		{
 			if(lim.loader == null) return;//已经被清理过了
-			var loader:Object = (lim.type == Constants.RES_TYPE_ZIP || lim.type == Constants.RES_TYPE_XML)
+			var loader:Object = (lim.type == Constants.RES_TYPE_ZIP || lim.type == Constants.RES_TYPE_XML || lim.type == Constants.RES_TYPE_BINARY)
 				? lim.loader
 				: lim.loader.contentLoaderInfo;
 			loader.removeEventListener(IOErrorEvent.IO_ERROR, errorHandler);
@@ -540,6 +548,7 @@ package lolo.common
 			var lim:LoadItemModel = _resList.getValueByKey(url);
 			if(lim == null) return null;
 			if(clear) _resList.removeKey(url);
+			if(lim.data is ByteArray) (lim.data as ByteArray).position = 0;
 			return lim.data;
 		}
 		

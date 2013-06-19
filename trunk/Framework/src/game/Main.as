@@ -16,7 +16,7 @@ package game
 	import lolo.events.LoadEvent;
 	
 	
-	[SWF(width="1000", height="600", backgroundColor="#FFFFFF", frameRate="25")]
+	[SWF(width="1000", height="600", backgroundColor="#FFFFFF", frameRate="60")]
 	/**
 	 * LOLO的Web框架
 	 * @author LOLO
@@ -33,6 +33,7 @@ package game
 		
 		public function Main()
 		{
+			this.mouseEnabled = false;
 			stage.stageFocusRect = false;
 			stage.align = "TL";
 			stage.scaleMode = "noScale";
@@ -107,6 +108,7 @@ package game
 					Common.loader.add(new LoadItemModel("mainUIConfig"));
 					Common.loader.add(new LoadItemModel("mainUIView"));
 					Common.loader.add(new LoadItemModel("enterMovie"));
+					Common.loader.add(new LoadItemModel("animationConfig"));
 					
 					_loading.start();
 					_loading.addEventListener("loadingMoviePlayFinished", loadGroupCompleteHander);

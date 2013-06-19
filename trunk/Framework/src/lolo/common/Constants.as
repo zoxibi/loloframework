@@ -21,6 +21,8 @@ package lolo.common
 		public static const RES_TYPE_ZIP:String = "zip";
 		/**xml类型的资源*/
 		public static const RES_TYPE_XML:String = "xml";
+		/**二进制类型的资源*/
+		public static const RES_TYPE_BINARY:String = "binary";
 		
 		
 		/**鼠标状态 - 正常*/
