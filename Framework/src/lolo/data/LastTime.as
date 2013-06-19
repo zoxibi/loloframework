@@ -21,7 +21,7 @@ package lolo.data
 		 * 构造函数
 		 * @param time 剩余时间的值
 		 * @param type 剩余时间的类型
-		 */		
+		 */
 		public function LastTime(time:Number=0, type:String="ms")
 		{
 			setTime(time, type);
@@ -32,7 +32,7 @@ package lolo.data
 		 * 设置剩余时间
 		 * @param time 时间的值
 		 * @param type 时间的类型
-		 */		
+		 */
 		public function setTime(time:Number, type:String="ms"):void
 		{
 			_initTime = getTimer();

@@ -10,6 +10,7 @@ package game.module.core.view
 	import game.ui.RequestModal;
 	
 	import lolo.common.Common;
+	import lolo.common.Constants;
 	import lolo.common.UIManager;
 	import lolo.data.LoadItemModel;
 
@@ -126,6 +127,8 @@ package game.module.core.view
 				showLoadBar(ModuleName.SCENE_TEST);
 				Common.loader.add(new LoadItemModel("testSceneModule", ModuleName.SCENE_TEST).addUrlListByCN(
 					"testSceneConfig", "testSceneView"));
+				Common.loader.add(new LoadItemModel(null, "public", false, 0, null, null, Common.config.getUIConfig("mapData", 101), Constants.RES_TYPE_BINARY));
+				Common.loader.add(new LoadItemModel(null, "public", false, 0, null, null, Common.config.getUIConfig("mapThumbnails", 101), Constants.RES_TYPE_IMG));
 				Common.loader.start(ModuleName.SCENE_TEST, loadTestSceneComplete);
 			}
 			else {

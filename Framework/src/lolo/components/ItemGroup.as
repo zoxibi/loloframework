@@ -130,6 +130,11 @@ package lolo.components
 				if(item.selected) item.selected = false;
 				item.index = 0;
 				item.group = null;
+				
+				if(item.parent == this) {
+					super.removeChild(item as DisplayObject);
+					item.dispose();
+				}
 			}
 		}
 		

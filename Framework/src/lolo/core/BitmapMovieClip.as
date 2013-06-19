@@ -14,7 +14,7 @@ package lolo.core
 	/**
 	 * 位图影片剪辑
 	 * 
-	 * 关于BitmapMovieClipEvent.ENTER_FRAME事件，与，与flash.display.MovieClip的Event.ENTER_FRAME事件不同的是：
+	 * 关于BitmapMovieClipEvent.ENTER_FRAME事件，与flash.display.MovieClip的Event.ENTER_FRAME事件不同的是：
 	 * 只会在帧刷新的时候触发该事件，而不是按照帧频不断触发
 	 * 
 	 * @author LOLO
@@ -74,7 +74,7 @@ package lolo.core
 			for(key in list) {
 				info = _data[key];
 				//位图数据已经没有在使用了
-				if(info.count == 0) {
+				if(info.count <= 0) {
 					//已经被标记过，可以被清除
 					if(info.prepareClear) {
 						for(var i:int = 0; i < info.frameList.length; i++) {
@@ -199,8 +199,8 @@ package lolo.core
 		 */
 		private function showFrame(frame:int):void
 		{
+			//已释放，未清理
 			if(_frameList == null || _frameList.length == 0) {
-				//已释放，未清理
 				if(_sourceName != "") {
 					var sn:String = _sourceName;
 					_sourceName = "";
@@ -267,7 +267,7 @@ package lolo.core
 				_frameList = _data[_sourceName].frameList;
 			}
 				
-				//新动画数据不存在，创建新动画
+			//新动画数据不存在，创建新动画
 			else
 			{
 				var mc:MovieClip = AutoUtil.getInstance(_sourceName);
@@ -301,10 +301,7 @@ package lolo.core
 				
 				//立即显示当前帧，如果动画是在播放中，继续播放
 				showFrame(currentFrame);
-				if(playing) {
-					_playing = true;
-					_timer.start();
-				}
+				if(_playing) _timer.start();
 			}
 			
 		}
@@ -351,21 +348,24 @@ package lolo.core
 				return;
 			}
 			
-			//到达停止帧
-			var stopFrame:uint = (this.stopFrame == 0) ? _frameList.length : this.stopFrame;
-			if(_currentFrame == stopFrame)
-			{
-				this.dispatchEvent(new BitmapMovieClipEvent(BitmapMovieClipEvent.ENTER_STOP_FRAME));
-				
-				_currentRepeatCount++;
-				//有指定重复播放次数，并且达到了重复播放次数
-				if(repeatCount > 0 && _currentRepeatCount >= repeatCount) {
-					stop();
-					if(callback != null) {
-						callback();
-						callback = null;
+			//有指定重复播放次数
+			if(repeatCount > 0) {
+				//到达停止帧
+				var stopFrame:uint = (this.stopFrame == 0) ? _frameList.length : this.stopFrame;
+				if(_currentFrame == stopFrame)
+				{
+					this.dispatchEvent(new BitmapMovieClipEvent(BitmapMovieClipEvent.ENTER_STOP_FRAME));
+					
+					_currentRepeatCount++;
+					//达到了重复播放次数
+					if(_currentRepeatCount >= repeatCount) {
+						stop();
+						if(callback != null) {
+							callback();
+							callback = null;
+						}
+						this.dispatchEvent(new BitmapMovieClipEvent(BitmapMovieClipEvent.MOVIE_END));
 					}
-					this.dispatchEvent(new BitmapMovieClipEvent(BitmapMovieClipEvent.MOVIE_END));
 				}
 			}
 		}
@@ -445,6 +445,15 @@ package lolo.core
 			_timer.clear();
 			_timer = null;
 		}
+		
+		
+		
+		/**
+		 * 帧序列动画列表。注意：该属性仅供测试使用，切勿在实际项目中使用
+		 * @param value
+		 */
+		public function set frameList(value:Vector.<BitmapMovieClipData>):void { _frameList = value; }
+		public function get frameList():Vector.<BitmapMovieClipData> { return _frameList; }
 		//
 	}
 }

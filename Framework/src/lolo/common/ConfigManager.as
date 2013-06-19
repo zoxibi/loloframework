@@ -1,6 +1,8 @@
 ﻿package lolo.common
 {
 	import flash.utils.Dictionary;
+	
+	import lolo.utils.StringUtil;
 
 	/**
 	 * 配置信息管理
@@ -131,11 +133,12 @@
 		/**
 		 * 获取界面配置文件信息
 		 * @param name 配置的名称
+		 * @param rest 可变参数
 		 * @return
 		 */
-		public function getUIConfig(name:String):String
+		public function getUIConfig(name:String, ...rest):String
 		{
-			return _uiConfig[name];
+			return StringUtil.substitute(_uiConfig[name], rest);
 		}
 		
 		

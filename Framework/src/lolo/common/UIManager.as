@@ -55,6 +55,7 @@ package lolo.common
 			super();
 			
 			_args = {};
+			this.mouseEnabled = false;
 			
 			_bgLayer = new Sprite();
 			_bgLayer.mouseEnabled = false;
